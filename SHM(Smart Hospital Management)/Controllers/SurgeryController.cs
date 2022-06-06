@@ -23,7 +23,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         }
 
         #region Create Surgery For Doctor
-
         [Authorize(Roles ="Doctor,DeptManager")]
         public async Task<IActionResult> DisplaySurgeries(int id, int HoId) //Doctor(id)
         {

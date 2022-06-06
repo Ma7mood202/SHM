@@ -247,7 +247,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl)
         {
-            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == PasswordHashing.HashPassword(fc["password"])).ToList();
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
             if (employees.Count == 0) return NotFound();
 
             var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
@@ -381,6 +381,46 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             employee.Active = false;
             await _context.SaveChangesAsync();
             return RedirectToAction("DisplayNurses", new { id = HeadNurseId, HoId = employee.Ho_Id });
+        }
+
+        [Authorize(Roles = "HeadNurse,IT,HeadNurse,Nurse,Resception")]
+        public async Task<IActionResult> EditPersonalDetails(int id) // EMployee (id)
+        {
+            var employee = await _context.Employees.Include(e => e.Employee_Phone_Numbers).FirstOrDefaultAsync(e => e.Employee_Id == id);
+            if (!employee.Active)
+                return RedirectToAction("LogOut");
+            int employeeCityId = (from c in _context.Cities
+                                 join a in _context.Areas
+                                 on c.City_Id equals a.City_Id
+                                 where a.Area_Id == employee.Area_Id
+                                 select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.EmployeeArea = _context.Areas.Find(employee.Area_Id).Area_Name;
+            return View(employee);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPersonalDetails(Employee employee, string[] pn)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Employee_Phone_Numbers> pns = new List<Employee_Phone_Numbers>();
+                foreach (var item in pn)
+                {
+                    pns.Add(new Employee_Phone_Numbers
+                    {
+                        Employee_Id = employee.Employee_Id,
+                        Employee_Phone_Number= item
+                    });
+                }
+                _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == employee.Employee_Id));
+                _context.AddRange(pns);
+                _context.Update(employee);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Master", new { id = employee.Employee_Id });
+            }
+            return View();
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowActiveEmployeesForIT(int id) // IT (id)

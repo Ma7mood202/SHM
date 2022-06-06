@@ -7,6 +7,7 @@ namespace SHM_Smart_Hospital_Management_.ViewModels
 {
     public class BusyRooms
     {
+        public int Id { get; set; }
         public string RoomNumber { get; set; }
         public DateTime StartDate { get; set; }
         public string PatientName { get; set; }

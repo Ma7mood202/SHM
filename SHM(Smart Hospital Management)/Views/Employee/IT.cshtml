@@ -3,6 +3,11 @@
     ViewData["Title"] = "IT";
 }
 @section Styles{
+    <style>
+        html{
+            direction:rtl;
+        }
+    </style>
     <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons -->
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font -->
@@ -154,15 +159,15 @@
                 </div>
             </div>
             <!--dep btn -->
-            <a asp-controller="Department" asp-action="HoDepartments" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
-                <button type="button" class="btn   modal-bt1">
+            <a asp-controller="Department" asp-action="HoDepartments" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn   modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent; color:white;outline:none;border:none">
                     عرض أقسام
                 </button>
             </a>
 
             <!--show-emp btn -->
-            <a asp-controller="Doctor" asp-action="DeptManagers" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
-                <button type="button" class="btn   modal-bt1">
+            <a asp-controller="Doctor" asp-action="DeptManagers" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn   modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent; color:white;outline:none;border:none">
                     عرض رؤساء الأقسام
                 </button>
             </a>

@@ -357,6 +357,46 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             }
             return View(doctor);
         }
+
+        [Authorize(Roles = "Doctor,DeptManager")]
+        public async Task<IActionResult> EditPersonalDetails(int id ,int HoId) // Doctor (id)
+        {
+            var doctor = await _context.Doctors.Include(d => d.Doctor_Phone_Numbers).FirstOrDefaultAsync(d => d.Doctor_Id == id);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut");
+            int doctorCityId = (from c in _context.Cities
+                                 join a in _context.Areas
+                                 on c.City_Id equals a.City_Id
+                                 where a.Area_Id == doctor.Area_Id
+                                 select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == doctorCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.DoctorArea = _context.Areas.Find(doctor.Area_Id).Area_Name;
+            return View(doctor);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPersonalDetails(Doctor doctor, string[] pn)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Doctor_Phone_Numbers> pns = new List<Doctor_Phone_Numbers>();
+                foreach (var item in pn)
+                {
+                    pns.Add(new Doctor_Phone_Numbers
+                    {
+                        Doctor_Id = doctor.Doctor_Id,
+                        Doctor_Phone_Number = item
+                    });
+                }
+                _context.Doctor_Phone_Numbers.RemoveRange(_context.Doctor_Phone_Numbers.Where(d => d.Doctor_Id == doctor.Doctor_Id));
+                _context.AddRange(pns);
+                _context.Update(doctor);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Master", new { id = doctor.Doctor_Id });
+            }
+            return View();
+        }
         [Authorize(Roles = "DeptManager")]
         public async Task<IActionResult> Delete(int? id, int HoId, int DeptMgrId)
         {

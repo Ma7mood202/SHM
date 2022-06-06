@@ -39,6 +39,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             join doc in _context.Doctors.ToList()
                             on pre.Doctor_Id equals doc.Doctor_Id
                             where pre.Patient_Id == id && pre.Preview_Date.Date >= DateTime.Now.Date
+                            && pre.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay
                             orderby pre.Preview_Date
                             select new CancelPreview
                             {
@@ -48,7 +49,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                 PreviewHour = pre.Preview_Date.ToString("hh:mm:tt"),
                                 DoctorPhoneNumber = _context.Doctor_Phone_Numbers.Where(dpn => dpn.Doctor_Id == doc.Doctor_Id).ToList(),
                                 Speclization = spec.FirstOrDefault(s => s.Dept_Id == Convert.ToInt32(doc.Department_Id)).Spec_Name,
-                                IsToday = pre.Preview_Date.Date == DateTime.Now.Date ? true : false,
+                                IsToday = pre.Preview_Date.Date == DateTime.Now.Date && pre.Preview_Date.TimeOfDay - DateTime.Now.TimeOfDay > TimeSpan.FromHours(2) ? true : false,
 
                             }).ToList();
             ViewBag.PatientId = id;
@@ -64,8 +65,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (patient.Canceled)
                 return RedirectToAction("DisplayPatientsPreviews", new { id = PatId });
             var preview = await _context.Previews.FindAsync(id);
-            if (preview.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay - TimeSpan.FromHours(2))
-                return RedirectToAction("DisplayPatientsPreviews", new { id = PatId });
             patient.Canceled = true;
             _context.Previews.Remove(_context.Previews.Find(id));
             await _context.SaveChangesAsync();

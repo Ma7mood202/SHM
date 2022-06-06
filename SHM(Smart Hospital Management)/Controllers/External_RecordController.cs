@@ -39,20 +39,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             return View(externalRecords);
         }
-        [Authorize(Roles = "Doctor,DeptManger")]
-        public IActionResult Create(int id, int DocId, int HoId)
+        [Authorize(Roles = "Patient")]
+        public IActionResult Create(int id, int PatId)
         {
             var externalRecord = new External_Records
             {
                 Medical_Detail_Id = id
             };
-            ViewBag.DocId = DocId;
-            ViewBag.HoId = HoId;
+            ViewBag.PatId = PatId;
             return View(externalRecord);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DateTime[] date, IFormFile[] files, int medicalDetailId, int DocId, int HoId)
+        public async Task<IActionResult> Create(DateTime[] date, IFormFile[] files, int medicalDetailId,int PatId)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +86,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                 await _context.AddRangeAsync(externalRecords);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ShowExternalRecordsForDoctor), new { id = medicalDetailId, DocId, HoId });
+                return RedirectToAction(nameof(ShowExternalRecordsPatient), new { id = medicalDetailId,PatId });
             }
             return View();
         }

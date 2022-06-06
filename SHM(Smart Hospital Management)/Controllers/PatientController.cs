@@ -25,12 +25,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             _context = context;
         }
         
-        //[Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Master(int id)
         { 
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Patient_Id == id);
             if (!patient.Active)
                 return RedirectToAction("LogOut");
+            var surgeries =await  _context.Surgeries.Where(s => s.Patient_Id == id && s.Surgery_Date.Date >= DateTime.Now.Date).ToListAsync();
+            ViewBag.Surgeries = surgeries;
             return View(patient);
         }
         [Authorize(Roles = "Doctor,DeptManager")]
@@ -158,6 +160,45 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             return View(patient);
         }
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> EditPersonalDetails(int id) // Patient (id)
+        {
+            var patient = await _context.Patients.Include(p=>p.Patient_Phone_Numbers).FirstOrDefaultAsync(p=>p.Patient_Id == id);
+            if (!patient.Active)
+                return RedirectToAction("LogOut");
+            int patientCityId = (from c in _context.Cities
+                                 join a in _context.Areas
+                                 on c.City_Id equals a.City_Id
+                                 where a.Area_Id == patient.Area_Id
+                                 select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name ,Selected = c.City_Id == patientCityId?true:false}).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.PatientArea = _context.Areas.Find(patient.Area_Id).Area_Name;
+            return View(patient);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPersonalDetails(Patient patient , string[] pn)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Patient_Phone_Numbers> pns = new List<Patient_Phone_Numbers>();
+                foreach (var item in pn)
+                {
+                    pns.Add(new Patient_Phone_Numbers
+                    {
+                        Patient_Id = patient.Patient_Id,
+                        Patient_Phone_Number = item
+                    });
+                }
+                _context.Patient_Phone_Numbers.RemoveRange(_context.Patient_Phone_Numbers.Where(p=>p.Patient_Id == patient.Patient_Id));
+                _context.AddRange(pns);
+                _context.Update(patient);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Master", new { id = patient.Patient_Id });
+            }
+            return View();
+        }
 
         public async Task<IActionResult> LogIn()
         {
@@ -167,7 +208,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl)
-        {
+        { 
             var patients = _context.Patients.Where(d => d.Patient_Email == fc["email"].ToString() && d.Patient_Password == fc["password"].ToString()).ToList();
             if (patients.Count == 0) return NotFound();
             var patient = patients.FirstOrDefault(p => p.Ho_Id == int.Parse(fc["hospital"]));

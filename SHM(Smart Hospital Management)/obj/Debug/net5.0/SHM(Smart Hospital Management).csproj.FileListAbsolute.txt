@@ -940,3 +940,4 @@ C:\Users\ASUS\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SH
 C:\Users\ASUS\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\ref\SHM(Smart Hospital Management).dll
 C:\Users\ASUS\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SHM(Smart Hospital Management).pdb
 C:\Users\ASUS\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SHM(Smart Hospital Management).genruntimeconfig.cache
+C:\Users\ASUS\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\Razor\Views\Patient\EditPersonalDetails.cshtml.g.cs

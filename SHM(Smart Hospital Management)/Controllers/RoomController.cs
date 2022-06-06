@@ -76,6 +76,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         on a.res.Patient_Id equals p.Patient_Id
                         select new BusyRooms
                         {
+                            Id = a.res.Reservation_Id,
                             RoomNumber = a.room.Room_Number,
                             StartDate = a.res.Start_Date,
                             PatientName = p.Patient_First_Name + " " + p.Patient_Last_Name
