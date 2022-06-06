@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css">
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">   
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">  
+    <link href="../nurse-mngdb/css/nursemng.css" rel="stylesheet">
+</head>
+ <body> 
+  <div class="sidebar">
+    <div class="logo-details">
+     <img src="../img/Nurse.jpg" class="nurse-img ">
+      <span class="logo_name">ممرض</span>
+    </div>
+    <hr class="sidebar-divider">   
+    <div class="nav-links ">
+    <div class="s_div f_div">
+        <label for="touch2"><span  class="side_name"><i class="bi bi-clipboard-plus "></i>  البحث عن مريض</span>
+          <i class="bi bi-chevron-compact-down icon arrow"></i>
+        </label>
+      <input type="checkbox" id="touch2">
+        <ul class="slide">
+            <span>عن طريق</span>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#exampleModal4"> رقم الغرفة</a>
+            </li>
+            <li>
+                <a href="#" data-toggle="modal" data-target="#exampleModal3"> الإسم الكامل </a>
+            </li>
+        </ul>
+    </div>
+    <div class="s_div">
+        <a href="#" >
+             <span class="side_name"><i class="bi bi-people-fill ic"></i>  عرض الممرضين</span>  
+        </a>
+    </div>
+    <div class="s_div">
+        <a href="#" >
+             <span class="side_name"><i class="bi bi-card-text ic"></i>  عرض الطلبات</span>  
+        </a>
+    </div>
+  </div>
+  <hr class="sidebar-divider ">
+</div>
+  <section class="home-section">
+  
+         <!-- Topbar -->
+        
+            <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
+                <div class="row">
+            
+        <ul class="navbar-nav ml-auto">   
+    <!-- Nav Item - User Information -->
+    <li class="nav-item dropdown no-arrow  ">
+        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="top_div">
+            <span class="mr-2 d-lg-inline text-gray-600 small">ممرض</span>
+            <img class="img-profile rounded-circle" src="../img/undraw_profile_3.svg">
+        </div>
+        </a>
+
+        <!-- Dropdown - User Information -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-nurse"
+            aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="#">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                المعلومات الشخصية
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                تسجيل خروج
+            </a>
+        </div>
+    </li>
+       </ul>
+         </div>
+           </div>  
+       
+        <!-- Logout Modal-->
+    <div class="modal fade " id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" dir="ltr">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel">تسجيل خروج</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body "> هل أنت متأكد</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
+                <a class="btn btn-primary Logout-btn" href="../../login/loginnurse/loginnurse.html">تسجيل خروج</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container ">
+    <div class="row">
+
+        <div class="col-10 mab_div">
+            
+        </div>
+
+        <div class="col-4">
+                            <!-- Button trigger modal -->
+        <button type="button" class="btn   modal-bt1 " data-toggle="modal" data-target="#exampleModal2">
+            البحث عن مريض
+        </button>
+    </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true" dir="ltr">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel2"> البحث عن طريق</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body Center">
+                
+                    <button type="button" class="btn btn-info  modal-bt5 " data-toggle="modal" data-target="#exampleModal3">
+                        الإسم الكامل
+                    </button>
+                    <button type="button" class="btn btn-info  modal-bt5"  data-toggle="modal" data-target="#exampleModal4">
+                       رقم الغرفة
+                    </button>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+            
+                </div>
+            </div>
+            </div>
+        </div>
+          <!--FullName Modal-->
+          <form action="">
+            <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true" dir="ltr">
+               <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                   <h5 class="modal-title modal-txt" id="exampleModalLabel3"> أدخل الإسم الكامل   </h5>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                   </div>
+                   <div class="modal-body Center">
+                       <input type="text" />
+                       <input type="submit" value="بحث" class="btn btn-info  modal-bt4" />
+                   </div>
+                   <div class="modal-footer">
+                   <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+               
+                   </div>
+               </div>
+               </div>
+           </div>
+       </form>
+   
+            <!--roomNumber Modal-->
+            <form action="">
+            <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true" dir="ltr">
+               <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                   <h5 class="modal-title modal-txt" id="exampleModalLabel4">  إختر رقم الغرفة    </h5>
+                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                   </button>
+                   </div>
+                   <div class="modal-body Center">
+                  
+                       <select name="" id="" >
+                           <option value="">
+                               a1
+                           </option>
+                           <option value="">
+                               a2
+                           </option>
+                           <option value="">
+                               a3
+                           </option>
+                           <option value="">
+                               a1
+                           </option>
+                           <option value="">
+                               a2
+                           </option>
+                           <option value="">
+                               a3
+                           </option>
+                       </select>
+                   </div>
+                   <div class="modal-footer">
+                   <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+                   </div>
+               </div>
+               </div>
+           </div>
+       </form>
+   
+       <div class="col-4">
+               <!--show-nur btn  -->
+           <button type="button" class="btn   modal-bt1 ">
+               عرض الممرضين
+           </button>
+        </div>
+        <div class="col-4">
+            <!--show-nur btn  -->
+        <button type="button" class="btn   modal-bt1 ">
+            عرض الطلبات
+        </button>
+     </div>
+        </div>
+        </div>
+        
+        <footer >
+            <div class="footer">
+              <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
+            </div>
+       
+        </footer>
+      
+  </section>
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../vendor/fontawesome-free/css/all.css"rel="stylesheet"type="text/css"/><!-- fontawsom icon -->
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"/><!-- bootstrap icon -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"/><!-- font -->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" /><!-- bootstrap min-->
+    <link href="css/admin.css" rel="stylesheet" /><!--style  -->
+  </head>
+  <body>
+    <!-- sidebar start-->
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src="../../assets/img/avatar/admin.jpg " class="admin-img" />
+        <span class="logo_name">مشرف</span>
+      </div>
+      <hr class="sidebar-divider" />
+      <div class="nav-links">
+        <div class="f_div">
+          <a href="#1">
+            <span class="side_name"><i class="fas fa-hospital-user"></i> إضافة مشفى</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- start  -->
+    <section class="home-section">
+      <!-- start Topbar -->
+      <div class="  navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow  topbar-ps">
+        <div class="row">
+          <ul class="navbar-nav ml-auto">
+            
+            <!-- Nav Item -admin info-->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle do_div" href="#"  id="userDropdown" role="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                <div class="info-d">
+                  <span class="mr-2  d-lg-inline text-gray-600 small">مشرف</span>
+                  <img class="img-profile rounded-circle" src="../img/undraw_profile_2.svg"/>
+                </div>
+              </a> 
+
+              <!--admin info dropdown  -->
+              <div
+                class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-admin" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#" data-toggle="modal"  data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  تسجيل خروج
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- end Topbar -->
+
+      <!--logout modal -->
+      <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"  aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title modal-txt" id="exampleModalLabel">
+                تسجيل خروج
+              </h5>
+              <button class="close close_x" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">هل أنت متأكد</div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary close_btn"type="button" data-dismiss="modal">
+                إلغاء
+              </button>
+              <a class="btn btn-primary Logout-btn" href="../../login/Loginadmin/loginadmin.html" >تسجيل خروج</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- start page -->
+      <div class="container">
+        <div class="row">
+         
+            <button type="button" class="btn modal-bt1"> إضافة مشفى</button>
+        
+        </div>
+      </div>
+
+       <!-- table start -->
+       <div class="container">
+        <div class="row">
+        <table class="D_table table">
+            <tbody>
+              <th class="main_text">المشافي المشتركة</th>
+              <tr>   
+                <th>مشفى الفيحاء</th>
+               
+            <td>  <button class="btn delete_btn ">حذف</button>
+              <button class="btn details_btn ">تفاصيل</button> </td>
+               
+              </tr>
+              <tr>   
+                <th>مشفى المجتهد</th>
+              </tr>
+              <tr>   
+                <th>مشقى الشامي</th>
+              </tr>
+              
+            </tbody>
+        </table>
+    </div>
+</div>
+       <!-- table end -->  
+       <!-- end page -->
+    </section>
+    <!-- end  -->
+
+    <!-- start footer-->
+    <footer>
+      <div class="footer">
+        <span class="fo_span">
+          حقوق الطباعة &copy; موقعنا 2022
+        </span>
+      </div>
+    </footer>
+    <!-- end footer-->
+
+    <script src="../vendor/jquery/jquery.min.js"></script><!--  jquery-->
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script><!--  bootstrap js-->
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
+    
+  </body>
+</html>

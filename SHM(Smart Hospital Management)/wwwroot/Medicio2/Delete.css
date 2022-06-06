@@ -1,0 +1,34 @@
+.Confirm_btn {
+    background-color: #e42121e6;
+    border-color: #c5c8cbe6;
+    border-radius: 30px;
+    float: left;
+    width: 66px;
+    height: 36px;
+    text-align: center;
+    color: #000000;
+    display:none;
+}
+    .Confirm_btn:hover {
+        transition: 0.5s;
+        background: #911f29;
+        box-shadow: 0 0 13px 1px rgb(151 150 150);
+        color: black;
+    }
+.Cancel_btn {
+    background-color: #3fbbc0;
+    border-color: #c5c8cbe6;
+    border-radius: 30px;
+    float: left;
+    width: 66px;
+    height: 36px;
+    text-align: center;
+    color: #000000;
+    display: none;
+}
+    .Cancel_btn:hover {
+        transition: 0.5s;
+        background: #236e71;
+        box-shadow: 0 0 13px 1px rgb(151 150 150);
+        color: black;
+    }

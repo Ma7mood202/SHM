@@ -1,0 +1,100 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SHM_Smart_Hospital_Management_.Data;
+using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace SHM_Smart_Hospital_Management_.Controllers
+{
+    public class BillController : Controller
+    {
+        private readonly ApplicationDbContext _context;
+
+        public BillController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> ShowBillForPatient(int? id) // Patient (id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var patient = await _context.Patients.FindAsync(id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            var bills = await _context.Bills.Where(b => b.Patient_Id == patient.Patient_Id).ToListAsync();
+            ViewBag.PatientId = id;
+            return View(bills);
+        }
+        [Authorize(Roles ="Resception")]
+        public async Task<IActionResult> ShowBillForResception(int? id, int EmpId) // Patient (id)
+        {
+            var Resception = _context.Employees.Find(EmpId);
+            if (!Resception.Active)
+                return RedirectToAction("LogOut", "Employee");
+            var patient = await _context.Patients.FindAsync(id);
+            if (patient is null)
+                return NotFound();
+            var bills = await _context.Bills.Where(b => b.Patient_Id == id && b.Paid == false)
+                .Select(s => new ShowBills
+                {
+                    Bill = s,
+                    FullName = patient.Patient_Full_Name
+                }).ToListAsync();
+            ViewBag.PatientId = id;
+            ViewBag.EmpId = EmpId;
+            ViewBag.HospitalId = patient.Ho_Id;
+            return View(bills);
+        }
+        [Authorize(Roles = "Resception")]
+        public async Task<IActionResult> PayBill(int id, int PatId, int EmpId) // Bill (id)
+        {
+            var Resception = _context.Employees.Find(EmpId);
+            if (!Resception.Active)
+                return RedirectToAction("LogOut", "Employee");
+            var bill = _context.Bills.Find(id);
+            bill.Paid = true;
+            _context.Update(bill);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ShowBillForResception", new { id = PatId, EmpId = EmpId });
+        }
+        [Authorize(Roles = "Resception")]
+        public IActionResult Create(int id, int EmpId) // Patient (id)
+        {
+            var Resception = _context.Employees.Find(EmpId);
+            if (!Resception.Active)
+                return RedirectToAction("LogOut", "Employee");
+            var patient = _context.Patients.FirstOrDefault(m => m.Patient_Id == id);
+            Bill b = new Bill()
+            {
+                Patient_Id = id
+            };
+            ViewBag.HospitalId = patient.Ho_Id;
+            ViewBag.EmpId = EmpId;
+
+            return View(b);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Bill bill, int id, int EmpId)
+        {
+            if (ModelState.IsValid)
+            {
+                var HoId = _context.Employees.Find(EmpId).Ho_Id;
+                _context.Add(bill);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("HoPatientsForBill", "Patient", new { id = HoId, EmpId });
+            }
+            return View(bill);
+        }
+    }
+}

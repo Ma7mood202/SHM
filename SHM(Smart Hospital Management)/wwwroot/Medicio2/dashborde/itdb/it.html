@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons -->
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"/><!-- bootstrap icons -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font -->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet"> <!-- bootstrap min -->
+    <link href="../itdb/css/it.css" rel="stylesheet"><!-- style -->
+</head>
+<body>
+    <!-- sidebar start -->     
+  <div class="sidebar">
+    <div class="logo-details">
+     <img src="../../assets/img/avatar/admin.jpg " class="it-img ">
+      <span class="logo_name">تقاني</span>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="nav-links ">
+    <div class="f_div">
+        <label for="touch2"> <span  class="side_name"> <i class="bi bi-door-open"></i> عرض غرفة </span>
+            <i class="bi bi-chevron-compact-down arrow "></i>
+        </label>
+      <input type="checkbox" id="touch2">
+        <ul class="slide">
+            <span>  عرض غرف</span>
+            <li>
+                <a href="#">   غرف إقامة</a>
+            </li>
+            <li>
+                <a href="#">  غرف عمليات</a>
+            </li>
+        </ul>
+       
+    </div>
+    <div class="s_div">
+        <a href="#">
+            <span class="side_name"> <i class="bi bi-menu-button-wide-fill"></i> عرض أقسام</span>
+        </a>
+    </div>
+    <div class="s_div">
+        <a href="#">
+            
+            <span class="side_name"><i class="bi bi-person"></i> عرض رؤساء الأقسام </span>
+        </a>
+    </div>
+    <div class="s_div">
+        <a href="#" data-toggle="modal" data-target="#BlockModal">
+            <span class="side_name">   <i class="bi bi-person-x"></i> حظر مستخدم</span>
+        </a>
+    </div>
+  </div>
+  <hr class="sidebar-divider ">
+</div>
+     <!-- sidebar end --> 
+
+     <!-- start --> 
+  <section class="home-section">
+  
+         <!-- Topbar start -->
+        
+            <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
+                <div class="row">
+        <ul class="navbar-nav ml-auto">   
+    <!-- it Info start -->
+    <li class="nav-item dropdown no-arrow ">
+        <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="top_div">
+            <span class="mr-2 d-lg-inline text-gray-600 small">تقاني</span>
+            <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+            </div>
+        </a>
+
+        <!-- it Info Dropdown start -->
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-it"
+            aria-labelledby="userDropdown">
+            <a class="dropdown-item" href="#">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                المعلومات الشخصية
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                تسجيل خروج
+            </a>
+        </div>
+         <!-- it Info Dropdown end -->
+    </li>
+    
+    <!-- it Info end -->
+    </ul>
+    </div>
+    </div>
+    <!-- Logout Modal start-->
+    <div class="modal fade " id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" dir="ltr">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel">تسجيل خروج</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body "> هل أنت متأكد</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
+                <a class="btn btn-primary Logout-btn" href="../../login/Loginit/loginit.html">تسجيل خروج</a>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- Logout Modal end-->
+
+    <!-- Topbar end -->
+   
+    <!-- start page -->
+        
+<div class="container ">
+    <div class="row">
+
+      <!-- room-add btn -->
+        <button type="button" class="btn   modal-bt1 " data-toggle="modal" data-target="#exampleModal2">
+            عرض غرفة
+         </button>
+ 
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true"  dir="ltr">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel2">   عرض غرف</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body Center">
+                    <button type="button" class="btn btn-info  modal-bt4 " >
+                        غرف إقامة
+                    </button>
+                    <button type="button" class="btn btn-info  modal-bt4" >
+                         غرف عمليات
+                    </button>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!--dep btn -->
+        <button type="button" class="btn   modal-bt1" >
+           <a> عرض أقسام</a>
+          </button>
+
+           <!--show-emp btn -->
+           <button type="button" class="btn   modal-bt1" >
+           <a> عرض رؤساء الأقسام</a>
+          </button>
+
+              <!--user-block btn -->
+              <button type="button" class="btn   modal-bt1"  data-toggle="modal" data-target="#BlockModal" >
+                <a>حظر مستخدم</a>
+              </button>
+                <!-- block Modal start-->
+        <div class="modal fade " id="BlockModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4"
+        aria-hidden="true" dir="ltr">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-txt" id="exampleModalLabel4"> إختر مستخدم</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body ">  
+                    <div class="container"><div class="row">
+                        <div class="col-4">
+                 <button type="button" class="btn btn-info  modal-bt5 " data-toggle="modal" data-target="#PaiBlockModal"  >
+                     مريض
+                </button>
+            </div>
+                <div class="col-4">
+                <button type="button" class="btn btn-info  modal-bt5" data-toggle="modal" data-target="#DocBlockModal"  >
+                      طبيب
+                </button>
+            </div>
+                <div class="col-4">
+                <button type="button" class="btn btn-info  modal-bt5" data-toggle="modal" data-target="#EmpBlockModal"  >
+                    موظف 
+               </button>
+            </div>
+            </div></div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
+                 <!-- block Modal end-->
+                 <!-- pai_block_Modal -->
+        <div class="modal fade" id="PaiBlockModal" tabindex="-1" aria-labelledby="exampleModalLabel5" aria-hidden="true"  dir="ltr">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel5">  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body Center">
+                    <button type="button" class="btn btn-info  modal-bt4 " >
+                         حظر
+                    </button>
+                    <button type="button" class="btn btn-info  modal-bt4" >
+                          فك حظر
+                    </button>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+          <!-- doc_block_Modal -->
+          <div class="modal fade" id="DocBlockModal" tabindex="-1" aria-labelledby="exampleModalLabel6" aria-hidden="true"  dir="ltr">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title modal-txt" id="exampleModalLabel6">  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body Center">
+                    <button type="button" class="btn btn-info  modal-bt4 " >
+                         حظر
+                    </button>
+                    <button type="button" class="btn btn-info  modal-bt4" >
+                          فك حظر
+                    </button>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+               <!-- emp_block_Modal -->
+               <div class="modal fade" id="EmpBlockModal" tabindex="-1" aria-labelledby="exampleModalLabel7" aria-hidden="true"  dir="ltr">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title modal-txt" id="exampleModalLabel7">  </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body Center">
+                        <button type="button" class="btn btn-info  modal-bt4 " >
+                             حظر
+                        </button>
+                        <button type="button" class="btn btn-info  modal-bt4" >
+                              فك حظر
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-primary close_btn" data-dismiss="modal">إغلاق</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+        <!-- end page -->
+
+        <!-- footer start -->
+        <footer >
+            <div class="footer">
+              <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
+            </div>
+       
+        </footer>
+    <!-- footer end -->
+  </section>
+  <!-- end -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.js"></script>
+
+</body>
+</html>

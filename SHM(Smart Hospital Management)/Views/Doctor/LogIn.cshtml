@@ -1,0 +1,99 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Hospital>
+
+@{
+    ViewData["Title"] = "LogIn";
+}
+
+@section Styles{
+    <link rel="icon" type="image/png" href="~/Medicio2/login/images/icons/favicon.ico" />
+    <link href="~/Medicio2/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link href="~/Medicio2/login/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link href="~/Medicio2/login/logindoctor/css/main.css" rel="stylesheet" />
+    <link href="~/Medicio2/login/logindoctor/css/util.css" rel="stylesheet" />
+}
+
+
+
+<div class="limiter">
+    <div class="container-login100" style="background-image: url('~/wwwroot/Medicio2/login/images/bg-01.jpg'); ">
+        <div class="wrap-login100">
+            <form asp-action="LogIn" method="post" class="login100-form validate-form">
+                <img src="~/Medicio2/assets/img/avatar/doctor..jpg" />
+                <span class="login100-form-title p-b-34 p-t-27">
+                    تسجيل دخول
+                </span>
+                <div class="wrap-input100 validate-input" data-validate="Enter username">
+                    <input class="input100" type="text" name="email" placeholder="إسم المستخدم" required>
+                    <span class="focus-input100" data-placeholder="&#xf207;"></span><span class="input-group-text" id="basic-addon2">&#64;Doctor.com</span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Enter password">
+                    <input class="input100" type="password" name="password" placeholder="كلمة السر" required>
+                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                </div>
+
+                <div class="hospital">
+                    <i class="fas fa-hospital-user hos-icon"></i>
+                    <select name="hospital" class="hos-select">
+                        @foreach (var item in Model)
+                        {
+                            <option value="@item.Ho_Id"> @item.Ho_Name</option>
+                        }
+                    </select>
+                </div>
+                @* firebase *@
+                <input type="hidden" id="fcmToken" name="fcmToken" />
+                <div class="container-login100-form-btn">
+                    <button type="submit" class="login100-form-btn">
+                        تسجيل دخول
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="dropDownSelect1"></div>
+
+
+@section Scripts{
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Medicio2/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Medicio2/login/vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="~/Medicio2/login/js/main.js"></script>
+    <script type="module" src="~/firebase/src/getToken.js"></script>
+
+
+
+}
+
+

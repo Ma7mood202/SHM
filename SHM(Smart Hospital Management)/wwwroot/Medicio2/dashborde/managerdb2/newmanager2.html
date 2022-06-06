@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"/><!--fontawsome icons-->
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"/><!--bootsrap icons-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"/><!--font-->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" /><!--bootstrap min-->
+    <link href="css/newmanager2.css" rel="stylesheet" /><!--style-->
+  </head>
+  <body>
+    <!--sidebar start-->
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src="../../assets/img/avatar/mng.jpg " class="doctor-img" />
+        <span class="logo_name"> مدير المشفى </span>
+      </div>
+      <hr class="sidebar-divider" />
+      <div class="nav-links">
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name"><i class="bi bi-clipboard icon"></i>إستعراض التقارير</span>
+          </a>
+        </div>
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name"><i class="bi bi-people-fill icon"></i>إستعراض الموظفين</span>
+          </a>
+        </div>
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name"><i class="bi bi-card-text icon"></i>إستعراض الطلبات</span>
+          </a>
+        </div>
+      </div>
+      <hr class="sidebar-divider" />
+    </div>
+    <!-- sidebar end-->
+    <!--start-->
+    <section class="home-section">
+      <!-- Topbar start -->
+      <div class=" container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
+        <div class="row">
+          <ul class="navbar-nav ml-auto">
+            <li>
+
+              <!--imrg btn -->
+              <button class="btn btn-danger modal-btn-danger">
+                حالة طوارئ
+              </button>
+
+            </li>
+            <div class="topbar-divider  d-sm-block"></div>
+            <!-- mng Info start -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="info-d">
+                  <span class="mr-2 d-lg-inline text-gray-600 small">مدير المشفى</span>
+                  <img class="img-profile rounded-circle" src="../img/undraw_profile.svg"/>
+                </div>
+              </a>
+
+              <!-- mng info Dropdown start -->
+              <div class=" dropdown-menu dropdown-menu-right shadow animated--grow-in  info-doc " aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> 
+                  المعلومات الشخصية
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                 تسجيل خروج
+                </a>
+              </div>
+              <!-- mng info Dropdown end -->
+            </li>
+              
+             <!-- mng Info end -->
+          </ul>
+        </div>
+      </div>
+       <!-- Logout Modal start-->
+       <div class="modal fade"id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title modal-txt" id="exampleModalLabel">
+                تسجيل خروج
+              </h5>
+              <button class="close close_x" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">هل أنت متأكد</div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">
+                إلغاء
+              </button>
+              <a class="btn btn-primary Logout-btn" href="../../login/loginmng/loginmng.html" >تسجيل خروج</a >
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Logout Modal end-->
+       <!-- topbar end -->
+
+   <!-- page start -->      
+      <div class="container">
+        <div class="row ">
+          <div class="col-4 ">
+             <!-- show-rep btn -->
+            <button type="button" class="btn modal-bt1">
+              إستعراض التقارير
+            </button>
+          </div>
+          
+          <!-- show-emp btn -->
+          <div class="col-4 ">
+            <button type="button" class="btn modal-bt1">
+              إستعراض الموظفين
+            </button>
+          </div>
+            
+          <!-- show-req btn -->
+          <div class="col-4 ">
+            <button type="button" class="btn modal-bt1">
+              إستعراض الطلبات
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- page end -->
+      <!-- footer start -->
+      <footer>
+        <div class="footer">
+          <span class="fo_span">حقوق الطباعة &copy; موقعنا 2022</span>
+        </div>
+      </footer>
+      <!-- footer end -->
+    </section>
+    <!-- end -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.js"></script>
+    
+  </body>
+</html>

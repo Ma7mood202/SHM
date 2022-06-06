@@ -1,0 +1,151 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Hospital>
+
+@{
+    ViewData["Title"] = "Master";
+}
+@section Styles{
+    <style>
+        html {
+            direction: rtl;
+        }
+    </style>
+    <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css" /><!-- fontawsom icon -->
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icon -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" /><!-- font -->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet" /><!-- bootstrap min-->
+    <link href="~/Medicio2/dashborde/admindb/css/admin.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
+}
+
+
+<!-- sidebar start-->
+<div class="sidebar">
+    <div class="logo-details">
+        <img src="~/Medicio2/assets/img/avatar/admin.jpg" class="admin-img" />
+        <span class="logo_name">مشرف</span>
+    </div>
+    <hr class="sidebar-divider" />
+    <div class="nav-links">
+        <div class="f_div">
+            <a asp-controller="Hospital" asp-action="Create">
+                <span class="side_name"><i class="fas fa-hospital-user"></i> إضافة مشفى</span>
+            </a>
+        </div>
+    </div>
+</div>
+<!-- sidebar end -->
+<!-- start  -->
+<section class="home-section">
+    <!-- start Topbar -->
+    <div class="  navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow  topbar-ps">
+        <div class="row">
+            <ul class="navbar-nav ml-auto">
+
+                <!-- Nav Item -admin info-->
+                <li class="nav-item dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="info-d">
+                            <span class="mr-2  d-lg-inline text-gray-600 small">مشرف</span>
+                            <img class="img-profile rounded-circle" src="~/Medicio2/dashborde/img/admin.jpg" />
+                        </div>
+                    </a>
+
+                    <!--admin info dropdown  -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-admin" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href"#" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                            تسجيل خروج
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- end Topbar -->
+    <!--logout modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-txt" id="exampleModalLabel">
+                        تسجيل خروج
+                    </h5>
+                    <button class="close close_x" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">هل أنت متأكد</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">
+                        إلغاء
+                    </button>
+                    <a asp-action="LogOut" class="btn btn-primary Logout-btn">تسجيل خروج</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- start page -->
+    <div class="container">
+        <div class="row">
+            <a asp-controller="Hospital" asp-action="Create" class="btn modal-bt1" style="display :flex; align-items:center; justify-content:center;"> إضافة مشفى</a>
+        </div>
+    </div>
+
+    <!-- table start -->
+    <div class="container">
+        <div class="row">
+            <table class="D_table table">
+                <tbody>
+                <th class="main_text">المشافي المشتركة</th>
+                @{ int i = 0;}
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th>@Html.DisplayFor(modelItem => item.Ho_Name)</th>
+
+                        <td>
+                            @{
+                                string confirm = "confirm" + i;
+                                string cancel = "cancel" + i;
+                                string delete = "delete" + i;
+                            }
+                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
+                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                            <a class="btn Confirm_btn" asp-controller="Hospital" asp-action="Delete" asp-route-id="@item.Ho_Id" id="@confirm">تأكيد</a>
+                            @{i++;}
+                        </td>
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- table end -->
+    <!-- end page -->
+</section>
+<!-- end  -->
+<!-- start footer-->
+<footer>
+    <div class="footer">
+        <span class="fo_span">
+            حقوق الطباعة &copy; موقعنا 2022
+        </span>
+    </div>
+</footer>
+<!-- end footer-->
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script><!--  jquery-->
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script><!--  jquery-->
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script><!--  bootstrap js-->
+    <!-- Core plugin JavaScript-->
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+}
+
+

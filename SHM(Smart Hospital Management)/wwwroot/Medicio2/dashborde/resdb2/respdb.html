@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"/><!--fontawsome icons-->
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"/><!-- bootstrap icons-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" /><!--font-->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet" /><!--bootstrap min-->
+    <link href="css/newres2.css" rel="stylesheet" /><!--style-->
+  </head>
+  <body>
+    <!--sidebar start-->
+    <div class="sidebar">
+      <div class="logo-details">
+        <img src="../../assets/img/avatar/res.png " class="res-img" />
+        <span class="logo_name"> موظف الإستقبال </span>
+      </div>
+      <hr class="sidebar-divider" />
+      <div class="nav-links">
+        <div class=" f_div">
+          <label class="lbl" for="touch2">
+            <span class="side_name">
+              <i class="bi bi-door-closed icon"></i>  
+               الغرف </span>
+           <i class="bi bi-chevron-compact-down arrow"></i>
+          </label>
+          <input type="checkbox" id="touch2" />
+          <ul class="slide">
+            <span>الغرف</span>
+            <li>
+              <a href="#">حجز غرفة</a>
+            </li>
+            <li>
+              <a href="#"> الغاء حجز غرفة</a>
+            </li>
+          </ul>
+        </div>
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name"
+              ><i class="bi bi-person-plus icon"></i> تسجيل مريض</span>
+          </a>
+        </div>
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name">
+              <i class="bi bi-collection icon"></i> عرض الأطباء</span>
+          </a>
+        </div>
+        <div class="s_div">
+          <a href="#">
+            <span class="side_name"
+              ><i class="bi bi-collection icon"></i> عرض المرضى</span>
+          </a>
+        </div>
+        <div class="s_div">
+          <a href="#" >
+            
+              <span class="side_name">  <i class="bi bi-receipt"></i> استعراض الفواتير</span>
+          </a>
+         
+      </div>
+      </div>
+      <hr class="sidebar-divider" />
+    </div>
+    <!-- sidebar end -->
+
+    <!--start-->
+    <section class="home-section">
+      <!-- Topbar start -->
+      <div
+        class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps"
+      >
+        <div class="row">
+          <ul class="navbar-nav ml-auto">
+            <!-- resp Info start -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="top_div">
+                  <span class="mr-2 d-lg-inline text-gray-600 small">موظف الإستقبال</span>
+                  <img class="img-profile rounded-circle" src="../img/undraw_profile_3.svg"/>
+                </div>
+              </a>
+
+              <!--resp Info Dropdown start-->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-res" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>المعلومات الشخصية
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>تسجيل خروج
+                </a>
+              </div>
+              <!--resp Info Dropdown end-->
+            </li>
+         
+            <!--resp Info end-->
+          </ul>
+        </div>
+      </div>
+         <!-- Logout Modal start-->
+         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" dir="ltr">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title modal-txt-out"  id="exampleModalLabel">
+                  تسجيل خروج
+                </h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span class="c-x-out" aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="txt_out modal-body">هل أنت متأكد</div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">
+                  إلغاء
+                </button>
+                <a class="btn btn-primary Logout-btn" href="../../login/loginrsp/loginrsp.html">تسجيل خروج</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Logout Modal end-->
+      <!-- Topbar end -->
+
+      <!-- page start -->
+      <div class="container">
+        <div class="row">
+
+          <!-- <div class="col-10 mab_div">
+            
+          </div> -->
+
+         
+          <!-- room-resv btn-->
+            <button type="button" class="btn modal-bt1" data-toggle="modal" data-target="#exampleModal3">
+              الغرف
+            </button>
+   
+          <!--  room-resv Modal start-->
+          <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title modal-txt" id="exampleModalLabel3">
+                    الغرف
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span class="c-x" aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body Center">
+                  <button type="button" class="btn btn-info modal-bt4">
+                    إلغاء حجز غرفة
+                  </button>
+                  <button type="button" class="btn btn-info modal-bt4">
+                    حجز غرفة
+                  </button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary close_btn1" data-dismiss="modal">
+                    إغلاق
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  room-resv Modal end-->
+           <!-- add-pai btn -->
+            <button type="button" class="btn modal-bt1">تسجيل مريض</button>
+
+          <!-- show-doc btn -->
+            <button type="button" class="btn modal-bt3">عرض الأطباء</button>
+
+          <!-- show-pai btn -->
+            <button type="button" class="btn modal-bt3">عرض المرضى</button>
+  
+
+            <!-- show-paibill btn -->
+            <button type="button" class="btn modal-bt2 ">
+              استعراض الفواتير
+            </button>
+     
+        </div>
+      </div>
+      <!-- page end -->
+
+      <!-- start footer -->
+      <footer>
+        <div class="footer">
+          <span class="fo_span">حقوق الطباعة &copy; موقعنا 2022</span>
+        </div>
+      </footer>
+      <!-- end footer -->
+    </section>
+    <!-- end  -->
+
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/sb-admin-2.js"></script>
+
+  </body>
+</html>

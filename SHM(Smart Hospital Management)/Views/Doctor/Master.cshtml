@@ -1,0 +1,293 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowPreviewsForDoctor>
+
+@{
+    ViewData["Title"] = "Master";
+}
+
+@section Styles{
+    <style>
+        html {
+            direction: rtl
+        }
+    </style>
+    <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!--fontawsome icons -->
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!--font -->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet"><!--style -->
+    <link href="~/Medicio2/dashborde/doctordb/css/doctor.css" rel="stylesheet"><!--style -->
+}
+<div class="sidebar">
+    <div class="logo-details">
+        <img asp-append-version="true" class="doctor-img" src="~/Medicio2/dashborde/img/doctor.jpg">
+
+
+        <span class="logo_name">@ViewBag.DoctorName</span>
+    </div>
+    <hr class="sidebar-divider ">
+    <div class="nav-links ">
+        <div class=" s_div">
+            <a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HospitalId" asp-route-DocId="@ViewBag.DoctorId"><span class="side_name"><i class="bi bi-calendar-week ic"></i> حجز موعد</span></a>
+        </div>
+        <div class="s_div">
+            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                <i class="fa fa-wheelchair ic"></i> <span class="side_name">مرضى</span>
+            </a>
+        </div>
+        <div class="s_div">
+            <a asp-controller="Surgery" asp-action="DisplaySurgeries" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                <i class="fa fa-bed ic"></i> <span class="side_name">العمليات</span>
+            </a>
+        </div>
+       
+        <div class="s_div">
+            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                <i class="fa fa-calendar ic"></i> <span class="side_name">عرض جدول الدوام</span>
+            </a>
+        </div>
+    </div>
+    <hr class="sidebar-divider ">
+</div>
+<!-- sidebar end-->
+<!-- start-->
+
+<div class="home-section">
+
+    <!-- Topbar start -->
+
+    <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
+        <div class="row">
+            <ul class="navbar-nav ml-auto">
+
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div natif">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                            <span class="badge badge-danger badge-counter">3+</span>
+                        </div>
+                    </a>
+                    <!--Alerts Dropdown start -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
+                         aria-labelledby="alertsDropdown">
+                        <h6 class="dropdown-header">
+                            مركز التنبيهات
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">ديسمبر 2019,12 </div>
+                                <span class="font-weight-bold">
+                                    ! تقرير شهري جديد جاهز للتنزيل
+                                </span>
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-success">
+                                    <i class="fas fa-donate text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">ديسمبر 2019,7</div>
+                                $290.29 has been deposited into your account!
+                            </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-warning">
+                                    <i class="fas fa-exclamation-triangle text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">ديسمبر 2019,2 </div>
+                                Spending Alert: We've noticed unusually high spending for your account.
+
+                            </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">إظهار كل التنبيهات</a>
+                    </div>
+                    <!--Alerts Dropdown end -->
+                </li>
+                <!--Alerts end -->
+
+
+                <div class="topbar-divider d-none d-sm-block"></div>
+                <!-- Nav Item - doctor Info start-->
+                <li class="nav-item dropdown no-arrow ">
+                    <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div">
+                            <span class="mr-2  d-lg-inline text-gray-600 small">@ViewBag.DoctorName</span>
+                            <img class="img-profile rounded-circle" src="~/Medicio2/dashborde/img/undraw_profile.svg">
+                        </div>
+                    </a>
+
+                    <!-- doctor Info Dropdown start -->
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-doc"
+                         aria-labelledby="userDropdown">
+                        <a class="dropdown-item" asp-action="Details" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                            المعلومات الشخصية
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href"#" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
+                            تسجيل خروج
+                        </a>
+                    </div>
+                    <!-- doctor Info Dropdown end -->
+                </li>
+                <!-- Nav Item - doctor Info end-->
+            </ul>
+        </div>
+    </div>
+    <!-- Topbar end -->
+    <!-- start page -->
+    <div class="container ">
+        <div class="row">
+
+
+
+
+            <!-- Logout Modal start-->
+            <div class="modal fade " id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true" dir="ltr">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title modal-txt" id="exampleModalLabel">تسجيل خروج</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body "> هل أنت متأكد</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
+                            <a asp-action="LogOut" class="btn btn-primary Logout-btn" href="../../login/logindoctor/logindoctor.html">تسجيل خروج</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HospitalId" asp-route-DocId="@ViewBag.DoctorId" class="btn modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                حجز موعد
+            </a>
+            <!-- Logout Modal start-->
+            <!--pait Btn -->
+            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" class="btn modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                @*<button type="button" class="btn modal-bt1 ">*@
+                المرضى
+                @*</button>*@
+            </a>
+            <!-- surg Btn-->
+            <a asp-controller="Surgery" asp-action="DisplaySurgeries" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                <button type="button" class="btn modal-bt2">
+                    العمليات
+                </button>
+            </a>
+
+            <!-- show-sce Btn-->
+            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" class="btn modal-bt2" style="display:flex;justify-content:center;align-items:center">
+                عرض جدول الدوام
+            </a>
+
+        </div>
+    </div>
+    <!-- table start-->
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+
+                            @Html.DisplayNameFor(model => model.PreviewDate)
+                        </th>
+                        <th>
+
+                            @Html.DisplayNameFor(model => model.PatientName)
+                        </th>
+                        <th>
+
+                            @Html.DisplayNameFor(model => model.PreviewHour)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int i = 0; }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PreviewDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PatientName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PreviewHour)
+                            </td>
+                            <td>
+                                @{
+                                    string confirm = "confirm" + i;
+                                    string cancel = "cancel" + i;
+                                    string delete = "delete" + i;
+                                }
+                                <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
+                                <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                                <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
+                                <button type="button" onclick="ShowForm(@i)">التشخيص</button>
+                                @{ string form = "form" + i;}
+                                <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
+                                    <input type="hidden" name="DocId" value="@ViewBag.DoctorId" />
+                                    <input type="hidden" name="HoId" value="@ViewBag.HospitalId" />
+                                    <input type="text" name="examinationRecord" value="@item.ExaminationRecord" />
+                                    @if (string.IsNullOrEmpty(item.ExaminationRecord))
+                                    {
+
+                                        <input type="submit" value="إضافة" />
+                                    }
+                                    else
+                                    {
+
+                                        <input type="submit" value="تعديل" />
+                                    }
+                                </form>
+                                @{i++;}
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- table end -->
+    <!-- end page -->
+    <!-- footer start -->
+    <footer>
+        <div class="footer">
+            <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
+        </div>
+    </footer>
+    <!-- footer end -->
+</div>
+<!-- end -->
+
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+}
+
