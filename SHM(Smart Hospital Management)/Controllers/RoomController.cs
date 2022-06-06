@@ -63,7 +63,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(rooms1);
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> BusyRooms(int id) // ??????
+        public async Task<IActionResult> BusyRooms(int id) 
         {
             var rooms = await _context.Rooms.Where(r => r.Ho_Id == id).ToListAsync();
             var data = (from res in _context.Reservations.ToList()

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7hieeHddpfegP6kY7EQE3GJnnFpA+2YMr1/XB+gV5bxXTcid/QvFEc5h5D0NZ8LuiYoe6F75r2qOJ2yL/3AzQg==",
+  "dgSpecHash": "lGdTp/jvmiUCYchyBL2CFn/CSxxAO88g9RrN+FuTHMo2CsT8w01ylZHJFE5xhijpa61wHbeRxFkQgjttpvZSzQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ASUS\\Desktop\\Graduation Project\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+  "projectFilePath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ASUS\\.nuget\\packages\\hangfire\\1.7.29\\hangfire.1.7.29.nupkg.sha512",
     "C:\\Users\\ASUS\\.nuget\\packages\\hangfire.aspnetcore\\1.7.29\\hangfire.aspnetcore.1.7.29.nupkg.sha512",

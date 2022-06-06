@@ -7622,11 +7622,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\Graduation Project\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
       "projectName": "SHM(Smart Hospital Management)",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\Graduation Project\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "projectPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
       "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\Graduation Project\\SHM(Smart Hospital Management)\\obj\\",
+      "outputPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
