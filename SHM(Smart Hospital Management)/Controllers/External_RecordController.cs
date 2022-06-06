@@ -26,7 +26,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         public async Task<IActionResult> ShowExternalRecordsPatient(int id , int PatId)//medical id
         {
             var externalRecords =await _context.External_Records.Where(e => e.Medical_Detail_Id == id).ToListAsync();
-            ViewBag.Medical_Detail_Id = id;
+            ViewBag.MedicalDetailId = id;
             ViewBag.PatientId = PatId;
             return View(externalRecords);
         }
@@ -89,6 +89,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return RedirectToAction(nameof(ShowExternalRecordsPatient), new { id = medicalDetailId,PatId });
             }
             return View();
+        }
+        [Authorize(Roles = "Patient")]
+        public async Task<IActionResult> Delete(int id ,int medicalId, int PatId)
+        {
+            var externalRecord = await _context.External_Records.FindAsync(id);
+            _context.External_Records.Remove(externalRecord);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(ShowExternalRecordsPatient), new { id=medicalId, PatId });
         }
     }
 }

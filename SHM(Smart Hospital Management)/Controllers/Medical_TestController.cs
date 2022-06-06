@@ -41,7 +41,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             Test_Name = t.Test_Name,
                             Result = mt.Test_Result
                         }).ToList();
-            ViewBag.Medical_Detail_Id = id;
+            ViewBag.MedicalDetailId = id;
             ViewBag.PatientId = PatId;
             return View(test);
         }
@@ -128,13 +128,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         }
 
         [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> Delete(int id , int PatId) // Need Complettion
+        public async Task<IActionResult> Delete(int id, int medicalId, int PatId)
         {
-            var medical_Test = await _context.Medical_Tests.FindAsync(id);
+            var test = await _context.Medical_Tests.FindAsync(id);
 
-            _context.Medical_Tests.Remove(medical_Test);
+            _context.Medical_Tests.Remove(test);
             await _context.SaveChangesAsync();
-            return RedirectToAction(""); // Not Completed
+            return RedirectToAction(nameof(ShowMedicalTestForPatient), new { id = medicalId, PatId });
         }
         public async Task<IActionResult> GetTests(int Test_Type_Id)
         {
