@@ -1,9 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "oKq5oR38aRb8nx8IJrpj1lymXKngTRlB4xMsjxiJF8Qj/4slyNCTC5YULga1sbdjf7E7kAYJ1BiiF+kSur6ipw==",
+  "dgSpecHash": "e0xZNJb0KGoPzwUHyqxvES4rLF//nlNXjmP3YJ5o3dxIvHBfPzNVgWoJ92/J9YcEPu36SQSK9TUpi9iNIbXufw==",
   "success": true,
   "projectFilePath": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Lenovo\\.nuget\\packages\\firebaseadmin\\2.3.0\\firebaseadmin.2.3.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\google.api.gax\\3.2.0\\google.api.gax.3.2.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\google.api.gax.rest\\3.2.0\\google.api.gax.rest.3.2.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\google.apis\\1.49.0\\google.apis.1.49.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\google.apis.auth\\1.49.0\\google.apis.auth.1.49.0.nupkg.sha512",
+    "C:\\Users\\Lenovo\\.nuget\\packages\\google.apis.core\\1.49.0\\google.apis.core.1.49.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\hangfire\\1.7.29\\hangfire.1.7.29.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\hangfire.aspnetcore\\1.7.29\\hangfire.aspnetcore.1.7.29.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\hangfire.core\\1.7.29\\hangfire.core.1.7.29.nupkg.sha512",
@@ -141,5 +147,12 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }

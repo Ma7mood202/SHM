@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -39,6 +41,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             join doc in _context.Doctors.ToList()
                             on pre.Doctor_Id equals doc.Doctor_Id
                             where pre.Patient_Id == id && pre.Preview_Date.Date >= DateTime.Now.Date
+                            && pre.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay
                             orderby pre.Preview_Date
                             select new CancelPreview
                             {
@@ -48,7 +51,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                 PreviewHour = pre.Preview_Date.ToString("hh:mm:tt"),
                                 DoctorPhoneNumber = _context.Doctor_Phone_Numbers.Where(dpn => dpn.Doctor_Id == doc.Doctor_Id).ToList(),
                                 Speclization = spec.FirstOrDefault(s => s.Dept_Id == Convert.ToInt32(doc.Department_Id)).Spec_Name,
-                                IsToday = pre.Preview_Date.Date == DateTime.Now.Date ? true : false,
+                                IsToday = pre.Preview_Date.Date == DateTime.Now.Date && pre.Preview_Date.TimeOfDay - DateTime.Now.TimeOfDay > TimeSpan.FromHours(2) ? true : false,
 
                             }).ToList();
             ViewBag.PatientId = id;
@@ -64,8 +67,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (patient.Canceled)
                 return RedirectToAction("DisplayPatientsPreviews", new { id = PatId });
             var preview = await _context.Previews.FindAsync(id);
-            if (preview.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay - TimeSpan.FromHours(2))
-                return RedirectToAction("DisplayPatientsPreviews", new { id = PatId });
             patient.Canceled = true;
             _context.Previews.Remove(_context.Previews.Find(id));
             await _context.SaveChangesAsync();
@@ -80,8 +81,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Master", "Doctor", new { id = DocId, HoId });
         }
-
-
         #region Create Preview For Patient
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> CreateForPatient(int id) // Patient(id) // Display All Departments in Patient.HoId
@@ -110,7 +109,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
                 return RedirectToAction("Logout", "Patient");
-            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
+            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync();
             ViewBag.PatientId = id;
             ViewBag.DeptId = DeptId;
             ViewBag.DocId = DocId;
@@ -172,6 +177,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 patient.PreviewCount++;
                 await _context.SaveChangesAsync();
                 TempData["PreviewAdded"] = "تم تسجيل الموعد بنجاح";
+                #region send notification
+                //====================================================================
+                var pat = await _context.Patients.FirstOrDefaultAsync(pat => pat.Patient_Id == p.Patient_Id);
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد للمريض  " + pat.Patient_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Doctor_Id, UserType.doc, message2);
+                //=======================================================================
+                #endregion
                 return RedirectToAction("Master", "Patient", new { id = id });
             }
             TempData["TImePatient"] = "لدى المريض موعد آخر في نفس التوقيت يرجى اختيار توقيت آخر";
@@ -190,7 +210,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.ErrorMessage = ErrorMessage;
             ViewBag.Times = new List<SelectListItem>();
-            return View(_context.Work_Days.Where(s => s.Doctor_Id == DoctorId));
+            return View(_context.Work_Days.Where(s => s.Doctor_Id == DoctorId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync());
         }
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> GetAvailableTimePost(int DocId, int HoId, int PatientId, DateTime date, TimeSpan PreviewTime)
@@ -225,7 +251,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 };
                 _context.Add(p);
                 await _context.SaveChangesAsync();
-
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","موعد جديد"},
+                            { "body","لديك موعد جديد عند الطبيب " + doctor.Doctor_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Patient_Id, UserType.pat, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("Master", "Doctor", new { id = DocId, HoId = HoId });
             }
 
@@ -265,7 +304,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
                 return RedirectToAction("Logout", "Employee");
-            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
+            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync();
             ViewBag.PatientId = PatientId;
             ViewBag.EmpId = EmpId;
             ViewBag.DeptId = id;
@@ -275,7 +320,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(workDays);
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> PickTimePost(int id, int DocId, int EmpId, int PatientId, DateTime date, TimeSpan PreviewTime)// Department(id)
+        public async Task<IActionResult> PickTimePost(int id, int DocId, int EmpId, int PatientId, DateTime date, TimeSpan PreviewTime , string isCaring)// Department(id)
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -303,11 +348,37 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     Doctor_Id = DocId,
                     Patient_Id = PatientId,
                     Preview_Date = d,
-                    Caring = false
+                    Caring = isCaring == "true"
                 };
                 _context.Add(p);
                 await _context.SaveChangesAsync();
                 TempData["PreviewAdded"] = "تم تسجيل الموعد بنجاح";
+                #region send notification
+                //==============================================================================================
+                var doc = await _context.Doctors.FirstOrDefaultAsync(pat => pat.Doctor_Id == p.Doctor_Id);
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد عند الطبيب " + doc.Doctor_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Patient_Id, UserType.pat, message);
+                var pat = await _context.Patients.FirstOrDefaultAsync(pat => pat.Patient_Id == p.Patient_Id);
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد للمريض  " + pat.Patient_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Doctor_Id, UserType.doc, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("Master", "Employee", new { id = EmpId });
             }
 
@@ -326,6 +397,22 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             _context.Previews.Remove(preview);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == preview.Doctor_Id);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title",  "ألغي الموعد"},
+                    { "body","تم إلغاء الموعد عند الطبيب " + doc.Doctor_Full_Name },
+                }
+
+            };
+            await FCMService.SendNotificationToUserAsync((int)preview.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Doctor", new { id = DocId, HoId = HoId });
         }
 

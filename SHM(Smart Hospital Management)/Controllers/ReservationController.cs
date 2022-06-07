@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +39,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
              _context.Add(res);
             await _context.SaveChangesAsync();
             TempData["Message"] = "تم الحجز بنجاح";
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "غرفتك جاهزة"},
+                    { "body","تم حجز الغرفة "+Room.Room_Number+" في الطابق "+Room.Room_Floor },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync(PatientId, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
     }

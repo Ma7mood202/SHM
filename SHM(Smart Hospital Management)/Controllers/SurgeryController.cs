@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,7 +25,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         }
 
         #region Create Surgery For Doctor
-
         [Authorize(Roles ="Doctor,DeptManager")]
         public async Task<IActionResult> DisplaySurgeries(int id, int HoId) //Doctor(id)
         {
@@ -121,6 +122,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Surgery_Time = t,
                 Surgery_Name = name
             };
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FindAsync(DocId);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "تم تحديد موعد عمليتك"},
+                    { "body","عند الطبيب "+doc.Doctor_Full_Name },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync(PatId, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("AddSurgery", "Request", new { id = DocId, HoId = HoId, surgery = JsonConvert.SerializeObject(s) });
         }
 
@@ -134,6 +150,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var surgery = await _context.Surgeries.FindAsync(id);
             _context.Surgeries.Remove(surgery);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == surgery.Doctor_Id);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "ألغيت العملية"},
+                    { "body","تم إلغاء العملية عند الطبيب " + doc.Doctor_Full_Name },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync((int)surgery.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("DisplaySurgeries", new { id = DocId, HoId });
         }
         public async Task<IActionResult> GetTimes(DateTime date, int Sr_Id, int hour, int minute)
@@ -141,7 +172,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             if (date != default)
             {
-                var su = await _context.Surgeries.Where(s => s.Surgery_Room_Id == Sr_Id).ToListAsync();
+                var su = await _context.Surgeries.Where(s => s.Surgery_Room_Id == Sr_Id && s.Surgery_Date.Date >= DateTime.Now.Date).ToListAsync();
                 List<TimeSpan> DateSurgery = new List<TimeSpan>();
                 List<TimeSpan> time = new List<TimeSpan>();
                 List<TimeSpan> Invalid = new List<TimeSpan>();
@@ -154,8 +185,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     for (TimeSpan i = TimeSpan.Zero; i < TimeSpan.FromDays(1); i += halfHour)
                     {
                         temp = TimeSpan.FromHours(i.Hours + hour) + TimeSpan.FromMinutes(i.Minutes + minute);
-                        if (temp < TimeSpan.FromDays(1) && i.Hours >= DateTime.Now.Hour)
-                            d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+                        if (date.Date == DateTime.Now.Date)
+                        {
+                            if (temp < TimeSpan.FromDays(1) && i.Hours >= DateTime.Now.Hour)
+                                d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+
+                        }
+                        else
+                        {
+                            if (temp < TimeSpan.FromDays(1))
+                                d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+                        }
                     }
                 }
                 else
