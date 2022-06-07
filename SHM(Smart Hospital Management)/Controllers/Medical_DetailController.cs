@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Break_Tables;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -155,6 +157,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 ViewBag.HoId = HoId;
                 await _context.AddRangeAsync(md);
                 await _context.SaveChangesAsync();
+                #region send notification
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "channelId","other" },
+                        { "title","الملف الطبي" },
+                        { "body","تم إضافة الملف الطبي الخاص بك " },
+                    }
+                };
+
+                await FCMService.SendNotificationToUserAsync(medical_Detail.Pa_Id, UserType.pat, message);
+
+                #endregion
                 return RedirectToAction("ShowMedicalDetailsForDoctor", new { id = medical_Detail.Pa_Id, DocId = DocId, HoId = HoId });
             }
             return View(medical_Detail);
@@ -213,7 +229,63 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Medical_Detail medical_Detail, int[] Diseases, string[] Chronic, string[] Family, int HoId, int DocId, int[] Allergies)
         {
-            return Ok();
+            var doc = _context.Doctors.Find(DocId);
+            if (!doc.Active)
+            {
+                RedirectToAction("LogOut", "Doctor", new { id = DocId });
+            }
+            _context.Update(medical_Detail);
+            var aller = _context.Medical_Allergies.Where(m => m.Medical_Detail_Id == medical_Detail.Medical_Details_Id).ToList();
+            _context.Medical_Allergies.RemoveRange(aller);
+            await _context.SaveChangesAsync();
+            if (Allergies.Length != 0)
+            {
+                Medical_Allergy[] ma = new Medical_Allergy[Allergies.Length] ;
+                for (int i = 0; i < ma.Length; i++)
+                {
+                    ma[i] = new Medical_Allergy()
+                    {
+                        Medical_Detail_Id = medical_Detail.Medical_Details_Id,
+                        Allergy_Id = Allergies[i]
+                    };
+                }
+                await _context.AddRangeAsync(ma);
+            }
+
+            var MedicalDisease = _context.Medical_Diseases.Where(m => m.Medical_Detail_Id == medical_Detail.Medical_Details_Id).ToList();
+            _context.Medical_Diseases.RemoveRange(MedicalDisease);
+            await _context.SaveChangesAsync();
+            Medical_Disease[] mds = new Medical_Disease[Diseases.Length];
+            for (int i = 0; i < Family.Length; i++)
+            {
+                Medical_Disease temp = new Medical_Disease()
+                {
+                    Medical_Detail_Id = medical_Detail.Medical_Details_Id,
+                    Disease_Id = int.Parse(Family[i]),
+                    Family_Health_History = Family[i] == "true",
+                    Chronic_Diseases = Chronic[i]== "true"
+                };
+                mds[i]=temp;
+            }
+
+            await _context.AddRangeAsync(mds);
+            await _context.SaveChangesAsync();
+
+            #region send notification
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تعديل على الملف الطبي"},
+                            { "body","تم تعديل على الملف الطبي " },
+                        }
+            };
+            var pat = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(p => p.Medical_Details_Id == medical_Detail.Medical_Details_Id);
+            await FCMService.SendNotificationToUserAsync(pat.Patient.Patient_Id, UserType.pat, message);
+
+            #endregion
+            return RedirectToAction("ShowMedicalDetailsForDoctor", new { id = pat.Patient.Patient_Id, DocId = DocId, HoId = HoId });
         }
 
         public async Task<IActionResult> GetDiseases(string Diseases_TypeId)

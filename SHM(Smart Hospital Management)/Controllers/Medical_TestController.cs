@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -122,6 +124,22 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                 await _context.AddRangeAsync(tests);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var p = _context.Medical_Details.Include(p => p.Patient).FirstOrDefault(p => p.Medical_Details_Id == medicalDetailId);
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تحليل جديد"},
+                            { "body","تم إضافة  " + tests.Count + " تحاليل جديدة."},
+                        }
+
+                };
+                await FCMService.SendNotificationToUserAsync(p.Patient.Patient_Id, UserType.pat, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction(nameof(ShowMedicalTestForDoctor), new { id = medicalDetailId, DocId, HoId });
             }
             return View();

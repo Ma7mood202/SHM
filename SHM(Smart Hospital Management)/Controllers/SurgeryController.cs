@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -120,6 +122,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Surgery_Time = t,
                 Surgery_Name = name
             };
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FindAsync(DocId);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "تم تحديد موعد عمليتك"},
+                    { "body","عند الطبيب "+doc.Doctor_Full_Name },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync(PatId, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("AddSurgery", "Request", new { id = DocId, HoId = HoId, surgery = JsonConvert.SerializeObject(s) });
         }
 
@@ -133,6 +150,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var surgery = await _context.Surgeries.FindAsync(id);
             _context.Surgeries.Remove(surgery);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == surgery.Doctor_Id);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "ألغيت العملية"},
+                    { "body","تم إلغاء العملية عند الطبيب " + doc.Doctor_Full_Name },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync((int)surgery.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("DisplaySurgeries", new { id = DocId, HoId });
         }
         public async Task<IActionResult> GetTimes(DateTime date, int Sr_Id, int hour, int minute)

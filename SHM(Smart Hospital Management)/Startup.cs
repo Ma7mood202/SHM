@@ -1,3 +1,5 @@
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,6 +14,7 @@ using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.HangFire;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,6 +41,14 @@ namespace SHM_Smart_Hospital_Management_
                 UseRecommendedIsolationLevel = true
             }));
             services.AddHangfireServer();
+
+            //firebase service
+            Stream stream = new FileStream(@"wwwroot\flutter-asp-notifications-firebase-adminsdk-9eao9-175cbdd607.json", FileMode.Open);
+            var credential = GoogleCredential.FromStream(stream);
+            FirebaseApp.Create(new AppOptions()
+            {
+                Credential = credential,
+            });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
               .AddCookie(options =>

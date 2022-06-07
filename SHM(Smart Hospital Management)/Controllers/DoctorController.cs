@@ -16,6 +16,7 @@ using SHM_Smart_Hospital_Management_.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SHM_Smart_Hospital_Management_.PhoneNumbers;
 using Newtonsoft.Json;
+using SHM_Smart_Hospital_Management_.Notifications;
 
 namespace SHM_Smart_Hospital_Management_.Controllers
 {
@@ -204,6 +205,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), doctor.Doctor_Id, UserType.doc, Platform.Web);
                     return RedirectToAction("Master", "Doctor", new { id = doctor.Doctor_Id, HoId = hospital.Ho_Id });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -211,9 +213,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             //*************
             return View();
         }
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> LogOut(int id)
         {
             await HttpContext.SignOutAsync();
+            FCMService.RemoveUnusedToken(id, UserType.doc, Platform.Web);
             return RedirectToAction("Index", "Home");
         }
         [Authorize(Roles = "IT")]
@@ -353,6 +356,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 }
                 await _context.AddRangeAsync(pns);
                 await _context.SaveChangesAsync();
+                FCMService.AddToken(doctor.Doctor_Id, UserType.doc);
                 return RedirectToAction("Master", new { id = DocId, HoId = HoId });
             }
             return View(doctor);
@@ -403,6 +407,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(id);
             doctor.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(doctor.Doctor_Id, UserType.doc);
             return RedirectToAction("DisplayDoctrosByDeptId", new { id = DeptMgrId, HoId = HoId });
         }
         [Authorize(Roles = "IT")]
@@ -444,6 +449,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(id);
             doctor.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(doctor.Doctor_Id, UserType.doc);
             return RedirectToAction("ShowActiveDoctorsForIT", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -455,6 +461,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(id);
             doctor.Active = true;
             await _context.SaveChangesAsync();
+            FCMService.AddToken(doctor.Doctor_Id, UserType.doc);
             return RedirectToAction("ShowUnActiveDoctorsForIT", new { id = EmpId });
         }
         public async Task<IActionResult> GetAreas(string CityId)

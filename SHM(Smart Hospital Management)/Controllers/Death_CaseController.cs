@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,6 +65,18 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 death_Case.Dead_Patient = patient;
                 _context.Add(death_Case);
                 await _context.SaveChangesAsync();
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "channelId","other" },
+                        { "title","وفاة مريض" },
+                        { "body"," تم تسجيل وفاة المريض بتاريخ " + death_Case.Death_Date.ToShortDateString() },
+                    }
+                };
+
+                await FCMService.SendNotificationToUserAsync(death_Case.Dead_Patient.Patient_Id, UserType.pat, message);
+
                 return RedirectToAction("HoPatientsForResception", "Patient", new { id = HoId, EmpId });
             }
             return View(death_Case);

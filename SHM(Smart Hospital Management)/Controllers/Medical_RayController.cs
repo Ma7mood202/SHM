@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -118,6 +120,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                 await _context.AddRangeAsync(rays);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var pat = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(p => p.Medical_Details_Id ==medicalDetailId);
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "channelId","other" },
+                        { "title", "صورة أشعة جديدة"},
+                        { "body","تم إضافة  "+ rays.Count+" صورة جديدة" },
+                    }
+                };
+                await FCMService.SendNotificationToUserAsync(pat.Patient.Patient_Id, UserType.pat, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction(nameof(ShowRaysForDoctor), new { id = medicalDetailId, DocId, HoId });
             }
             return View();

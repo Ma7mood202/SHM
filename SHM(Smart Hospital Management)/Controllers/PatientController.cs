@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.PasswordHash;
 using SHM_Smart_Hospital_Management_.PhoneNumbers;
 using System;
@@ -111,7 +112,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(patients.Where(p => p.Patient_Full_Name.Contains(patientName)).ToList());
         }
         [Authorize(Roles = "Nurse,HeadNurse")]
-        public async Task<IActionResult> DisplayPatientsByRoomNumber(int id, int EmpId, string roomNumber) // Hospital (id)
+        public async Task<IActionResult> DisplayPatientsByRoomNumber(int id, int EmpId, int roomNumber) // Hospital (id)
         {
             var Nurse = await _context.Employees.FindAsync(EmpId);
             if (!Nurse.Active)
@@ -125,7 +126,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var data = (from p in patients
                         join r in _context.Rooms.ToList()
                         on p.res.Room_Id equals r.Room_Id
-                        where r.Room_Number.ToUpper().Contains(roomNumber.ToUpper())
+                        where r.Room_Id == roomNumber
                         select p.p).Distinct().ToList();
             ViewBag.EmpId = EmpId;
             return View(data);
@@ -225,6 +226,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), patient.Patient_Id, UserType.pat, Platform.Web);
                     return RedirectToAction("Master", "Patient", new { id = patient.Patient_Id});
                 }
                 return RedirectToAction(ReturnUrl);
@@ -232,9 +234,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             //*************
             return View();
         }
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> LogOut(int id)
         {
             await HttpContext.SignOutAsync();
+            FCMService.RemoveUnusedToken(id, UserType.pat, Platform.Web);
             return RedirectToAction("Index", "Home");
         }
 
@@ -278,6 +281,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.AddRangeAsync(pns);
                 await _context.SaveChangesAsync();
                 TempData["PatientAdded"] = "تمت إضافة" + patient.Patient_Full_Name;
+                FCMService.AddToken(patient.Patient_Id, UserType.pat);
                 return RedirectToAction("Master", "Employee", new { id = EmpId });
             }
             return View(patient);
@@ -312,6 +316,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = await _context.Patients.FindAsync(id);
             patient.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(patient.Patient_Id, UserType.pat);
             return RedirectToAction("ShowActivePatientsForIT", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -323,6 +328,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = await _context.Patients.FindAsync(id);
             patient.Active = true;
             await _context.SaveChangesAsync();
+            FCMService.AddToken(patient.Patient_Id, UserType.pat);
             return RedirectToAction("ShowUnActivePatientsForIT", new { id = EmpId });
         }
         public async Task<IActionResult> GetAreas(string CityId)

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -120,6 +122,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 }
                 await _context.AddRangeAsync(wd);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "يمكنك الآن تفقد جدول دوامك"},
+                            { "body","تم إضافة جدول الدوام"},
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync(DoctorId, UserType.doc, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("GetWorkDays", new { id = DoctorId, HoId, DeptMgrId });
             }
             ViewBag.DeptMgrId = DeptMgrId;
@@ -146,6 +162,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 _context.Update(work_Days);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","تفقد جدول دوامك"},
+                            { "body","تم تعديل جدول الدوام" },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync(work_Days.Doctor_Id, UserType.doc, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("GetWorkDays", new { id = work_Days.Doctor_Id, HoId, DeptMgrId });
             }
             return View(work_Days);

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +37,39 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var request = await _context.Requests.FindAsync(id);
             var HeadNurse = await _context.Employees.FindAsync(request.Employee_Id);
             if (!HeadNurse.Active)
+            {
+                #region send notification
+                //==============================================================================================
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "عذراً لم تتم الموافقة على طلبك"},
+                            { "body","لم نتمكن من الموافقة على طلبك يرجى إعادة المحاولة" },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)request.Patient_Id, UserType.pat, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("LogOut", "Employee");
+            }
             request.Accept = true;
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "تمت الموافقة على طلبك"},
+                    { "body","سنفوم بإرسال ممرض في أقرب وقت" },
+                }
+            };
+            await FCMService.SendNotificationToUserAsync((int)request.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("ShowRequestsForHeadNurse", new { id = HeadNurse.Employee_Id });
         }
         [Authorize(Roles = "HeadNurse")]
@@ -46,9 +78,41 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var request = await _context.Requests.FindAsync(id);
             var HeadNurse = await _context.Employees.FindAsync(request.Employee_Id);
             if (!HeadNurse.Active)
+            {
+                #region send notification
+                //==============================================================================================
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "عذراً لم تتم الموافقة على طلبك"},
+                    { "body"," " },
+                }
+
+                };
+                await FCMService.SendNotificationToUserAsync((int)request.Patient_Id, UserType.pat, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("LogOut", "Employee");
+            }
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "عذراً لم تتم الموافقة على طلبك"},
+                    { "body"," " },
+                }
+
+            };
+            await FCMService.SendNotificationToUserAsync((int)request.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("ShowRequestsForHeadNurse", new { id = HeadNurse.Employee_Id });
 
         }
@@ -61,7 +125,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return RedirectToAction("LogOut", "Patient");
             if (patient.Sent)
             {
-                TempData["Notification ya huda"] = "لا يمكن إرسال اكثر من طلب في نفس اليوم";
+                #region send notification
+                //==============================================================================================
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","لا يمكن إرسال اكثر من طلب في نفس اليوم" },
+                            { "body"," " },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)patient.Patient_Id, UserType.pat, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("Master", "Patient", new { id });
             }
             patient.Sent = true;
@@ -80,6 +157,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title",request.Request_Description},
+                            { "body"," " },
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)request.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Patient", new { id });
         }
         #endregion
@@ -107,6 +198,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Doctor", new { id, HoId });
         }
         [Authorize(Roles = "IT")]
@@ -129,6 +233,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -151,6 +268,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
 
@@ -174,6 +304,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -196,6 +339,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -218,6 +374,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -240,6 +409,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -264,6 +446,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -288,18 +483,46 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", request.Request_Description},
+                        }
+            };
+            await FCMService.SendNotificationToUserAsync((int)Mgr.Employee_Id, UserType.emp, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> AcceptRequest(int id, int mgrId)
         {
             var request = await _context.Requests.FindAsync(id);
+            var hoId = _context.Employees.Find(mgrId).Ho_Id;
+            var itIds = await _context.Employees.Where(e => e.Employee_Job == "IT" && e.Ho_Id == hoId).Select(e => e.Employee_Id).ToListAsync();
             if (request.Request_Type == "AddDepartment")
             {
                 request.Accept = true;
                 Department department = JsonConvert.DeserializeObject<Department>(request.Request_Data);
                 _context.Add(department);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على إضافة قسم" +department.Department_Name},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "DeleteDepartment")
@@ -308,6 +531,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 var department = _context.Departments.Find(int.Parse(request.Request_Data));
                 department.Active = false;
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على إزالة قسم" + department.Department_Name},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "AddRoom")
@@ -316,6 +552,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Room room = JsonConvert.DeserializeObject<Room>(request.Request_Data);
                 _context.Add(room);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                    {
+                        { "channelId","other" },
+                        { "title", "تمت الموافقة على إضافة الغرفة" + room.Room_Number},
+                    }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "DeleteRoom")
@@ -324,6 +573,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 var room = _context.Rooms.Find(int.Parse(request.Request_Data));
                 room.Active = false;
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على إزالة الغرفة" + room.Room_Number},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "AddSurgeryRoom")
@@ -332,6 +594,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Surgery_Room room = JsonConvert.DeserializeObject<Surgery_Room>(request.Request_Data);
                 _context.Add(room);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على إضافة غرفة العمليات" + room.Su_Room_Number},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "DeleteSurgeryRoom")
@@ -340,6 +615,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 var room = _context.Surgery_Rooms.Find(int.Parse(request.Request_Data));
                 room.Active = false;
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على إزالة غرفة العمليات" + room.Su_Room_Number},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "AddDeptManager")
@@ -352,6 +640,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 dep.Dept_Manager = doctor;
                 _context.Update(dep);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على تعيين د. " + doctor.Doctor_Full_Name+" رئيس قسم "+dep.Department_Name},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "UpdateDeptManager")
@@ -362,6 +663,19 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 department.Dept_Manager = doctor;
                 _context.Update(department);
                 await _context.SaveChangesAsync();
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "تمت الموافقة على تعيين د. " + doctor.Doctor_Full_Name + " رئيس قسم " + department.Department_Name},
+                        }
+                };
+                await FCMService.SendNotificationsToItAsync(itIds, UserType.emp, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
             if (request.Request_Type == "AddSurgery")
@@ -370,6 +684,33 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Surgery surgery = JsonConvert.DeserializeObject<Surgery>(request.Request_Data);
                 _context.Add(surgery);
                 await _context.SaveChangesAsync();
+                #region send notification to doctor
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","تمت الموافقة على عملية المريض "+_context.Patients.Find(surgery.Patient_Id).Patient_Full_Name},
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)surgery.Doctor_Id, UserType.doc, message);
+                //=========================================================================================
+                #endregion
+
+                #region send notification to patient
+                //==============================================================================================
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title", "تم حجز العملية عند الطبيب "+_context.Doctors.Find(surgery.Doctor_Id).Doctor_Full_Name},
+                }
+                };
+                await FCMService.SendNotificationToUserAsync((int)surgery.Patient_Id, UserType.pat, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
             }
 
@@ -381,7 +722,29 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var request = _context.Requests.Find(id);
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
+            //#region send notification to doctor
+            ////==============================================================================================
+            //Surgery surgery = JsonConvert.DeserializeObject<Surgery>(request.Request_Data);
+            //var message = new MulticastMessage()
+            //{
+            //    Data = new Dictionary<string, string>()
+            //            {
+            //                { "channelId","other" },
+            //                { "title", "لم تتم الموافقة على عملية المريض " + _context.Patients.Find(surgery.Patient_Id).Patient_Full_Name},
+            //            }
+            //};
+            //await FCMService.SendNotificationToUserAsync((int)surgery.Doctor_Id, UserType.doc, message);
+            ////=========================================================================================
+            //#endregion
             return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
+        }
+        public async Task<IActionResult> EmergencyAlert(int id)
+        {
+            var hoId = _context.Employees.Find(id).Ho_Id;
+            var dept = _context.Departments.FirstOrDefault(d => d.Ho_Id == hoId).Department_Id;
+            var DocIds = await _context.Doctors.Where(e => e.Department_Id == dept).Select(e => e.Doctor_Id).ToListAsync();
+            await FCMService.SendEmergencyNotificationsToDoctorsAsync(DocIds);
+            return RedirectToAction("MasterHoMgr", "Employee", new { id = id });
         }
     }
 }

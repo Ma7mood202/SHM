@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {}
+    "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {}
   },
   "projects": {
-    "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {
+    "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+        "projectUniqueName": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
         "projectName": "SHM(Smart Hospital Management)",
-        "projectPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
+        "projectPath": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+        "packagesPath": "C:\\Users\\Huda\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Huda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,6 +45,10 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "FirebaseAdmin": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Hangfire": {
               "target": "Package",
               "version": "[1.7.29, )"

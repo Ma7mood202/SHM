@@ -2,6 +2,85 @@
   "version": 3,
   "targets": {
     "net5.0": {
+      "FirebaseAdmin/2.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Rest": "3.2.0",
+          "Google.Apis.Auth": "1.49.0",
+          "System.Collections.Immutable": "1.7.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/FirebaseAdmin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/FirebaseAdmin.dll": {}
+        }
+      },
+      "Google.Api.Gax/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.0.0",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Api.Gax.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Api.Gax.dll": {}
+        }
+      },
+      "Google.Api.Gax.Rest/3.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax": "3.2.0",
+          "Google.Apis.Auth": "[1.48.0, 2.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Api.Gax.Rest.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Api.Gax.Rest.dll": {}
+        }
+      },
+      "Google.Apis/1.49.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis.Core": "1.49.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.dll": {}
+        }
+      },
+      "Google.Apis.Auth/1.49.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Apis": "1.49.0",
+          "Google.Apis.Core": "1.49.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll": {},
+          "lib/netstandard2.0/Google.Apis.Auth.dll": {}
+        }
+      },
+      "Google.Apis.Core/1.49.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Apis.Core.dll": {}
+        }
+      },
       "Hangfire/1.7.29": {
         "type": "package",
         "dependencies": {
@@ -2205,6 +2284,129 @@
     }
   },
   "libraries": {
+    "FirebaseAdmin/2.3.0": {
+      "sha512": "ror9V68bFWdr3VXoCPQrAAJ1ZA8dyLzIHJvy53BmoD83Ze9VuWC9hPBicPqqOANP3VTMWnylC7xci59UEMuU4A==",
+      "type": "package",
+      "path": "firebaseadmin/2.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "firebaseadmin.2.3.0.nupkg.sha512",
+        "firebaseadmin.nuspec",
+        "lib/net461/FirebaseAdmin.dll",
+        "lib/net461/FirebaseAdmin.xml",
+        "lib/netstandard2.0/FirebaseAdmin.dll",
+        "lib/netstandard2.0/FirebaseAdmin.xml"
+      ]
+    },
+    "Google.Api.Gax/3.2.0": {
+      "sha512": "0OjahFAHTOoprSgvJiQ6/fIQLrUYU4QIFgkuJ51/lcmhZbuXxB3ycPk3JTVEvx6A5yQBL14wgmHgwXLcEsnu3Q==",
+      "type": "package",
+      "path": "google.api.gax/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.api.gax.3.2.0.nupkg.sha512",
+        "google.api.gax.nuspec",
+        "lib/net461/Google.Api.Gax.dll",
+        "lib/net461/Google.Api.Gax.pdb",
+        "lib/net461/Google.Api.Gax.xml",
+        "lib/netstandard2.0/Google.Api.Gax.dll",
+        "lib/netstandard2.0/Google.Api.Gax.pdb",
+        "lib/netstandard2.0/Google.Api.Gax.xml"
+      ]
+    },
+    "Google.Api.Gax.Rest/3.2.0": {
+      "sha512": "YY4mD0nGxTx1uez7Perm+zAd3FH50dd3+7HTYsRFCywDEtj3RkrMjcAmw6mNpKkw2sRICu7aYNy1mgMjd3nVbw==",
+      "type": "package",
+      "path": "google.api.gax.rest/3.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.api.gax.rest.3.2.0.nupkg.sha512",
+        "google.api.gax.rest.nuspec",
+        "lib/net461/Google.Api.Gax.Rest.dll",
+        "lib/net461/Google.Api.Gax.Rest.pdb",
+        "lib/net461/Google.Api.Gax.Rest.xml",
+        "lib/netstandard2.0/Google.Api.Gax.Rest.dll",
+        "lib/netstandard2.0/Google.Api.Gax.Rest.pdb",
+        "lib/netstandard2.0/Google.Api.Gax.Rest.xml"
+      ]
+    },
+    "Google.Apis/1.49.0": {
+      "sha512": "fmXQQTxZFOBlnvokvdQMzq0Lt+g2QzpZ4H6U8lMMFHgAR8ZqxQnPN5yHDpoHf7a++hJHb5W3pALxauGsq+afKQ==",
+      "type": "package",
+      "path": "google.apis/1.49.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.1.49.0.nupkg.sha512",
+        "google.apis.nuspec",
+        "lib/net45/Google.Apis.PlatformServices.dll",
+        "lib/net45/Google.Apis.dll",
+        "lib/net45/Google.Apis.pdb",
+        "lib/net45/Google.Apis.xml",
+        "lib/netstandard1.3/Google.Apis.dll",
+        "lib/netstandard1.3/Google.Apis.pdb",
+        "lib/netstandard1.3/Google.Apis.xml",
+        "lib/netstandard2.0/Google.Apis.dll",
+        "lib/netstandard2.0/Google.Apis.pdb",
+        "lib/netstandard2.0/Google.Apis.xml"
+      ]
+    },
+    "Google.Apis.Auth/1.49.0": {
+      "sha512": "3V9ohvixQtjaEvk7T9Ac7E/KvwEPa7eL4aMNreJDI0CEPzCdQdk2zCvaJPRrNIjhe+UuBeOeom1oAOMFB74JHg==",
+      "type": "package",
+      "path": "google.apis.auth/1.49.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.auth.1.49.0.nupkg.sha512",
+        "google.apis.auth.nuspec",
+        "lib/net45/Google.Apis.Auth.PlatformServices.dll",
+        "lib/net45/Google.Apis.Auth.dll",
+        "lib/net45/Google.Apis.Auth.pdb",
+        "lib/net45/Google.Apis.Auth.xml",
+        "lib/netstandard1.3/Google.Apis.Auth.PlatformServices.dll",
+        "lib/netstandard1.3/Google.Apis.Auth.dll",
+        "lib/netstandard1.3/Google.Apis.Auth.pdb",
+        "lib/netstandard1.3/Google.Apis.Auth.xml",
+        "lib/netstandard2.0/Google.Apis.Auth.PlatformServices.dll",
+        "lib/netstandard2.0/Google.Apis.Auth.dll",
+        "lib/netstandard2.0/Google.Apis.Auth.pdb",
+        "lib/netstandard2.0/Google.Apis.Auth.xml"
+      ]
+    },
+    "Google.Apis.Core/1.49.0": {
+      "sha512": "9DgGdtyzgrCfHWwc/HiDXDbykNMeKQozbEHYEUEcezRuH+YR3fvq7YGVBDmUM8g6qEL3kDk6h5EU4h0IJwue1w==",
+      "type": "package",
+      "path": "google.apis.core/1.49.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.apis.core.1.49.0.nupkg.sha512",
+        "google.apis.core.nuspec",
+        "lib/net45/Google.Apis.Core.dll",
+        "lib/net45/Google.Apis.Core.pdb",
+        "lib/net45/Google.Apis.Core.xml",
+        "lib/netstandard1.3/Google.Apis.Core.dll",
+        "lib/netstandard1.3/Google.Apis.Core.pdb",
+        "lib/netstandard1.3/Google.Apis.Core.xml",
+        "lib/netstandard2.0/Google.Apis.Core.dll",
+        "lib/netstandard2.0/Google.Apis.Core.pdb",
+        "lib/netstandard2.0/Google.Apis.Core.xml"
+      ]
+    },
     "Hangfire/1.7.29": {
       "sha512": "sB9lkvJ84AIr0xoZh2pEDpX2zezlZlMUkQ8Zk5Xvd4hU/EdZw6V9qPvhybz90Ii4DtMDjJEYJheehk+H3sbaeQ==",
       "type": "package",
@@ -4200,7 +4402,7 @@
       ]
     },
     "System.Collections.Specialized/4.3.0": {
-      "sha512": "Epx8PoVZR0iuOnJJDzp7pWvdfMMOAvpUo95pC4ScH2mJuXkKA2Y4aR3cG9qt2klHgSons1WFh4kcGW7cSXvrxg==",
+      "sha512": "NoPBj0ykejqAWW4p4gGtrrL+3c84ZLSvGnHgq422ew1Rj4WKj1FA8/BCybqC111EtgcqUl6ZJNFYYS22HLgbjA==",
       "type": "package",
       "path": "system.collections.specialized/4.3.0",
       "files": [
@@ -4386,7 +4588,7 @@
       ]
     },
     "System.ComponentModel.Primitives/4.3.0": {
-      "sha512": "j8GUkCpM8V4d4vhLIIoBLGey2Z5bCkMVNjEZseyAlm4n5arcsJOeI3zkUP+zvZgzsbLTYh4lYeP/ZD/gdIAPrw==",
+      "sha512": "KMVuoQ+8bMQ/Z59M3s64num5AD74X5YSqVc7ibwGkPTfmmkl2W8VuSxLRJtpw4KzQrSKUgR0BLbF0adPfcTSGQ==",
       "type": "package",
       "path": "system.componentmodel.primitives/4.3.0",
       "files": [
@@ -7605,6 +7807,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "FirebaseAdmin >= 2.3.0",
       "Hangfire >= 1.7.29",
       "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0.17",
       "Microsoft.EntityFrameworkCore >= 5.0.17",
@@ -7616,23 +7819,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
+    "C:\\Users\\Huda\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "projectUniqueName": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
       "projectName": "SHM(Smart Hospital Management)",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
+      "projectPath": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "packagesPath": "C:\\Users\\Huda\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Huda\\Desktop\\SHM\\SHM(Smart Hospital Management)\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Huda\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7658,6 +7864,10 @@
       "net5.0": {
         "targetAlias": "net5.0",
         "dependencies": {
+          "FirebaseAdmin": {
+            "target": "Package",
+            "version": "[2.3.0, )"
+          },
           "Hangfire": {
             "target": "Package",
             "version": "[1.7.29, )"

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -175,6 +177,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 patient.PreviewCount++;
                 await _context.SaveChangesAsync();
                 TempData["PreviewAdded"] = "تم تسجيل الموعد بنجاح";
+                #region send notification
+                //====================================================================
+                var pat = await _context.Patients.FirstOrDefaultAsync(pat => pat.Patient_Id == p.Patient_Id);
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد للمريض  " + pat.Patient_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Doctor_Id, UserType.doc, message2);
+                //=======================================================================
+                #endregion
                 return RedirectToAction("Master", "Patient", new { id = id });
             }
             TempData["TImePatient"] = "لدى المريض موعد آخر في نفس التوقيت يرجى اختيار توقيت آخر";
@@ -234,7 +251,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 };
                 _context.Add(p);
                 await _context.SaveChangesAsync();
-
+                #region send notification
+                //==============================================================================================
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","موعد جديد"},
+                            { "body","لديك موعد جديد عند الطبيب " + doctor.Doctor_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Patient_Id, UserType.pat, message);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("Master", "Doctor", new { id = DocId, HoId = HoId });
             }
 
@@ -323,6 +353,32 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 _context.Add(p);
                 await _context.SaveChangesAsync();
                 TempData["PreviewAdded"] = "تم تسجيل الموعد بنجاح";
+                #region send notification
+                //==============================================================================================
+                var doc = await _context.Doctors.FirstOrDefaultAsync(pat => pat.Doctor_Id == p.Doctor_Id);
+                var message = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد عند الطبيب " + doc.Doctor_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Patient_Id, UserType.pat, message);
+                var pat = await _context.Patients.FirstOrDefaultAsync(pat => pat.Patient_Id == p.Patient_Id);
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title", "موعد جديد"},
+                            { "body","لديك موعد جديد للمريض  " + pat.Patient_Full_Name },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)p.Doctor_Id, UserType.doc, message2);
+                //=========================================================================================
+                #endregion
                 return RedirectToAction("Master", "Employee", new { id = EmpId });
             }
 
@@ -341,6 +397,22 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             _context.Previews.Remove(preview);
             await _context.SaveChangesAsync();
+            #region send notification
+            //==============================================================================================
+            var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == preview.Doctor_Id);
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                {
+                    { "channelId","other" },
+                    { "title",  "ألغي الموعد"},
+                    { "body","تم إلغاء الموعد عند الطبيب " + doc.Doctor_Full_Name },
+                }
+
+            };
+            await FCMService.SendNotificationToUserAsync((int)preview.Patient_Id, UserType.pat, message);
+            //=========================================================================================
+            #endregion
             return RedirectToAction("Master", "Doctor", new { id = DocId, HoId = HoId });
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.PasswordHash;
 using SHM_Smart_Hospital_Management_.PhoneNumbers;
 using System;
@@ -130,7 +131,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 }
                 await _context.AddRangeAsync(epn);
                 await _context.SaveChangesAsync();
-
+                FCMService.AddToken(Nurse.Employee_Id, UserType.emp);
                 return RedirectToAction("Master", new { id = EmpId });
             }
             return View(Nurse);
@@ -223,6 +224,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 hospital.Manager = employee;
                 _context.Update(hospital);
                 _context.SaveChanges();
+                FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("Master", "Admin");
             }
             return View(employee);
@@ -264,6 +266,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
                     return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id, HoId = int.Parse(fc["hospital"]) });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -298,6 +301,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), HoManager.Employee_Id, UserType.emp, Platform.Web);
                     return RedirectToAction("MasterHoMgr", "Employee", new { id = HoManager.Employee_Id });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -306,9 +310,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View();
 
         }
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> LogOut(int id)
         {
             await HttpContext.SignOutAsync();
+            FCMService.RemoveUnusedToken(id, UserType.emp, Platform.Web);
             return RedirectToAction("Index", "Home");
         }
 
@@ -361,6 +366,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 }
                 await _context.AddRangeAsync(pns);
                 await _context.SaveChangesAsync();
+                FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("MasterHoMgr", new { id = MgrId });
             }
             return View(employee);
@@ -371,6 +377,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(employee.Employee_Id, UserType.emp);
             return RedirectToAction("HoEmployees", new { id = MgrId });
         }
         [Authorize(Roles = "HeadNurse")]
@@ -379,6 +386,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(employee.Employee_Id, UserType.emp);
             return RedirectToAction("DisplayNurses", new { id = HeadNurseId, HoId = employee.Ho_Id });
         }
 
@@ -449,6 +457,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = false;
             await _context.SaveChangesAsync();
+            FCMService.RemoveToken(employee.Employee_Id, UserType.emp);
             return RedirectToAction("ShowActiveEmployeesForIT", new { id = EmpId });
         }
         [Authorize(Roles = "IT")]
@@ -460,6 +469,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = true;
             await _context.SaveChangesAsync();
+            FCMService.AddToken(employee.Employee_Id, UserType.emp);
             return RedirectToAction("ShowUnActiveEmployeesForIT", new { id = EmpId });
         }
 

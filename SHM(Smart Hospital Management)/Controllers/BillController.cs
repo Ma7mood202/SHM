@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SHM_Smart_Hospital_Management_.Data;
 using SHM_Smart_Hospital_Management_.Models;
+using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -65,6 +67,22 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             bill.Paid = true;
             _context.Update(bill);
             await _context.SaveChangesAsync();
+            #region send notification
+            var message = new MulticastMessage()
+            {
+                Data = new Dictionary<string, string>()
+                    {
+                        { "channelId","other" },
+                        { "title","تم دفع الفاتورة" },
+                        { "body","تم دفع الفاتورة بتاريخ " + bill.Bill_Date.ToShortDateString() },
+                    }
+
+            };
+
+            await FCMService.SendNotificationToUserAsync(bill.Patient_Id, UserType.pat, message);
+
+            #endregion
+
             return RedirectToAction("ShowBillForResception", new { id = PatId, EmpId = EmpId });
         }
         [Authorize(Roles = "Resception")]
