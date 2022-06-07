@@ -9,6 +9,7 @@ namespace SHM_Smart_Hospital_Management_.Models
 {
     public class Department
     {
+
         [Key]
         public int Department_Id { get; set; }
         [Display(Name = "Is Active")]
