@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.CancelPreview>
+
+@{
+    ViewData["Title"] = "DisplayPatientsPreviews";
+}
+
+<h1>DisplayPatientsPreviews</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviewDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviewHour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Speclization)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviewDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviewHour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Speclization)
+            </td>
+            <td>
+                @if (item.IsToday)
+                {
+                    <a asp-action="CancelPreview" asp-route-id="@item.PreviewId" asp-route-PatId="@ViewBag.PatientId">إلغاء الموعد</a> 
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId">Back to Master Page</a>

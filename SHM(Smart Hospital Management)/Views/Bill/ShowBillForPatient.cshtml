@@ -1,0 +1,84 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Bill>
+
+@{
+    ViewData["Title"] = "ShowBillForPatient";
+}
+
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style="direction:rtl; width:auto; position:relative; right:13%">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill_Examination)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill_Surgeries)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill_Rays)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill_Medical_Test)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill_Room_Service)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Paid)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bill_Examination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bill_Surgeries)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bill_Rays)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bill_Medical_Test)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Bill_Room_Service)
+                    </td>
+                    <td>
+                        @if (item.Paid)
+                        {
+                            <span>مدفوعة</span>
+                        }
+                        else
+                        {
+                            <span>غير مدفوعة</span>
+                        }
+
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 46%;">Back to Master Page</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

@@ -1,0 +1,155 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Doctor
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+
+<form asp-action="Create" method="post" class="All_form" style="background-color:white">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_First_Name"></label>
+                <input asp-for="Doctor_First_Name" /><br />
+                <span asp-validation-for="Doctor_First_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Middle_Name"></label>
+                <input asp-for="Doctor_Middle_Name" /><br />
+                <span asp-validation-for="Doctor_Middle_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Last_Name"></label>
+                <input asp-for="Doctor_Last_Name" /><br />
+                <span asp-validation-for="Doctor_Last_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_EmailName"></label>
+                <input asp-for="Doctor_EmailName" /><br />
+                <span asp-validation-for="Doctor_EmailName" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_National_Number"></label>
+                <input asp-for="Doctor_National_Number" /><br />
+            </div>
+            <div class="All_div col-12">
+
+                @if (@TempData["national"].ToString() == "true")
+                {
+                    <span asp-validation-for="Doctor_National_Number" class="text-danger">الرجاء ادخال رقم وطني صالح</span>
+                }
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Gender"></label>
+                    <select asp-for="Doctor_Gender">
+                        <option value="ذكر"> ذكر</option>
+                        <option value="أنثى"> أنثى</option>
+                    </select><br />
+                    <span asp-validation-for="Doctor_Gender" class="text-danger"></span>
+                </div>
+
+                <input type="hidden" asp-for="Doctor_Email" />
+                <input type="hidden" asp-for="Doctor_Password" />
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Family_Members"></label>
+                    <input asp-for="Doctor_Family_Members" min="0" /><br />
+                    <span asp-validation-for="Doctor_Family_Members" class="text-danger"></span>
+                </div>
+
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Qualifications"></label>
+                    <input asp-for="Doctor_Qualifications" /><br />
+                    <span asp-validation-for="Doctor_Qualifications" class="text-danger"></span>
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Social_Status"></label>
+                    <select asp-for="Doctor_Social_Status">
+                        <option>أعزب</option>
+                        <option>متزوج</option>
+                    </select><br />
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Birth_Date"></label>
+                    <input type="date" asp-for="Doctor_Birth_Date" /><br />
+                    <span asp-validation-for="Doctor_Birth_Date" class="text-danger"></span>
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="Doctor_Birth_Place">مكان الولادة</label>
+                    <select asp-for="Doctor_Birth_Place" asp-items="@ViewBag.Cities">
+                    </select>
+                </div>
+                <input type="hidden" asp-for="Doctor_Hire_Date" />
+                <input type="hidden" asp-for="Department_Id" />
+                <div class="All_div col-12">
+                    <label>السكن</label>
+                    <select id="City" asp-items="@ViewBag.Cities">
+                    </select>
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="Area_Id"></label>
+                    <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
+                    </select>
+                    @if (TempData["Area"].ToString() == "true")
+                    {
+                        <span asp-validation-for="Area_Id" class="text-danger">الرجاء اختيار منطقة</span>
+                    }
+                </div>
+                <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+                <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+                <table>
+                    <tr id="tr0">
+                        <td><div class="col-12 All_div"><input type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" required /></div></td>
+                        <td>
+                        </td>
+
+                        <td>
+                            <div class="col-12">
+                                <span id="span0"></span>
+                                <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            </div>
+                        </td>
+
+                        <td> <span asp-validation-for="Doctor_Phone_Numbers" class="text-danger"></span></td>
+
+                    </tr>
+                </table>
+                <div class="All_div col-12">
+                    <input type="submit" value="إضافة طبيب" />
+                </div>
+            </div>
+        </div>
+    <a asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">العودة للخلف</a>
+</form>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/addPhoneNumbers2.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+        $("#City").change(function () {
+            var selectedCity = $("#City").val();
+            var AreasSelect = $("#Area");
+            AreasSelect.empty();
+            if (selectedCity != null && selectedCity != "") {
+                $.getJSON('@Url.Action("GetAreas")', { CityId: selectedCity }, function (Areas) {
+                    if (Areas != null && !jQuery.isEmptyObject(Areas)) {
+                        AreasSelect.append($('<option/>', { value: null, text: "اختر المنطقة" }));
+
+                        $.each(Areas, function (index, area) {
+                           AreasSelect.append($('<option/>', { value: area.value, text: area.text }));
+                        });
+                    };
+                });
+
+            }
+        });
+    });
+    </script>
+}

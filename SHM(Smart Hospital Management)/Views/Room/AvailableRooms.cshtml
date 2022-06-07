@@ -1,0 +1,69 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.AvailableRoom>
+
+@{
+    ViewData["Title"] = "AvailableRooms";
+}
+
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Create.css" rel="stylesheet" />
+}
+<style>
+    html {
+        height: 100vh;
+    }
+
+    body {
+        padding: 10px;
+    }
+</style>
+<div class="All_form" style="direction: rtl; text-align: right; margin-left: 19%; width: 60%; ">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Room.Room_Floor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Room.Room_Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmptyBedCount)
+                </th>
+                <th>Number Of Beds Wanted</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Room.Room_Floor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Room.Room_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmptyBedCount)
+                    </td>
+                    <td>
+                        <form asp-controller="Reservation" asp-action="Create" asp-route-RoomId="@item.Room.Room_Id" asp-route-PatientId="@ViewBag.PatientId" asp-route-EmptyBedCount="@item.EmptyBedCount" asp-route-EmpId="@ViewBag.EmployeeId">
+                            <input type="number" min="0" max="@item.EmptyBedCount" name="ReservationBedNumber" style="width: 40%;"/>
+                            <input type="submit" value="حجز موعد" style="width: 28%;"/>
+                        </form>
+                    </td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Patient" asp-action="HoPatientsForReservation" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmployeeId" style="position: relative; left: 45%;">Back to List</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

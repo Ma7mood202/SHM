@@ -30,7 +30,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.PatientId = PatId;
             return View(externalRecords);
         }
-        [Authorize(Roles ="Doctor,DeptManger")]
+      //  [Authorize(Roles ="Doctor,DeptManger")]
         public async Task<IActionResult> ShowExternalRecordsForDoctor(int id, int DocId, int HoId)//medical id
         {
             var externalRecords =await _context.External_Records.Where(e => e.Medical_Detail_Id == id).ToListAsync();

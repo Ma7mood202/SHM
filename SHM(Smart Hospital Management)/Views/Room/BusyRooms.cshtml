@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.BusyRooms>
+
+@{
+    ViewData["Title"] = "BusyRooms";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+
+        body {
+            padding: 10px;
+        }
+    </style>
+}
+<div class="All_form" style="direction: rtl; text-align: right; background-color: white ">
+    <table class="table" style="direction:ltr">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoomNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PatientName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PatientName)
+                    </td>
+                    <td>
+                        <a asp-controller="Reservation" asp-action="Delete" asp-route-id="@item.Id" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+    <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 45%;"> Back to Master Page</a>

@@ -1,0 +1,169 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Patient
+
+@{
+    ViewData["Title"] = "EditPersonalDetails";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Edit.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+
+
+<form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Patient_Id" />
+            <input type="hidden" asp-for="Patient_First_Name" />
+            <input type="hidden" asp-for="Patient_Middle_Name" />
+            <input type="hidden" asp-for="Patient_Last_Name" />
+            <input type="hidden" asp-for="Patient_Email" />
+            <input type="hidden" asp-for="Patient_Password" />
+            <input type="hidden" asp-for="Patient_National_Number" />
+            <input type="hidden" asp-for="Patient_Gender" />
+            <input type="hidden" asp-for="Patient_Birth_Date" />
+            <input type="hidden" asp-for="Patient_Birth_Place" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="Sent" />
+            <input type="hidden" asp-for="Canceled" />
+            <input type="hidden" asp-for="PreviewCount" />
+            <input type="hidden" asp-for="Ho_Id" />
+            <input type="hidden" asp-for="Patient_X_Y" />
+            <div class="form-group" style="margin:20px 0px">
+                <label asp-for="Patient_Social_Status"></label>
+                <select asp-for="Patient_Social_Status">
+                    @if (Model.Patient_Social_Status == "عازب/ة")
+                    {
+                        <option value="عازب/ة" selected>عازب/ة</option>
+                        <option value="متزوج/ة">متزوج/ة</option>
+
+                    }
+                    else if (Model.Patient_Social_Status == "متزوج/ة")
+                    {
+                        <option value="عازب/ة">عازب/ة</option>
+                        <option value="متزوج/ة" selected>متزوج/ة</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group" style="margin:20px 0px">
+                <label>City</label>
+                <select id="City" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
+            <div class="form-group" style="margin:20px 0px">
+                <label asp-for="Area_Id"></label>
+                <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
+                    <option value="@Model.Area_Id" selected>@ViewBag.PatientArea</option>
+                </select>
+                <span asp-validation-for="Area_Id" class="text-danger"></span>
+            </div>
+            <span id="PNCount" style="display:none;">@Model.Patient_Phone_Numbers.Count</span>
+            <table style="margin:20px 0px">
+                @{int i = 0; }
+                @foreach (var item in Model.Patient_Phone_Numbers)
+                {
+                    string span = "span" + i;
+                    string tr = "tr" + i;
+                    <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px;">
+                        @if (i == 0 && Model.Patient_Phone_Numbers.Count == 1)
+                        {
+                            <td><div class="All_div col-12"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                            <td>
+                            </td>
+                            <td>
+                                <div class="col-12">
+                                    <span id="@span"></span>
+                                    <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                </div>
+                            </td>
+                        }
+                        else if (i + 1 == Model.Patient_Phone_Numbers.Count)
+                        {
+                            <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                            <td>
+                                <input type="button" onclick="Delete()" value="Delete" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            </td>
+                            <td>
+                                <div class="col-12">
+                                    <span id="@span"></span>
+                                    <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            if (i == 0)
+                            {
+                                <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                <td>
+                                </td>
+                                <td>
+                                    <div class="col-12">
+                                        <span id="@span"></span>
+                                    </div>
+                                </td>
+                            }
+                            else
+                            {
+                                <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                <td>
+                                    <input type="button" onclick="Delete()" value="Delete" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                </td>
+                                <td>
+                                    <div class="col-12">
+                                        <span id="@span"></span>
+                                    </div>
+                                </td>
+                            }
+                        }
+
+                    </tr>
+                    i++;
+                }
+
+            </table>
+            <div class="form-group">
+                <input type="submit" value="Save" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45.5%;">Back to Mater Page</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/EditPhoneNumbers3.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+        $("#City").change(function () {
+            var selectedCity = $("#City").val();
+            var AreasSelect = $("#Area");
+            AreasSelect.empty();
+            if (selectedCity != null && selectedCity != "") {
+                $.getJSON('@Url.Action("GetAreas")', { CityId: selectedCity }, function (Areas) {
+                    if (Areas != null && !jQuery.isEmptyObject(Areas)) {
+                        AreasSelect.append($('<option/>', { value: null, text: "اختر المنطقة" }));
+
+                        $.each(Areas, function (index, area) {
+                           AreasSelect.append($('<option/>', { value: area.value, text: area.text }));
+                        });
+                    };
+                });
+
+            }
+        });
+    });
+    </script>
+
+}

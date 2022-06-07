@@ -1,0 +1,49 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Room
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+<form asp-action="Create" method="post" class="All_form" style="background-color: white">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Room_Number" ></label>
+                <input asp-for="Room_Number" /><br />
+                <span asp-validation-for="Room_Number" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Room_Floor" ></label>
+                <input asp-for="Room_Floor"  /><br />
+                <span asp-validation-for="Room_Floor" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Room_Beds_Count" ></label>
+                <input asp-for="Room_Beds_Count" /><br />
+                <span asp-validation-for="Room_Beds_Count" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Ho_Id" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="Room_Empty" />
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+    <div>
+        <a asp-action="DisplayRooms" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id" style="position: relative; left: 47.5%;">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

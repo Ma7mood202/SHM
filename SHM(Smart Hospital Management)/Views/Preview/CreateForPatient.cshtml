@@ -1,0 +1,44 @@
+﻿@model List<SHM_Smart_Hospital_Management_.ViewModels.Specialization_Dept>
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style="direction:rtl; width:auto; position:relative; right:13%">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    department
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Spec_Name)
+                    </td>
+
+                    <td>
+                        <a asp-action="DeptDoctorsForPatient" asp-route-id="@ViewBag.PatientId" asp-route-DeptId="@item.Dept_Id">اختيار</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 46%;">Back to Master Bage</a>
+
+    @section Scripts{
+        <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+    }

@@ -1,0 +1,48 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Surgery_Room
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+<form asp-action="Create" method="post" class="All_form" style="background-color: white">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Su_Room_Number"></label>
+                <input asp-for="Su_Room_Number" /><br />
+                <span asp-validation-for="Su_Room_Number" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Su_Room_Floor"></label>
+                <input asp-for="Su_Room_Floor" /><br />
+                <span asp-validation-for="Su_Room_Floor" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Surgery_Room_Ready" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="Ho_Id" />
+
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="DisplaySurgeryRooms" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id" style=" position: relative; left: 48%;">Back to List</a>
+</div>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 45.5%;">Back to Master Page</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

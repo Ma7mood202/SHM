@@ -25,7 +25,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             _context = context;
         }
-        [Authorize(Roles = "IT,Resception,Nurse,HeadNurse")]
+        //[Authorize(Roles = "IT,Resception,Nurse,HeadNurse")]
         public IActionResult Master(int? id)
         {
             if (id == null)
@@ -43,7 +43,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (employee.Employee_Job == "HeadNurse") return RedirectToAction("HeadNurse", new { id = id });
             return NotFound();
         }
-        [Authorize(Roles = "IT")]
+       // [Authorize(Roles = "IT")]
         public async Task<IActionResult> IT(int id)
         {
             var IT = await _context.Employees.FindAsync(id);
@@ -247,7 +247,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl)
         {
-            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == PasswordHashing.HashPassword(fc["password"])).ToList();
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
             if (employees.Count == 0) return NotFound();
 
             var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));

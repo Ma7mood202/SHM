@@ -3,6 +3,11 @@
     ViewData["Title"] = "IT";
 }
 @section Styles{
+    <style>
+        html{
+            direction:rtl;
+        }
+    </style>
     <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons -->
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font -->
@@ -70,19 +75,19 @@
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="top_div">
                             <span class="mr-2 d-lg-inline text-gray-600 small">تقاني</span>
-                            <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            <img class="img-profile rounded-circle" src="~/Medicio2/dashborde/img/undraw_profile.svg">
                         </div>
                     </a>
 
                     <!-- it Info Dropdown start -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-it"
                          aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@Model.Employee_Id">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             المعلومات الشخصية
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             تسجيل خروج
                         </a>
@@ -108,7 +113,7 @@
                 <div class="modal-body "> هل أنت متأكد</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
-                    <a class="btn btn-primary Logout-btn" href="../../login/Loginit/loginit.html">تسجيل خروج</a>
+                    <a class="btn btn-primary Logout-btn" asp-action="LogOut" asp-route-id="@Model.Employee_Id">تسجيل خروج</a>
                 </div>
             </div>
         </div>
@@ -154,15 +159,15 @@
                 </div>
             </div>
             <!--dep btn -->
-            <a asp-controller="Department" asp-action="HoDepartments" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
-                <button type="button" class="btn   modal-bt1">
+            <a asp-controller="Department" asp-action="HoDepartments" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn   modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     عرض أقسام
                 </button>
             </a>
 
             <!--show-emp btn -->
-            <a asp-controller="Doctor" asp-action="DeptManagers" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
-                <button type="button" class="btn   modal-bt1">
+            <a asp-controller="Doctor" asp-action="DeptManagers" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn   modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     عرض رؤساء الأقسام
                 </button>
             </a>

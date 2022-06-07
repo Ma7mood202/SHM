@@ -1,0 +1,144 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+<form asp-action="Create" method="post" class="All_form">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_First_Name"></label>
+                <input asp-for="Employee_First_Name" /><br />
+                <span asp-validation-for="Employee_First_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Middle_Name"></label>
+                <input asp-for="Employee_Middle_Name" /><br />
+                <span asp-validation-for="Employee_Middle_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Last_Name"></label>
+                <input asp-for="Employee_Last_Name" /><br />
+                <span asp-validation-for="Employee_Last_Name" class="text-danger"></span>
+            </div>
+
+            <div class="All_div col-12">
+                <label asp-for="Employee_EmailName"></label>
+                <input asp-for="Employee_EmailName" /><br />
+                <span asp-validation-for="Employee_EmailName" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Employee_Email" />
+            <input type="hidden" asp-for="Employee_Password" />
+            <input type="hidden" asp-for="Ho_Id" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" asp-for="Employee_Hire_Date" />
+            <input type="hidden" asp-for="Employee_X_Y" />
+            <div class="All_div col-12">
+                <label asp-for="Employee_National_Number"></label>
+                <input asp-for="Employee_National_Number" /><br />
+                <span asp-validation-for="Employee_National_Number" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Gender"></label>
+                <select asp-for="Employee_Gender">
+                    <option value="ذكر">ذكر</option>
+                    <option value="أنثى">أنثى</option>
+                </select>
+            </div>
+
+            <div class="All_div col-12">
+                <label asp-for="Employee_Family_Members"></label>
+                <input asp-for="Employee_Family_Members" /><br />
+                <span asp-validation-for="Employee_Family_Members" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Job"></label>
+                <select asp-for="Employee_Job">
+                    <option value="IT">IT</option>
+                    <option value="Resception">Resception</option>
+                    <option value="HeadNurse">Head Nurse</option>
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Social_Status"></label>
+                <select asp-for="Employee_Social_Status">
+                    <option value="عازب/ة">عازب/ة</option>
+                    <option value="متزوج/ة">متزوج/ة</option>
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Birth_Date"></label>
+                <input type="date" asp-for="Employee_Birth_Date" /><br />
+                <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label>City</label>
+                <select id="City" asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Area_Id"></label>
+                <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
+                </select>
+                <table>
+                    <tr id="tr0">
+                        <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                        <td>
+                        </td>
+
+
+                        <td>
+                            <div class="col-12">
+                                <span id="span0"></span>
+                                <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" name="MgrId" value="@ViewBag.MgrId" />
+                <div class="All_div col-12">
+                    <input type="submit" value="Create" />
+                </div>
+            </div>
+    </div>
+    <a asp-action="HoEmployees" asp-route-id="@ViewBag.MgrId">Back to List</a>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/addPhoneNumbers.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+        $("#City").change(function () {
+            var selectedCity = $("#City").val();
+            var AreasSelect = $("#Area");
+            AreasSelect.empty();
+            if (selectedCity != null && selectedCity != "") {
+                $.getJSON('@Url.Action("GetAreas")', { CityId: selectedCity }, function (Areas) {
+                    if (Areas != null && !jQuery.isEmptyObject(Areas)) {
+                        AreasSelect.append($('<option/>', { value: null, text: "اختر المنطقة" }));
+
+                        $.each(Areas, function (index, area) {
+                           AreasSelect.append($('<option/>', { value: area.value, text: area.text }));
+                        });
+                    };
+                });
+
+            }
+        });
+    });
+    </script>
+
+}

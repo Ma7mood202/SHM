@@ -1,0 +1,71 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+
+@{
+    ViewData["Title"] = "GetWorkDays";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+@if (ViewBag.IsDeptManager)
+{
+    <a asp-action="Create" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HoId" asp-route-DeptMgrId="@ViewBag.DocId" style=" position: relative; left: 45%;">إضافة جدول دوام</a>
+}
+    <div class="All_form" style="width: 92%; position: relative; right: 22%; background-color: white">
+        <h2>@ViewBag.DoctorName</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Start_Hour)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.End_Hour)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Day)
+                    </th>
+                    @if (ViewBag.IsDeptManager)
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Start_Hour)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.End_Hour)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day)
+                        </td>
+                        @if (ViewBag.IsDeptManager)
+                        {
+                            <td>
+                                @{int day = (int)item.Day;}
+                                <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تعديل</a>
+                                <a asp-action="Delete" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">حذف</a>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44%;">Back to Master Page</a>
+    @section Scripts{
+        <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+    }

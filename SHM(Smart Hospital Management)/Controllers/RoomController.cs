@@ -63,7 +63,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(rooms1);
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> BusyRooms(int id) 
+        public async Task<IActionResult> BusyRooms(int id, int EmpId) 
         {
             var rooms = await _context.Rooms.Where(r => r.Ho_Id == id).ToListAsync();
             var data = (from res in _context.Reservations.ToList()
@@ -76,10 +76,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         on a.res.Patient_Id equals p.Patient_Id
                         select new BusyRooms
                         {
+                            Id=a.res.Reservation_Id,
                             RoomNumber = a.room.Room_Number,
                             StartDate = a.res.Start_Date,
                             PatientName = p.Patient_First_Name + " " + p.Patient_Last_Name
                         }).ToList();
+            ViewBag.EmpId = EmpId;
             return View(data);
         }
         [Authorize(Roles = "IT")]

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {}
+    "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {}
   },
   "projects": {
-    "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {
+    "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+        "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
         "projectName": "SHM(Smart Hospital Management)",
-        "projectPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
-        "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
+        "projectPath": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+        "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -98,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     }

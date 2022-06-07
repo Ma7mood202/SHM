@@ -14,16 +14,16 @@ namespace SHM_Smart_Hospital_Management_.Models
         public int Ho_Mgr_Id { get; set; }
         [Key]
         public int Ho_Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="الرجاء عدم ترك الحقل فارغ")]
         [StringLength(50)]
         [Display(Name = "Hospital Name ")]
         public string Ho_Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [Display(Name = "Subscribtion Date")]
         public DateTime Ho_Subscribtion_Date { get; set; }
         [Display(Name = "Is Active")]
         public bool Active { get; set; } = true;
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         public int Area_Id { get; set; } // foreignKey
 
         [ForeignKey("Mgr_Id")] // NoAction // unique // type<int?>

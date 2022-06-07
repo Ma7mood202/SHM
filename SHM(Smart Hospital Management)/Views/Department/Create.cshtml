@@ -1,0 +1,43 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Department
+
+@{
+    ViewData["Title"] = "CreateDepartment";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+
+
+<form asp-action="Create" class="All_form" style="background-color: white">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="All_div col-12">
+                <label asp-for="Department_Name"></label>
+                <select asp-for="Department_Name">
+                    @foreach (var item in ViewBag.Specializations as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Specialization>)
+                    {
+                        <option value="@item.Specialization_Id">@item.Specialization_Name</option>
+                    }
+                </select>
+            </div>
+            <input type="hidden" asp-for="Ho_Id" />
+            <input type="hidden" asp-for="Active" />
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+    <a asp-action="HoDepartments" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

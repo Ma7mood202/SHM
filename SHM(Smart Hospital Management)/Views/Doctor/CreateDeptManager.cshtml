@@ -1,0 +1,154 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Doctor
+
+@{
+    ViewData["Title"] = "CreateDeptManager";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+<form asp-action="CreateDeptManager" method="post" class="All_form" style="background-color: white">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_First_Name"></label>
+                <input asp-for="Doctor_First_Name" /><br />
+                <span asp-validation-for="Doctor_First_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Middle_Name"></label>
+                <input asp-for="Doctor_Middle_Name" /><br />
+                <span asp-validation-for="Doctor_Middle_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Last_Name"></label>
+                <input asp-for="Doctor_Last_Name" /><br />
+                <span asp-validation-for="Doctor_Last_Name" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_EmailName"></label>
+                <input asp-for="Doctor_EmailName" /><br />
+                <span asp-validation-for="Doctor_EmailName" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_National_Number"></label>
+                <input asp-for="Doctor_National_Number" /><br />
+                <span asp-validation-for="Doctor_National_Number" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Gender"></label>
+                <select asp-for="Doctor_Gender">
+                    <option value="ذكر"> ذكر</option>
+                    <option value="أنثى"> أنثى</option>
+                </select><br />
+                <span asp-validation-for="Doctor_Gender" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="Doctor_Email" />
+            <input type="hidden" asp-for="Doctor_Password" />
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Family_Members"></label>
+                <input asp-for="Doctor_Family_Members" /><br />
+                <span asp-validation-for="Doctor_Family_Members" class="text-danger"></span>
+            </div>
+
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Qualifications"></label>
+                <input asp-for="Doctor_Qualifications" /><br />
+                <span asp-validation-for="Doctor_Qualifications" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Social_Status"></label>
+                <select asp-for="Doctor_Social_Status">
+                    <option>أعزب</option>
+                    <option>متزوج</option>
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Birth_Date"></label>
+                <input type="date" asp-for="Doctor_Birth_Date" /><br />
+                <span asp-validation-for="Doctor_Birth_Date" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Doctor_Birth_Place"></label>
+                <select asp-for="Doctor_Birth_Place" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
+            <input type="hidden" asp-for="Doctor_Hire_Date" />
+            <div class="All_div col-12">
+                <label asp-for="Department_Id"></label>
+                <select asp-for="Department_Id">
+                    @foreach (var item in ViewBag.Specializations as List<SHM_Smart_Hospital_Management_.ViewModels.Specialization_Dept>)
+                    {
+                        <option value="@item.Dept_Id ">@item.Spec_Name</option>
+                    }
+                </select>
+
+            </div>
+            <div class="All_div col-12">
+                <label>City</label>
+                <select id="City" asp-items="@ViewBag.Cities">
+                </select>
+
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Area_Id"></label>
+                <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
+                </select>
+            </div>
+            <table>
+                <tr id="tr0">
+                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                    <td>
+                    </td>
+
+
+                    <td>
+                        <div class="col-12">
+                            <span id="span0"></span>
+                            <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+    <a asp-action="DeptManagers" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId">Back to List</a>
+</form>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/addPhoneNumbers.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+        $("#City").change(function () {
+            var selectedCity = $("#City").val();
+            var AreasSelect = $("#Area");
+            AreasSelect.empty();
+            if (selectedCity != null && selectedCity != "") {
+                $.getJSON('@Url.Action("GetAreas")', { CityId: selectedCity }, function (Areas) {
+                    if (Areas != null && !jQuery.isEmptyObject(Areas)) {
+                        AreasSelect.append($('<option/>', { value: null, text: "اختر المنطقة" }));
+
+                        $.each(Areas, function (index, area) {
+                           AreasSelect.append($('<option/>', { value: area.value, text: area.text }));
+                        });
+                    };
+                });
+
+            }
+        });
+    });
+    </script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

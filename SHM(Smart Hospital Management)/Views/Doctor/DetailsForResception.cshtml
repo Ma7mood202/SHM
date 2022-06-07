@@ -1,0 +1,66 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Doctor
+
+@{
+    ViewData["Title"] = "DetailsForResception";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+
+<div class="All_div">
+    <dl class="row" style=" direction: rtl; width: 80%; position: relative; left: 10%; background-color: white; border-radius: 20px; margin:5% 0; ">
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            @Html.DisplayNameFor(model => model.Doctor_Full_Name)
+        </dt>
+
+        <dd class="col-3" style=" margin: 20px 0px; ">
+            @Html.DisplayFor(model => model.Doctor_Full_Name)
+        </dd>
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            @Html.DisplayNameFor(model => model.Doctor_National_Number)
+        </dt>
+        <dd class="col-3" style=" margin: 20px 0px; ">
+            @Html.DisplayFor(model => model.Doctor_National_Number)
+        </dd>
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            @Html.DisplayNameFor(model => model.Doctor_Gender)
+        </dt>
+        <dd class="col-3" style=" margin: 20px 0px; ">
+            @Html.DisplayFor(model => model.Doctor_Gender)
+        </dd>
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            @Html.DisplayNameFor(model => model.Doctor_Social_Status)
+        </dt>
+        <dd class="col-3" style=" margin: 20px 0px; ">
+            @Html.DisplayFor(model => model.Doctor_Social_Status)
+        </dd>
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            @Html.DisplayNameFor(model => model.Doctor_Birth_Date)
+        </dt>
+        <dd class="col-3" style=" margin: 20px 0px; ">
+            @Html.DisplayFor(model => model.Doctor_Birth_Date)
+        </dd>
+
+        <dt class="col-6" style=" margin: 20px 0px; ">
+            أرقام الهاتف
+        </dt>
+        @if (ViewBag.PhoneNumbers.Count == 0)
+        {
+            <dd class="col-3" style=" margin: 20px 0px; ">لا يوجد رقم هاتف</dd>
+        }
+        else
+            @foreach (var item in ViewBag.PhoneNumbers as List<SHM_Smart_Hospital_Management_.PhoneNumbers.Doctor_Phone_Numbers>)
+            {
+                @Html.DisplayFor(model => item.Doctor_Phone_Number)
+                <br />
+            }
+    </dl>
+</div>
+<a asp-controller="Doctor" asp-action="HoDoctors" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId" style="position: relative; left: 48%;">Back to List</a>

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style="direction: rtl; width: 82%; position: relative; right: 17%;">
+    <h2>د.@ViewBag.DoctorName</h2>
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Day)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.End_Hour)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start_Hour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End_Hour)
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+    <a asp-controller="Doctor" asp-action="HoDoctors" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 45%;">Back to List</a>
+    @section Scripts{
+        <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+    }

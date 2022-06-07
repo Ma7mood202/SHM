@@ -1,0 +1,77 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Patient>
+
+@{
+    ViewData["Title"] = "HoPatientsForPreview";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+
+        body {
+            direction: rtl;
+        }
+    </style>
+}
+<div class="All_form" style="width: 82%; position: relative; right: 9%; background-color: white">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient_Full_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient_National_Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient_Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient_Social_Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient_Birth_Date)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient_Full_Name)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient_National_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient_Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient_Social_Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Patient_Birth_Date)
+                    </td>
+                    <td>
+                        <a asp-controller="Preview" asp-action="Create" asp-route-PatientId="@item.Patient_Id" asp-route-DoctorId="@ViewBag.DocId" asp-route-HoId="@item.Ho_Id">Add Preview</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HospitalId" style="position: relative; right: 45%;">Back to Master Page</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

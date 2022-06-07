@@ -49,9 +49,11 @@
 						<span class="focus-input100" data-placeholder="&#xf207;"></span><span class="input-group-text" id="basic-addon2">@Pati.com</span>
 					</div>
 
+					
 					<div class="wrap-input100 " data-validate="Enter password">
-						<input class="input100" type="password" name="pass" placeholder="كلمة السر">
-						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+						<i class="bi bi-eye-slash" id="togglePassword"></i>
+						<input class="input100" type="password" name="password" autocomplete="current-password" id="id_password" placeholder="كلمة السر">
+						<span class="focus-input100" data-placeholder="&#xf191;">	</span>
 					</div>
 
 						
@@ -99,6 +101,17 @@
 	<script src="../vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="../js/main.js"></script>
+
+	<script>
+		const togglePassword = document.querySelector('#togglePassword');
+		const password = document.querySelector('#id_password');
+	
+		togglePassword.addEventListener('click', function(e){
+			const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+			password.setAttribute('type', type);
+			this.classList.toggle('bi-eye');
+		});
+	</script>
 
 </body>
 </html>

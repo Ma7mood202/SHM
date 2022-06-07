@@ -92,7 +92,7 @@
                     <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">
                         إلغاء
                     </button>
-                    <a asp-action="LogOut" class="btn btn-primary Logout-btn">تسجيل خروج</a>
+                    <a asp-action="LogOut" asp-route-id="@Model.Employee_Id" class="btn btn-primary Logout-btn">تسجيل خروج</a>
                 </div>
             </div>
         </div>

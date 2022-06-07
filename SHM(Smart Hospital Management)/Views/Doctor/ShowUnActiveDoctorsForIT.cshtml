@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Doctor>
+
+@{
+    ViewData["Title"] = "ShowActiveDoctorsForIT";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style=" direction: rtl; width: 92%; position: relative; right: 22%; background-color: white">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Full_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Birth_Date)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Full_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Birth_Date)
+                    </td>
+                    <td>
+                        <a asp-action="Activate" asp-route-id="@item.Doctor_Id" asp-route-EmpId="@ViewBag.EmpId">فك الحظر</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 44%;">Back to Master Page</a>

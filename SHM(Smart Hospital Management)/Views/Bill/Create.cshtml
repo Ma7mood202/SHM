@@ -1,0 +1,74 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Bill
+
+@{
+    ViewData["Title"] = "CreateBill";
+}
+
+
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+
+<form asp-action="Create" method="post" class="All_form">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Examination"></label>
+                <input type="number" min="0" asp-for="Bill_Examination" /><br />
+                <span asp-validation-for="Bill_Examination" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Surgeries"></label>
+                <input type="number" min="0" asp-for="Bill_Surgeries" /><br />
+                <span asp-validation-for="Bill_Surgeries" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Rays"></label>
+                <input type="number" min="0" asp-for="Bill_Rays" /><br />
+                <span asp-validation-for="Bill_Rays" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Medical_Test"></label>
+                <input type="number" min="0" asp-for="Bill_Medical_Test" /><br />
+                <span asp-validation-for="Bill_Medical_Test" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Room_Service"></label>
+                <input type="number" min="0" asp-for="Bill_Room_Service" /><br />
+                <span asp-validation-for="Bill_Room_Service" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Medication"></label>
+                <input type="number" min="0" asp-for="Bill_Medication" /><br />
+                <span asp-validation-for="Bill_Medication" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Bill_Date"></label>
+                <input asp-for="Bill_Date" type="date" /><br />
+                <span asp-validation-for="Bill_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="hidden" asp-for="Paid" />
+                </label>
+            </div>
+            <input type="hidden" asp-for="Patient_Id" />
+            <input type="hidden" name="id" value="@ViewBag.HospitalId" />
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+    <a asp-controller="Patient" asp-action="HoPatientsForBill" asp-route-id="@ViewBag.HospitalId" asp-route-EmpId="@ViewBag.EmpId">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

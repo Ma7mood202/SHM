@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowMedicalTest>
+
+@{
+    ViewData["Title"] = "ShowMedicalTestForPatient";
+}
+@section Styles{
+    <link href="~/Medicio2/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
+    <link href="~/Medicio2/Cards/Card.css" rel="stylesheet" /><!-- bootstrap icons-->
+}
+
+<a asp-action="Create" asp-route-id="@ViewBag.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Create New</a>
+<div class="container">
+    <div class="row">
+        @{ int i = 1;}
+        @foreach (var item in Model)
+        {
+            string exampleModal = "exampleModal" + i;
+            <div class="col-4">
+                <div class="card ">
+                    <a data-toggle="modal" data-target="#@exampleModal">
+                        <img class="bd-placeholder-img card-img-top" src="~/External_Records_Details/@item.Result" />
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Test_Name</h5>
+                        <p class="card-text">@item.Date</p>
+                        <a asp-action="Delete" asp-route-id="@item.Test_Id" asp-route-medicalId="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" class="btn delete_btn">حذف</a>
+                    </div>
+                </div>
+            </div>
+            <!--Modal start-->
+            <div class="modal fade " id="@exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true" dir="ltr">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body Center ">
+                            <img class="bd-placeholder-img card-img-top" src="~/External_Records_Details/@item.Result" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn delete_btn " data-dismiss="modal">إغلاق</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            i++;
+        }
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}
+
+
+
+

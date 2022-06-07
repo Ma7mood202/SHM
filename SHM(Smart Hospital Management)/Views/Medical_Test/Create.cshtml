@@ -1,0 +1,174 @@
+﻿@model SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Medical_Test
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/Create.css" rel="stylesheet" />
+}
+
+<div style="width:1px;height:1px; overflow:scroll; visibility:hidden">
+    <ul>
+        @{
+            List<SelectListItem> TestTypes = ViewBag.Test_Type_Id;
+            for (int i = 0; i < TestTypes.Count; i++)
+            {
+                <li class="Test_Type_Id">@TestTypes[i].Value</li>
+                <li class="Test_Type_Name">@TestTypes[i].Text</li>
+            }
+        }
+    </ul>
+
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+
+
+            <div id="div0">
+                <div class="form-group">
+                    <label for="files" class="control-label"></label>
+                    <input type="file" name="files" />
+                </div>
+                <div class="form-group">
+                    <label for="type" class="control-label"></label>
+                    <select id="type0" onchange="ChangeSelect(0)" class="form-control" asp-items="ViewBag.Test_Type_Id">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="type" class="control-label"></label>
+                    <select id="test0" name="test" class="form-control" asp-items="ViewBag.Tests">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date" class="control-label"></label>
+                    <input type="date" name="date" class="form-control" />
+                </div>
+                <span class="span" id="0"></span>
+                <button type="button" onclick="AddMedicalTest(this,0)"> إضافة تحليل</button>
+            </div>
+
+
+
+            <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
+            <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+            <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ShowMedicalTestForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        var TestsCount = 1;
+        function AddMedicalTest(btn, i) {
+            if (TestsCount < 3) {
+                var attribute = document.createAttribute("style");
+                attribute.value = "display:none";
+                btn.setAttributeNodeNS(attribute);
+                var div = document.getElementById('div' + i);
+                var Test_Type_Ids = document.getElementsByClassName('Test_Type_Id');
+                var Test_Type_Names = document.getElementsByClassName('Test_Type_Name');
+                var string1 = "";
+                for (var j = 0; j < Test_Type_Ids.length; j++) {
+                    string1 += '<option value="' + Test_Type_Ids[j].innerHTML + '">' + Test_Type_Names[j].innerHTML + '</option>';
+                }
+
+                var valueToAdd = "";
+                if (TestsCount != 2) {
+                    valueToAdd =
+                        '<div id="div' + (i + 1) + '">' +
+                        '<div class="form-group" >' +
+                        '<label for="files" class="control-label"></label>' +
+                        '<input type="file" name="files" />' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="type" class="control-label"></label>' +
+                        '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control"' +
+                        string1 +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="type" class="control-label"></label>' +
+                        '<select id="test' + (i + 1) + '" name="test" class="form-control">' +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="date" class="control-label"></label>' +
+                        '<input type="date" name="date" class="form-control" />' +
+                        '</div>' +
+                        '<span class="span" id="' + (i + 1) + '"></span>' +
+                        '<button type="button" onclick="AddMedicalTest(this,' + (i + 1) + ')"> إضافة تحليل</button>' +
+                        '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')"> حذف </button>' +
+                        '</div>'
+                }
+                else {
+                    valueToAdd =
+                        '<div id="div' + (i + 1) + '">' +
+                        '<div class="form-group" >' +
+                        '<label for="files" class="control-label"></label>' +
+                        '<input type="file" name="files" />' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="type" class="control-label"></label>' +
+                        '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control"' +
+                        string1 +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="type" class="control-label"></label>' +
+                        '<select id="test' + (i + 1) + '" name="test" class="form-control">' +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="date" class="control-label"></label>' +
+                        '<input type="date" name="date" class="form-control" />' +
+                        '</div>' +
+                        '<span class="span" id="' + (i + 1) + '"></span>' +
+                        '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')"> حذف </button>' +
+                        '</div >'
+                }
+                div.insertAdjacentHTML('afterend', valueToAdd);
+                TestsCount++;
+            }
+        }
+        function DeleteMedicalTest(i) {
+            var div = document.getElementById("div" + i);
+            div.parentNode.removeChild(div);
+            TestsCount--;
+            var spans = document.getElementsByClassName('span');
+            if (TestsCount == 1) {
+                var span = document.getElementById('0');
+                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,0)"> إضافة </button>');
+            }
+            else {
+                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,' + spans[spans.length - 1].id + ')"> إضافة </button>');
+            }
+        }
+        function ChangeSelect(num) {
+            var selectedTest_Type = $("#type" + num).val();
+            var TestsSelect = $("#test" + num);
+            TestsSelect.empty();
+            if (selectedTest_Type != null && selectedTest_Type != "") {
+                $.getJSON('@Url.Action("GetTests")', { Test_Type_Id: selectedTest_Type }, function (Tests) {
+                    if (Tests != null && !jQuery.isEmptyObject(Tests)) {
+                        TestsSelect.append($('<option/>', { value: null, text: "اختر نوع المرض" }));
+
+                        $.each(Tests, function (index, Test) {
+                            TestsSelect.append($('<option/>', { value: Test.value, text: Test.text }));
+                        });
+                    };
+                });
+
+            }
+        }
+    </script>
+
+}

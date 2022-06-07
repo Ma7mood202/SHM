@@ -1,0 +1,17 @@
+﻿@model List<TimeSpan>
+<form asp-action="PickTimePost">
+    <input type="hidden" name="id" value="@ViewBag.DeptId" />
+    <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+    <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+    <input type="hidden" name="date" value="@ViewBag.Date" />
+    <input type="hidden" name="PatientId" value="@ViewBag.PatientId" />
+    <select name="PreviewTime" class="form-control">
+        @foreach (var item in Model)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+    @TempData["TImePatient"]
+    <input type="submit" value="submit" />
+
+</form>

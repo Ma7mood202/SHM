@@ -4200,7 +4200,7 @@
       ]
     },
     "System.Collections.Specialized/4.3.0": {
-      "sha512": "Epx8PoVZR0iuOnJJDzp7pWvdfMMOAvpUo95pC4ScH2mJuXkKA2Y4aR3cG9qt2klHgSons1WFh4kcGW7cSXvrxg==",
+      "sha512": "NoPBj0ykejqAWW4p4gGtrrL+3c84ZLSvGnHgq422ew1Rj4WKj1FA8/BCybqC111EtgcqUl6ZJNFYYS22HLgbjA==",
       "type": "package",
       "path": "system.collections.specialized/4.3.0",
       "files": [
@@ -4386,7 +4386,7 @@
       ]
     },
     "System.ComponentModel.Primitives/4.3.0": {
-      "sha512": "j8GUkCpM8V4d4vhLIIoBLGey2Z5bCkMVNjEZseyAlm4n5arcsJOeI3zkUP+zvZgzsbLTYh4lYeP/ZD/gdIAPrw==",
+      "sha512": "KMVuoQ+8bMQ/Z59M3s64num5AD74X5YSqVc7ibwGkPTfmmkl2W8VuSxLRJtpw4KzQrSKUgR0BLbF0adPfcTSGQ==",
       "type": "package",
       "path": "system.componentmodel.primitives/4.3.0",
       "files": [
@@ -7616,23 +7616,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ASUS\\.nuget\\packages\\": {},
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
       "projectName": "SHM(Smart Hospital Management)",
-      "projectPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
-      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ASUS\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
+      "projectPath": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\SHM(Smart Hospital Management).csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lenovo\\Desktop\\SHM\\SHM\\SHM(Smart Hospital Management)\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7713,7 +7713,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.408\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -11,66 +11,68 @@ namespace SHM_Smart_Hospital_Management_.Models
     public class Doctor
     {
         [NotMapped]
-        [Display(Name = "Name in English ")]
+        [Display(Name = "الاسم بالانكليزي")]
         public string Doctor_EmailName { get; set; }
         [Key]
         public int Doctor_Id { get; set; }
-        [Required]
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "First Name Must Be Between 2 and 30 characters ..")]
-        [Display(Name = "First Name")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [StringLength(30, MinimumLength = 3,ErrorMessage ="الرجاء ادخال اسم صالح")]
+        [Display(Name = "الاسم الأول ")]
         public string Doctor_First_Name { get; set; }
-        [Required]
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "First Name Must Be Between 2 and 30 characters ..")]
-        [Display(Name = "Middle Name")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "الرجاء ادخال اسم صالح")]
+        [Display(Name = "اسم الأب")]
         public string Doctor_Middle_Name { get; set; }
-        [Required]
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "First Name Must Be Between 2 and 30 characters ..")]
-        [Display(Name = "Last Name")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "الرجاء ادخال اسم صالح")]
+        [Display(Name = "الكنية")]
         public string Doctor_Last_Name { get; set; }
-        [Display(Name = "Full Name")]
+        [Display(Name = " الاسم الكامل")]
         public string Doctor_Full_Name { get { return Doctor_First_Name + " " + Doctor_Middle_Name + " " + Doctor_Last_Name; } }
-        [Required]
-        [StringLength(25)]
-        [Display(Name = "National Number")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [StringLength(11,MinimumLength = 11, ErrorMessage ="الرجاء ادخال رقم وطني صالح")]
+        [Display(Name = "الرقم الوطني")]
 
-        public string Doctor_National_Number { get; set; }// Unique   // Remeber that he is a doctor !!!!!!!!!
+        public string Doctor_National_Number { get; set; }
         [StringLength(6)]
-        [Display(Name = "Gender")]
-        [Required]
+        [Display(Name = "الجنس")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         public string Doctor_Gender { get; set; }
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [StringLength(100)]
-        [Display(Name = "Email")]
+        [Display(Name = "البريد الالكتروني")]
         public string Doctor_Email { get; set; }
-        [Required]
-        [Display(Name = "Password")]
-        [StringLength(250, MinimumLength = 8, ErrorMessage = "Must Be Between 8 and 25 Characters ")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "كلمة السر")]
+        [StringLength(250, MinimumLength = 8)]
         public string Doctor_Password { get; set; }
         [Range(0, 25)]
-        [Display(Name = "Family Members")]
+        [Display(Name = "عدد افراد العائلة")]
 
         public int? Doctor_Family_Members { get; set; }
-        [Display(Name = "Qualifications")]
+        [Display(Name = "المؤهلات")]
         // max
         public string Doctor_Qualifications { get; set; }
         [StringLength(10)]
-        [Display(Name = "Social Status")]
+        [Display(Name = "الحالة الاجتماعية")]
         public string Doctor_Social_Status { get; set; } // single selected
-        [Display(Name = "Birth Date")]
+        [Display(Name = "تاريخ الولادة")]
         public DateTime Doctor_Birth_Date { get; set; }
-        [Display(Name = "Age")]
+        [Display(Name = "العمر")]
         public int? Doctor_Age { get { return DateTime.Now.Year - Doctor_Birth_Date.Year; } }
 
-        [Required]
-        [Display(Name = "Hire Date")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "تاريخ التعيين")]
         public DateTime Doctor_Hire_Date { get; set; } = DateTime.Now;
-        [Display(Name = "Is Active")]
+        [Display(Name = "فعّال")]
         public bool Active { get; set; } = true;
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "مكان الولادة")]
         public int? Doctor_Birth_Place { get; set; } // Foreign Key mn al City
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "المنطقة")]
         public int? Area_Id { get; set; } // ForeignKey;
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         public int? Department_Id { get; set; } // Foreign Key // set null 
 
         [ForeignKey("Doctor_Id")]

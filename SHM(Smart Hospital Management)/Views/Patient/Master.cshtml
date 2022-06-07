@@ -74,12 +74,12 @@
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-pai"
                          aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@Model.Patient_Id">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             المعلومات الشخصية
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             تسجيل خروج
                         </a>
@@ -103,7 +103,7 @@
                 <div class="modal-body "> هل أنت متأكد</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
-                    <a class="btn btn-primary Logout-btn" asp-action="LogOut">تسجيل خروج</a>
+                    <a class="btn btn-primary Logout-btn" asp-action="LogOut" asp-route-id="@Model.Patient_Id">تسجيل خروج</a>
                 </div>
             </div>
         </div>
@@ -144,8 +144,8 @@
                     </div>
                 </div>
             </div>
-            <a asp-controller="Request" asp-action="SendNurse" asp-route-id="@Model.Patient_Id" data-toggle="modal" data-target="#ٍSendNurseModal">
-                <button type="button" class="btn   modal-bt2 " data-toggle="modal" data-target="#ٍSendNurseModal">
+            <a asp-controller="Request" asp-action="SendNurse" asp-route-id="@Model.Patient_Id" data-toggle="modal" data-target="#ٍSendNurseModal" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+                <button type="button" data-toggle="modal" data-target="#ٍSendNurseModal" style="background:transparent;color:white;outline:none;border:none">
                     طلب إرسال ممرض
                 </button>
             </a>
@@ -167,13 +167,13 @@
                     </div>
                 </div>
             </div>
-            <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id">
-                <button type="button" class="btn   modal-bt2 ">
+            <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     الملف الطبي
                 </button>
             </a>
-            <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id">
-                <button type="button" class="btn   modal-bt2 ">
+            <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id"style="display:flex;justify-content:center;align-items:center" class="btn  modal-bt2 ">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     الفاتورة
                 </button>
             </a>

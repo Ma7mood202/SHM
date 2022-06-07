@@ -1,0 +1,250 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Medical_Detail
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 20px;
+        }
+    </style>
+}
+<div style="width:1px;height:1px; overflow:scroll; visibility:hidden">
+    <ul>
+        @{
+            List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Disease_Type> disease_Types = ViewBag.DiseasesTypes;
+            List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy> allergies = ViewBag.Allergies;
+
+            for (int i = 0; i < disease_Types.Count; i++)
+            {
+                <li class="Disease_Type_Id">@disease_Types[i].Disease_Type_Id</li>
+                <li class="Disease_Type_Name">@disease_Types[i].Disease_Type_Name</li>
+            }
+            for (int i = 0; i < allergies.Count; i++)
+            {
+                <li class="Allergy_Id">@allergies[i].Allergy_Id</li>
+                <li class="Allergy_Name">@allergies[i].Allergy_Name</li>
+            }
+        }
+    </ul>
+
+</div>
+
+<form asp-action="Create" method="post" class="All_form">
+    <div class="container">
+        <div class="row">
+            <input type="hidden" asp-for="Pa_Id" />
+            <input type="hidden" name="HoId" value="@ViewBag.DocId" />
+            <input type="hidden" name="DocId" value="@ViewBag.HoId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="All_div col-12">
+                <label asp-for="MD_Patient_Blood_Type"></label>
+                <select asp-for="MD_Patient_Blood_Type">
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements"></label>
+                <input asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" /><br />
+                <span asp-validation-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="MD_Patient_Special_Needs"></label>
+                <input asp-for="MD_Patient_Special_Needs" /><br />
+                <span asp-validation-for="MD_Patient_Special_Needs" class="text-danger"></span>
+            </div>
+            <span id="span"></span>
+            <div id="AlergyDiv0">
+                <button type="button" onclick="AddAllergy(this,0)"> إضافة حساسيات</button>
+            </div>
+
+            <div id="div0">
+                <div class="All_div col-12">
+                    <label for="Diseases_Type">Diseases Type</label>
+                    <select id="Diseases_Type0" onchange="ChangeSelect(0)" name="Diseases_Type" asp-items="@ViewBag.Diseases_Type">
+                    </select>
+                </div>
+                <div>
+                    <label for="Diseases">Diseases</label>
+                    <select id="Diseases0" name="Diseases" asp-items="@ViewBag.Diseases">
+                    </select>
+                    <label for="Chronic">Chronic Disease</label>
+                    <input id="chr0" type="checkbox" onchange="changeChk(0)" />
+                    <input id="Chronic0" type="hidden" name="Chronic" value="false" />
+                    <label for="Family">Family Health History</label>
+                    <input id="fam0" type="checkbox" onchange="changeChk1(0)" />
+                    <input id="Family0" type="hidden" name="Family" value="false" />
+                </div>
+                <span id="span0"></span>
+                <input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+            </div>
+            <div class="All_div col-12">
+                <input type="submit" value="Create" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 46%;">Back To Master Page</a>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+    function changeChk(num)
+    {
+        var chr = document.getElementById('chr' + num);
+
+        if (chr.checked == true) {
+            document.getElementById('Chronic' + num).value = "true";
+        }
+        else { document.getElementById('Chronic' + num).value = "false";}
+
+    }
+    function changeChk1(num)
+    {
+
+        var fam = document.getElementById('fam' + num);
+        if (fam.checked == true) {
+            document.getElementById('Family' + num).value="true";
+        }
+        else { document.getElementById('Family' + num).value = "false"; }
+    }
+
+    var count = 1;
+    function Delete(divNum) {
+        count--;
+        if (count == 1 || divNum == count) {
+            var span = document.getElementById('span' + (count-1));
+            span.insertAdjacentHTML('afterend', '<input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>');
+        }
+        var div = document.getElementById("div"+ divNum);
+        div.parentNode.removeChild(div);
+        }
+
+    function Add(btn, num, divNum) {
+            count++;
+            if (num < 6) {
+                num = num + 1;
+                divNum = divNum + 1;
+                var attribute = document.createAttribute("style");
+                attribute.value = "display:none";
+                btn.setAttributeNodeNS(attribute);
+                var div = document.getElementById('div' + (divNum-1));
+                var DiseaseTypesIds = document.getElementsByClassName('Disease_Type_Id');
+                var DiseaseTypesNames = document.getElementsByClassName('Disease_Type_Name');
+                var string1 = "";
+                for (var i = 0; i < DiseaseTypesIds.length; i++) {
+                    string1 += '<option value="' + DiseaseTypesIds[i].innerHTML + '">' + DiseaseTypesNames[i].innerHTML + '</option>';
+                }
+                var valueToAdd = '<div id="div'+ divNum +'">'+
+                    '<div class="All_div col-12"> ' +
+                    ' <label for="Diseases_Type">Diseases_Type</label>' +
+                    ' <select id="Diseases_Type' + divNum + '" onchange="ChangeSelect(' + divNum + ')"  name="Diseases_Type">' +
+                    string1 +
+                    '</select>' +
+                    ' </div>' +
+                    '<div class="All_div col-12">' +
+                    ' <label for="Diseases">Diseases</label>' +
+                    '<select id="Diseases' + divNum + '" name="Diseases">' +
+                    '</select> ' +
+                    '<label for="Chronic">Chronic</label>' +
+                    '<input id="chr' + divNum + '" type="checkbox" onchange="changeChk(' + divNum + ')"  />' +
+                    '<input id="Chronic' + divNum + '" type="hidden" name="Chronic" value="false" />'+
+                    ' <label for="Family">Family Health History</label>' +
+                    '<input id="fam' + divNum + '" type="checkbox" onchange="changeChk1(' + divNum + ')"  />' +
+                    '<input id="Family' + divNum + '" type="hidden" name="Family" value="false" />'+
+                    '</div>' + '<input type="button" onclick="Delete(' + divNum + ')" value="Delete" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
+                    '<span id="span' + divNum + '"></span>' +
+                    '<input type="button" onclick="Add(this,' + num + ',' + divNum + ')" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>' +
+                    '</div> ';
+                div.insertAdjacentHTML('afterend', valueToAdd);
+
+            }
+
+        }
+
+    function ChangeSelect(num) {
+                var selectedDiseases_Type = $("#Diseases_Type" + num).val();
+                var DiseasesSelect = $("#Diseases" + num);
+                DiseasesSelect.empty();
+                if (selectedDiseases_Type != null && selectedDiseases_Type != "") {
+                    $.getJSON('@Url.Action("GetDiseases")', { Diseases_TypeId: selectedDiseases_Type }, function (Diseases) {
+                        if (Diseases != null && !jQuery.isEmptyObject(Diseases)) {
+                            DiseasesSelect.append($('<option/>', { value: null, text: "اختر نوع المرض" }));
+
+                            $.each(Diseases, function (index, Disease) {
+                                DiseasesSelect.append($('<option/>', { value: Disease.value, text: Disease.text }));
+                            });
+                        };
+                    });
+
+                }
+
+        }
+
+
+    // Allergies
+    var AllergiesCount = 0;
+    function AddAllergy(btn, i) {
+
+        if (AllergiesCount < 6) {
+
+            var attribute = document.createAttribute("style");
+            attribute.value = "display:none";
+            btn.setAttributeNodeNS(attribute);
+            var div = document.getElementById('AlergyDiv' + i);
+            var Allergy_Ids = document.getElementsByClassName('Allergy_Id');
+            var Allergy_Names = document.getElementsByClassName('Allergy_Name');
+            console.log(Allergy_Ids);
+            console.log(Allergy_Names);
+            var string1 = "";
+            for (var j = 0; j < Allergy_Ids.length; j++) {
+                string1 += '<option value="' + Allergy_Ids[j].innerHTML + '">' + Allergy_Names[j].innerHTML + '</option>';
+            }
+            var valueToAdd =
+                '<div id="AlergyDiv' + (i + 1) + '">' +
+                ' <select name="Allergies" style="min-height: 75px; max-height: 100px;">' +
+                string1 +
+                '</select>' +
+                '<span class="AddSpans" id="' + (i + 1) + '"></span>' +
+                '<button type="button" onclick="AddAllergy(this,' + (i + 1) + ')">إضافة</button>' +
+                ' <button type="button" onclick="DeleteAllergy(' + (i + 1) + ')">حذف</button>' +
+                ' </div>';
+            div.insertAdjacentHTML('afterend', valueToAdd);
+            AllergiesCount++;
+        }
+    }
+    function DeleteAllergy(i) {
+        var addSpans = document.getElementsByClassName('AddSpans');
+        if (AllergiesCount == 1) {
+            var span = document.getElementById('span');
+            var value = '<div id="AlergyDiv0">\
+                        <button type = "button" onclick = "AddAllergy(this,0)" > إضافة حساسيات</button>\
+                            </div >';
+            span.insertAdjacentHTML('afterend', value);
+        }
+        else if (addSpans[addSpans.length - 1].id == i) {
+            addSpans[addSpans.length - 2].insertAdjacentHTML('afterend', '<button type="button" onclick="AddAllergy(this,' + (i - 1) + ')">إضافة</button>');
+        }
+        var div = document.getElementById("AlergyDiv" + i);
+        div.parentNode.removeChild(div);
+        AllergiesCount--;
+
+
+    }
+    //End Allergies
+
+
+    </script>
+
+}

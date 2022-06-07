@@ -1,0 +1,46 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Work_Days
+
+@{
+    ViewData["Title"] = "Edit";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Edit.css" rel="stylesheet" />
+}
+<form asp-action="Edit" method="post" class="All_form">
+    <div class="container">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Doctor_Id" />
+            <input type="hidden" asp-for="Day" />
+            <div class="All_div col-12">
+                <label asp-for="Start_Hour"></label>
+                <input type="time" asp-for="Start_Hour" style="width: 54%; height: 42px; border-radius: 18px; font-size: 16px; text-indent: 10px; color: #0000009e; font-weight: 500;" /><br />
+                <span asp-validation-for="Start_Hour" class="text-danger"></span>
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="End_Hour"></label>
+                <input type="time" asp-for="End_Hour" style="width: 54%; height: 42px; border-radius: 18px; font-size: 16px; text-indent: 10px; color: #0000009e; font-weight: 500;" /><br />
+                <span asp-validation-for="End_Hour" class="text-danger"></span>
+            </div>
+            <input type="hidden" name="DeptMgrId" value="@ViewBag.DeptMgrId" />
+            <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+            <div class="All_div col-12">
+                <input type="submit" value="Save" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <a asp-action="GetWorkDays" asp-route-id="@Model.Doctor_Id" asp-route-HoId="@ViewBag.HoId" asp-route-DeptMgrId="@ViewBag.DeptMgrId" style=" position: relative; left: 48%;">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Employee>
+
+@{
+    ViewData["Title"] = "HoEmployees";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<p>
+    <a asp-action="Create" asp-route-MgrId="@ViewBag.MgrId" asp-route-HoId="@ViewBag.HospitalId" style=" position: relative; left: 46%;">Create New</a>
+</p>
+<div class="All_form" style="direction: rtl; width: 92%; position: relative; right: 22%; background-color: white ">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Full_Name)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Email)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_National_Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Job)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Social_Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee_Hire_Date)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int i = 0;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Full_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_National_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Gender)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Job)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Social_Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee_Hire_Date)
+                    </td>
+
+                    <td>
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a id="@confirm" class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.Employee_Id" asp-route-MgrId="@ViewBag.MgrId">تأكيد</a>
+                        @{i++;}
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-action="MasterHoMgr" asp-route-id="@ViewBag.MgrId" style=" position: relative; left: 46%;">Back to Master Page</a>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/ConfirmDelete.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

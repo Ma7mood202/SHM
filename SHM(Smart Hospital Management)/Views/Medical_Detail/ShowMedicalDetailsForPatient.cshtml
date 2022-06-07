@@ -1,0 +1,123 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Medical_Detail
+
+@{
+    ViewData["Title"] = "ShowMedicalDetailsForPatient";
+}
+@section Styles{
+    <style>
+        html {
+            direction: rtl
+        }
+    </style>
+    <link href="~/Medicio/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="~/Medicio/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
+    <link href="~/ShowMedicalDetailsForPatient.css" rel="stylesheet" />
+    <style> body {background-color: rgb(155 211 211 / 58%);}</style>
+}
+<div class="all_page">
+    <div class="container">
+        <div class="row">
+            <div class="show_div col-12" style=" background-color: white; ">
+                <div class="blood_div col-12">
+                    <label for="">زمرة الدم :</label>
+                    <span>@Model.MD_Patient_Blood_Type</span>
+                </div>
+                <div class="sp_need_div col-12">
+                    <label for="">الإحتياجات الخاصة :</label>
+                    <span>@Model.MD_Patient_Special_Needs</span>
+                </div>
+                <div class="tr_pl_div col-12">
+                    <label for="">الخطة العلاجية :</label>
+                    <span>@Model.MD_Patient_Treatment_Plans_And_Daily_Supplements</span>
+                </div>
+                <div class="ex_div col-12">
+                    <label for="">التشخيصات: </label>
+                    @*@foreach (var item in ViewBag.Examination)
+                        {
+                            <p>@item.Details</p>
+                        }*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tables_div">
+    <div class="container col-12">
+        <div class="row"   style="background-color: white; width: 80%;position: relative; right: 88px;border-radius: 20px;padding: 20px;">
+            <div class="col-4">
+                <table>
+                    <thead> <tr><th>الحساسيات</th></tr></thead>
+                    <tbody>
+
+                        @foreach (var item in ViewBag.allergies as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy>)
+                        {
+                            <tr>
+                                <td>@item.Allergy_Name</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-4">
+                <table>
+                    <tr>
+                        <th>الأمراض المزمنة</th>
+
+                    </tr>
+                    @foreach (var item in ViewBag.chronic_diseases as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Disease>)
+                    {
+                        <tr>
+                            <td>
+                                @item.Disease_Name
+                            </td>
+                        </tr>
+                    }
+
+
+                </table>
+            </div>
+            <div class="col-4">
+                <table>
+                    <tr>
+                        <th>الأمراض العائلية</th>
+                    </tr>
+                    @foreach (var item in ViewBag.family_diseases as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Disease>)
+                    {
+                        <tr>
+                            <td>@item.Disease_Name</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="btn_div">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <a asp-controller="External_Record" asp-action="ShowExternalRecordsPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">الملفات الخارجية</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="Ray" asp-action="ShowRaysForPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">الأشعة</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="Medical_Test" asp-action="ShowMedicalTestForPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">التحاليل</a>
+            </div>
+            <br />
+            <div class="col-3">
+                <a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" width: 150px; position: relative; right: 425px; margin-top: 25px; background-color: whitesmoke;">Back to Master Page</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/Medicio/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

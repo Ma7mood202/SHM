@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Doctor>
+
+@{
+    ViewData["Title"] = "EditDeptManager";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Edit.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style=" margin-left: 15%; width: 70%; background-color: white">
+    <form asp-action="EditDeptManager" asp-route-id="@ViewBag.DeptID" method="get">
+        <div class="container">
+            <div class="row" style="width: 200%; position: relative; right: 40%;">
+                <p>
+                    <div class="All_div col-12">
+
+                        <input type="hidden" name="DoctorId" value="@ViewBag.DoctorId" />
+                        <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+                        <input type="text" name="search" style="width:70%;" />
+                        <input type="submit" value="بحث" />
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>
+    <table class="table" style="direction:rtl;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Full_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_National_Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Birth_Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Doctor_Hire_Date)
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Full_Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_National_Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Gender)
+                    </td
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Birth_Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Doctor_Hire_Date)
+                    </td>
+                    <td>
+                        <a asp-controller="Request" asp-action="UpdateDeptManager" asp-route-id="@item.Doctor_Id" asp-route-EmpId="@ViewBag.EmpId">تعيين</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-action="DeptManagers" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 48%;">Back to List</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

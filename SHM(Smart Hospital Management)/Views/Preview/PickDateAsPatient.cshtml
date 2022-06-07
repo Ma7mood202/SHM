@@ -1,0 +1,116 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+
+@{
+    ViewData["Title"] = "Create";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+
+<form asp-action="PickTimeAsPatientPost" class="All_form">
+    <div class="container">
+        <div class="row">
+            <input id="DocId" type="hidden" name="DocId" value="@ViewBag.DocId" />
+            <input type="hidden" name="id" value="@ViewBag.PatientId" />
+            <input type="hidden" name="DeptId" value="@ViewBag.DeptId" />
+            <div class="All_div col-12">
+                <label>الرجاء إختيار يوم المعاينة</label>
+                <input id="date" type="date" name="date" required /> <br />
+                <span id="message" style="color:red"></span>
+            </div>
+            <span class="text-danger">@ViewBag.ErrorMessage</span>
+            <div class="All_div col-12">
+                <label>الرجاء إختيار وقت المعاينة</label>
+                <select id="time" name="PreviewTime" asp-items="@ViewBag.Times" required>
+                    <option disabled selected> اختر الوقت</option>
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <input type="submit" value="حجز الموعد" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="All_form" style="direction:rtl;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Day)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.End_Hour)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start_Hour)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.End_Hour)
+                    </th>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-action="DeptDoctorsForPatient" asp-route-id="@ViewBag.PatientId" asp-route-DeptId="@ViewBag.DeptId" style=" position: relative; left: 48%;">Back to List</a>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script type="text/javascript">
+        $(document).ready(function ()
+        {
+
+            $("#date").blur(function () {
+                var selectedDate = $("#date").val();
+                var DocId = $("#DocId").val();
+            var TimesSelect = $("#time");
+            TimesSelect.empty();
+                if (selectedDate != null) {
+                    $.getJSON('@Url.Action("GetTimes")', { date: selectedDate, DocId: DocId}, function (Times) {
+                        if (Times.timeSelect != null && !jQuery.isEmptyObject(Times.timeSelect)) {
+                            TimesSelect.append($('<option/>', { value: "12:02:00", text: "اختر الوقت" }));
+                            $.each(Times.timeSelect, function (index, time) {
+                                TimesSelect.append($('<option/>', { value: time.value, text: time.text }));
+                            });
+                            $("#message").html(Times.message);
+
+                        }
+                        else {
+                            $("#message").html(Times.message);
+
+                        }
+
+                });
+
+            }
+        });
+    });
+    </script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

@@ -1,0 +1,140 @@
+﻿@model SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Medical_Ray
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@section Styles{
+    <link href="~/Medicio2/Create.css" rel="stylesheet" />
+}
+<div style="width:1px;height:1px; overflow:scroll; visibility:hidden">
+    <ul>
+        @{
+            List<SelectListItem> RayTypes = ViewBag.Ray_Type_Id;
+            for (int i = 0; i < RayTypes.Count; i++)
+            {
+                <li class="Ray_Type_Id">@RayTypes[i].Value</li>
+                <li class="Ray_Type_Name">@RayTypes[i].Text</li>
+            }
+        }
+    </ul>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+
+            <div id="div0">
+                <div class="form-group">
+                    <label for="files" class="control-label"></label>
+                    <input type="file" name="files" />
+                </div>
+                <div class="form-group">
+                    <label for="ray" class="control-label"></label>
+                    <select name="ray" class="form-control" asp-items="ViewBag.Ray_Type_Id">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date" class="control-label"></label>
+                    <input type="date" name="date" class="form-control" />
+                </div>
+                <span class="span" id="0"></span>
+                <button type="button" onclick="AddRay(this,0)"> إضافة اشعة</button>
+            </div>
+
+            <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
+            <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+            <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ShowRaysForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        var RaysCount = 1;
+        function AddRay(btn, i) {
+            if (RaysCount < 3) {
+                var attribute = document.createAttribute("style");
+                attribute.value = "display:none";
+                btn.setAttributeNodeNS(attribute);
+                var div = document.getElementById('div' + i);
+                var Ray_Type_Ids = document.getElementsByClassName('Ray_Type_Id');
+                var Ray_Type_Names = document.getElementsByClassName('Ray_Type_Name');
+                var string1 = "";
+                for (var j = 0; j < Ray_Type_Ids.length; j++) {
+                    string1 += '<option value="' + Ray_Type_Ids[j].innerHTML + '">' + Ray_Type_Names[j].innerHTML + '</option>';
+                }
+
+                var valueToAdd = "";
+                if (RaysCount != 2) {
+                    valueToAdd = '<div id="div' + (i + 1) + '">' +
+                        '<div class="form-group">' +
+                        '<label for= "files" class= "control-label" ></label> ' +
+                        '<input type="file" name="files" />' +
+                        '</div >' +
+                        '<div class="form-group">' +
+                        '<label for="ray" class="control-label"></label>' +
+                        '<select name="ray" class="form-control">' +
+                        string1 +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="date" class="control-label"></label>' +
+                        '<input type="date" name="date" class="form-control" />' +
+                        '</div>' +
+                        '<span class="span" id="'+(i+1)+'"></span>' +
+                        '<button type="button" onclick="AddRay(this,' + (i + 1) + ')"> إضافة </button>' +
+                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')"> حذف </button>' +
+                        '</div>';
+                }
+                else {
+                    valueToAdd = '<div id="div' + (i + 1) + '">' +
+                        '<div class="form-group">' +
+                        '<label for= "files" class= "control-label" ></label> ' +
+                        '<input type="file" name="files" />' +
+                        '</div >' +
+                        '<div class="form-group">' +
+                        '<label for="ray" class="control-label"></label>' +
+                        '<select name="ray" class="form-control">' +
+                        string1 +
+                        '</select>' +
+                        '</div>' +
+                        '<div class="form-group">' +
+                        '<label for="date" class="control-label"></label>' +
+                        '<input type="date" name="date" class="form-control" />' +
+                        '</div>' +
+                        '<span class="span" id="'+(i+1)+'"></span>' +
+                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')"> حذف </button>' +
+                        '</div>';
+                }
+                div.insertAdjacentHTML('afterend', valueToAdd);
+                RaysCount++;
+            }
+        }
+        function DeleteRay(i) {
+            var div = document.getElementById("div" + i);
+            div.parentNode.removeChild(div);
+            RaysCount--;
+            var spans = document.getElementsByClassName('span');
+            if (RaysCount == 1) {
+                var span = document.getElementById('0');
+                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,0)"> إضافة </button>');
+            }
+            else {
+                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,' + spans[spans.length - 1].id + ')"> إضافة </button>');
+            }
+           
+
+
+        }
+    </script>
+}

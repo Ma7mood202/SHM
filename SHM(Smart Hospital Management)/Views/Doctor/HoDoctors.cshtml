@@ -1,0 +1,69 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.HoDoctors>
+
+@{
+    ViewData["Title"] = "HoDoctors";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style="direction:rtl; width:auto; position:relative; right:13%">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DoctorFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Specialization)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhoneNumbers)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DoctorFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Specialization)
+                    </td>
+                    @*+ رقم الموبايل وساعات الدوام*@
+                    <td>
+                        @if (item.PhoneNumbers.Count == 0)
+                        {
+                            <span>لا يوجد</span>
+                        }
+                        else
+                            @foreach (var item1 in item.PhoneNumbers)
+                            {
+                                @Html.DisplayFor(modelItem => item1) <br />
+                            }
+                    </td>
+                    <td>
+
+                        <a asp-action="DetailsForResception" asp-route-id="@item.DoctorId" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">تفاصيل </a> |
+                        <a asp-controller="Work_Days" asp-action="ShowDoctorWorkDays" asp-route-id="@item.DoctorId" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">جدول الدوام</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style=" position: relative; left: 46%;">Back to Master Page</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

@@ -166,7 +166,7 @@
                 <div class="modal-body "> هل أنت متأكد</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
-                    <a class="btn btn-primary Logout-btn" asp-action="LogOut">تسجيل خروج</a>
+                    <a class="btn btn-primary Logout-btn" asp-action="LogOut" asp-route-id="@ViewBag.DeptMgrId">تسجيل خروج</a>
                 </div>
             </div>
         </div>

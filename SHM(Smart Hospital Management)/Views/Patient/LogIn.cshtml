@@ -9,6 +9,8 @@
     <!--===============================================================================================-->
     <link href="~/Medicio2/login/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="~/Medicio2/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="~/Medicio2/login/fonts/iconic/css/material-design-iconic-font.min.css">
@@ -23,8 +25,8 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="~/Medicio2/login/vendor/daterangepicker/daterangepicker.css">
     <!--===============================================================================================-->
-    <link href="~/Medicio2/login/logindoctor/css/main.css" rel="stylesheet" />
     <link href="~/Medicio2/login/logindoctor/css/util.css" rel="stylesheet" />
+    <link href="~/Medicio2/login/loginpai/css/Main.css" rel="stylesheet" />
 }
 
 <div class="limiter">
@@ -42,9 +44,11 @@
                 </div>
 
                 <div class="wrap-input100">
-                    <input class="input100" type="password" name="password" placeholder="كلمة السر">
-                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                    <i class="bi bi-eye-slash" id="togglePassword"></i>
+                    <input class="input100" type="password" name="password" autocomplete="current-password" id="id_password" placeholder="كلمة السر">
+                    <span class="focus-input100" data-placeholder="&#xf191;">	</span>
                 </div>
+
                 <div class="hospital">
                     <i class="fas fa-hospital-user hos-icon"></i>
                     <select name="hospital" class="hos-select">
@@ -61,6 +65,7 @@
                         تسجيل دخول
                     </button>
                 </div>
+                <a asp-controller="Home" asp-action="Index" class="back"><i class="bi bi-arrow-left-short"></i> العودة إلى الصفحة الرئيسية </a>
             </form>
         </div>
     </div>
@@ -87,6 +92,15 @@
     <!--===============================================================================================-->
     <script src="~/Medicio2/login/js/main.js"></script>
     <script type="module" src="~/firebase/src/getToken.js"></script>
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#id_password');
 
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+        });
+    </script>
 }
 

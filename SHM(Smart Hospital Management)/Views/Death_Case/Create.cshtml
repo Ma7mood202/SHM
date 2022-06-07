@@ -1,0 +1,44 @@
+﻿@model SHM_Smart_Hospital_Management_.Models.Death_Case
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Death_Case</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <input type="hidden" asp-for="PatientId" />
+            <input type="hidden" asp-for="Death_Cause" />
+            <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+       
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div> 
+            <div class="form-group">
+                <label asp-for="Death_Date" class="control-label"></label>
+                <input asp-for="Death_Date" class="form-control" />
+                <span asp-validation-for="Death_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="HoPatientsForResception" asp-route-id="">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

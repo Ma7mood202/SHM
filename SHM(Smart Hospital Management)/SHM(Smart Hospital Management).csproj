@@ -23,4 +23,28 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\External_Records_Details\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\CODEOWNERS" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\CONTRIBUTING.md" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\dependabot.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\ISSUE_TEMPLATE\bug_report.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\ISSUE_TEMPLATE\config.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\ISSUE_TEMPLATE\feature_request.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\release-drafter.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\SUPPORT.md" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\browserstack.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\bundlewatch.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\codeql.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\css.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\docs.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\js.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\lint.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\node-sass.yml" />
+    <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\release-notes.yml" />
+  </ItemGroup>
+
 </Project>

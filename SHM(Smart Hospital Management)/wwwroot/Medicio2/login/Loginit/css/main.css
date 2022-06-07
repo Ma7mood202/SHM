@@ -250,6 +250,7 @@ iframe {
 [ Input ]*/
 
 .wrap-input100 {
+  display: flex;
   width: 100%;
   position: relative;
   border-bottom: 2px solid rgba(255,255,255,0.24);
@@ -555,7 +556,7 @@ iframe {
   border-bottom-left-radius: 0;
 }
 .input-group-text {
-  top: -42px;
+  top: 3px;
   height: 43px;
   position: relative;
   opacity: 0.6;
@@ -597,9 +598,19 @@ iframe {
   position: absolute;
   bottom: 21px;
   left: 430px;
-  color: #ffffff;
+  color: #000000;
   font-size: medium;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 }
 .back:hover{
  color: rgb(4, 56, 99);
+}
+i#togglePassword {
+  position: relative;
+  right: -92%;
+  top: 15px;
+  color: aliceblue;
+}
+i#togglePassword:hover {
+cursor: pointer;
+color:  rgb(222, 224, 226);
 }

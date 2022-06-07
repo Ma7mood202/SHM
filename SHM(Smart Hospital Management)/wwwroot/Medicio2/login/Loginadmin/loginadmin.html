@@ -10,6 +10,8 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css">
+<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="../fonts/iconic/css/material-design-iconic-font.min.css">
@@ -45,28 +47,21 @@
 						<span class="focus-input100" data-placeholder="&#xf207;"></span><span class="input-group-text" id="basic-addon2">@Admin.com</span>
 					</div>
 
-					<div class="wrap-input100  " data-validate="Enter password">
-						<input class="input100" type="password" name="pass" placeholder="كلمة السر">
-						<span class="focus-input100 " data-placeholder="&#xf191;"></span>
+					<div class="wrap-input100 " data-validate="Enter password">
+						<i class="bi bi-eye-slash" id="togglePassword"></i>
+						<input class="input100" type="password" name="password" autocomplete="current-password" id="id_password" placeholder="كلمة السر">
+						
+					
+						<span class="focus-input100" data-placeholder="&#xf191;">	</span>
+					
 					</div>
 
-					<!-- <div class="contact100-form-checkbox">
-						<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-						<label class="label-checkbox100" for="ckb1">
-						تذكرني
-						</label>
-					</div>-->
 					 <div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							تسجيل دخول
 						</button>
 					</div> 
 
-					<!-- <div class="text-center p-t-90">
-						<a class="txt1" href="#">
-							Forgot Password?
-						</a>
-					</div> -->
 				</form>
 			</div>
 		</div>
@@ -91,7 +86,15 @@
 	<script src="../vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="../js/main.js"></script>
-
-
+	<script>
+		const togglePassword = document.querySelector('#togglePassword');
+		const password = document.querySelector('#id_password');
+	
+		togglePassword.addEventListener('click', function(e){
+			const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+			password.setAttribute('type', type);
+			this.classList.toggle('bi-eye');
+		});
+		</script>
 </body>
 </html>

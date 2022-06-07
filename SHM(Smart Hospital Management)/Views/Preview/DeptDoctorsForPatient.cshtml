@@ -1,0 +1,48 @@
+﻿@model List<SHM_Smart_Hospital_Management_.ViewModels.HoDoctors>
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<div class="All_form" style="direction:rtl;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Doctor Full Name
+                </th>
+                <th>
+                    Phone Numbers
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DoctorFullName)
+                    </td>
+                    <td>
+                        @foreach (var item1 in item.PhoneNumbers)
+                        {
+                            <span> @item1</span> <br />
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-action="PickDateAsPatient" asp-route-DeptId="@ViewBag.DeptId" asp-route-id="@ViewBag.PatientId" asp-route-DocId="@item.DoctorId">اختيار</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-action="CreateForPatient" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 48%;">Back to List</a>

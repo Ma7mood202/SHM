@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.DeptManagers>
+
+@{
+    ViewData["Title"] = "DeptManagers";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+<a asp-action="CreateDeptManager" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style="position: relative; left: 43%;">Add New Dept Manager</a>
+<div class="All_form" style="direction: rtl; width: auto; position: relative; right: 13%; background-color: white">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Manager
+
+                </th>
+                <th>
+                    Dept
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.MgrName
+                    </td>
+                    <td>
+                        @item.DeptName
+                    </td>
+                    <td>
+                        <input type="hidden" value="@item.Id" />
+                        <a asp-action="EditDeptManager" asp-route-id="@item.Id" asp-route-DoctorId="@item.DoctorManagerId" asp-route-EmpId="@ViewBag.EmpId">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 46%;">Back To List</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

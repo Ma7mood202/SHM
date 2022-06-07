@@ -10,7 +10,7 @@ namespace SHM_Smart_Hospital_Management_.HangFire
     public static class TimingOperations
     {
         private static DbContextOptions<ApplicationDbContext> opt = new DbContextOptionsBuilder<ApplicationDbContext>()
-              .UseSqlServer("Server=DESKTOP-QQQJ0LR\\SQLEXPRESS;Database=LastHMS2;trusted_connection=yes;").Options;
+              .UseSqlServer(@"Server=DESKTOP-G3NE69C\SQLEXPRESS;Database=LastHMS2;trusted_connection=yes;").Options;
 
         private static readonly ApplicationDbContext context = new ApplicationDbContext(opt);
         //public static void EmptySurgeryRooms()
