@@ -79,8 +79,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Master", "Doctor", new { id = DocId, HoId });
         }
-
-
         #region Create Preview For Patient
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> CreateForPatient(int id) // Patient(id) // Display All Departments in Patient.HoId
@@ -109,7 +107,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
                 return RedirectToAction("Logout", "Patient");
-            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
+            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync();
             ViewBag.PatientId = id;
             ViewBag.DeptId = DeptId;
             ViewBag.DocId = DocId;
@@ -189,7 +193,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.ErrorMessage = ErrorMessage;
             ViewBag.Times = new List<SelectListItem>();
-            return View(_context.Work_Days.Where(s => s.Doctor_Id == DoctorId));
+            return View(_context.Work_Days.Where(s => s.Doctor_Id == DoctorId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync());
         }
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> GetAvailableTimePost(int DocId, int HoId, int PatientId, DateTime date, TimeSpan PreviewTime)
@@ -264,7 +274,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
                 return RedirectToAction("Logout", "Employee");
-            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
+            var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).Select(s =>
+            new ShowWorkDays
+            {
+                Day = s.Day,
+                End_Hour = s.End_Hour.ToString("c"),
+                Start_Hour = s.Start_Hour.ToString("c")
+            }).ToListAsync();
             ViewBag.PatientId = PatientId;
             ViewBag.EmpId = EmpId;
             ViewBag.DeptId = id;
@@ -274,7 +290,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(workDays);
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> PickTimePost(int id, int DocId, int EmpId, int PatientId, DateTime date, TimeSpan PreviewTime)// Department(id)
+        public async Task<IActionResult> PickTimePost(int id, int DocId, int EmpId, int PatientId, DateTime date, TimeSpan PreviewTime , string isCaring)// Department(id)
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -302,7 +318,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     Doctor_Id = DocId,
                     Patient_Id = PatientId,
                     Preview_Date = d,
-                    Caring = false
+                    Caring = isCaring == "true"
                 };
                 _context.Add(p);
                 await _context.SaveChangesAsync();

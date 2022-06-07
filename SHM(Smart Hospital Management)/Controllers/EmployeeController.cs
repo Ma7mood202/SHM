@@ -60,7 +60,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return RedirectToAction("LogOut");
             if (Resception == null) return NotFound();
             ViewBag.HospitalName = _context.Hospitals.Find(Resception.Ho_Id).Ho_Name;
-            ViewBag.PatientsXYs = await _context.Patients.Where(p => p.Active && p.Ho_Id == Resception.Ho_Id).Select(s => s.Patient_X_Y).ToListAsync();
             return View(Resception);
         }
 

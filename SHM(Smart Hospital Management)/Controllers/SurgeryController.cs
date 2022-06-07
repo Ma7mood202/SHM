@@ -140,7 +140,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             if (date != default)
             {
-                var su = await _context.Surgeries.Where(s => s.Surgery_Room_Id == Sr_Id).ToListAsync();
+                var su = await _context.Surgeries.Where(s => s.Surgery_Room_Id == Sr_Id && s.Surgery_Date.Date >= DateTime.Now.Date).ToListAsync();
                 List<TimeSpan> DateSurgery = new List<TimeSpan>();
                 List<TimeSpan> time = new List<TimeSpan>();
                 List<TimeSpan> Invalid = new List<TimeSpan>();
@@ -153,8 +153,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     for (TimeSpan i = TimeSpan.Zero; i < TimeSpan.FromDays(1); i += halfHour)
                     {
                         temp = TimeSpan.FromHours(i.Hours + hour) + TimeSpan.FromMinutes(i.Minutes + minute);
-                        if (temp < TimeSpan.FromDays(1) && i.Hours >= DateTime.Now.Hour)
-                            d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+                        if (date.Date == DateTime.Now.Date)
+                        {
+                            if (temp < TimeSpan.FromDays(1) && i.Hours >= DateTime.Now.Hour)
+                                d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+
+                        }
+                        else
+                        {
+                            if (temp < TimeSpan.FromDays(1))
+                                d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
+                        }
                     }
                 }
                 else
