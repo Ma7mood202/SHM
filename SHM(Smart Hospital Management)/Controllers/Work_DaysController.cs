@@ -48,6 +48,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(await _context.Work_Days.Where(w => w.Doctor_Id == id).Select(s =>
             new ShowWorkDays
             {
+                Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
                 End_Hour = s.End_Hour.ToString("c"),
                 Start_Hour = s.Start_Hour.ToString("c")
@@ -65,6 +66,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(await _context.Work_Days.Where(w => w.Doctor_Id == id).Select(s=>
             new ShowWorkDays
             {
+                Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
                 End_Hour = s.End_Hour.ToString("c"),
                 Start_Hour = s.Start_Hour.ToString("c")

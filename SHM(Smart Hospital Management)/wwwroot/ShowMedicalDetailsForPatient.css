@@ -1,0 +1,342 @@
+
+.blood_div, .sp_need_div, .tr_pl_div, .ex_div {
+    display: flex;
+    align-items: center;
+}
+span{
+    margin-right: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+}
+.show_div.col-12 {
+    background-color: #c9c6c629;
+    border-radius: 17px;
+    margin: 10px;
+}
+th {
+    border-bottom: 2px solid #e3e1e1d9;
+    color: gray;
+    font-size: 20px;
+}
+label {
+    font-size: 17px;
+    font-weight: 800;
+    color: #767474bf;
+    margin: 10px 0px;
+}
+table {
+    text-align: center;
+    margin: 0px 69px;
+}
+.tables_div {
+    margin: 48px;
+    margin-right: 159px;
+}
+td {
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    padding-top: 14px;
+}
+a {
+    color: #606366;
+    font-size: 14px;
+    font-weight: 700;
+    width: 36%;
+    text-align: center;
+    height: 46px;
+    border-radius: 15px;
+    padding: 10px;
+    display: inline-block;
+    background-color: #46c9cd70;
+    transition: 0.2s;
+}
+a:hover {
+    color: black;
+    text-decoration: none;
+    box-shadow: 10px 10px;
+}
+.btn_div {
+    text-align: center;
+}
+
+
+
+/* Extra small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) { 
+    .all_page {
+        width: 80%;
+        margin: 26px 40px;
+    }
+    label {
+        font-size: 12px;
+        font-weight: 400;
+        color: #767474bf;
+        margin: 10px 0px;
+    }
+    span{
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+    .tables_div {
+        margin: 0px;
+        margin-right: 0px;
+        margin-bottom: 14px;
+    }
+    table {
+        text-align: center;
+        margin: 0px;
+        margin-right: 22px;
+        margin-bottom: 13px;
+    }
+    td {
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+        padding-top: 14px;
+    }
+    th {
+        border-bottom: 2px solid #e3e1e1d9;
+        color: gray;
+        font-size: 12px;
+        padding-top: 15px;
+    }
+    a {
+        color: #606366;
+        font-size: 11px;
+        font-weight: 700;
+        width: 93%;
+        text-align: center;
+        height: 46px;
+        border-radius: 15px;
+        padding: 10px;
+        padding-top: 17px;
+        margin-right: 14px;
+        display: inline-block;
+        background-color: #46c9cd70;
+        transition: 0.2s;
+    }
+   }
+  
+  /*/ Small devices (landscape phones, 576px and up)*/
+  @media (min-width: 576px) and (max-width: 767.98px) { 
+    .all_page {
+        width: 90%;
+        margin: 10px;
+        margin-right: 20px;
+    }
+    label {
+        font-size: 14px;
+        font-weight: 800;
+        color: #767474bf;
+        margin: 10px 0px;
+    }
+    span{
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+    .tables_div {
+        margin: 48px 0px;
+        margin-right: 22px;
+    }
+    table {
+        text-align: center;
+        margin: 0px 21px;
+    }
+    th {
+        border-bottom: 2px solid #e3e1e1d9;
+        color: gray;
+        font-size: 14px;
+    }
+    td {
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+        padding-top: 14px;
+    }
+    a {
+        color: #606366;
+        font-size: 11px;
+        font-weight: 700;
+        width: 68%;
+        text-align: center;
+        height: 46px;
+        margin-right: 31px;
+        border-radius: 15px;
+        padding: 10px;
+        padding-top: 15px;
+        display: inline-block;
+        background-color: #46c9cd70;
+        transition: 0.2s;
+    }
+   }
+  /*/ Medium devices (tablets, 768px and up)*/
+  @media (min-width: 768px) and (max-width: 991.98px) { 
+    .all_page {
+        width: 90%;
+        margin: 10px;
+        margin-right: 20px;
+    }
+    label {
+        font-size: 14px;
+        font-weight: 800;
+        color: #767474bf;
+        margin: 10px 0px;
+    }
+    span{
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+    .tables_div {
+        margin: 48px 0px;
+        margin-right: 50px;
+    }
+    table {
+        text-align: center;
+        margin: 0px 38px 0px 31px;
+    }
+    th {
+        border-bottom: 2px solid #e3e1e1d9;
+        color: gray;
+        font-size: 14px;
+    }
+    td {
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+        padding-top: 14px;
+    }
+    a {
+        color: #606366;
+        font-size: 11px;
+        font-weight: 700;
+        width: 68%;
+        text-align: center;
+        height: 46px;
+        margin-right: 31px;
+        border-radius: 15px;
+        padding: 10px;
+        padding-top: 15px;
+        display: inline-block;
+        background-color: #46c9cd70;
+        transition: 0.2s;
+    }
+  
+   }
+  
+  /*/ Large devices (desktops, 992px and up)*/
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    .all_page {
+        width: 86%;
+        margin: 10px;
+        margin-right: 63px;
+    }
+    label {
+        font-size: 14px;
+        font-weight: 800;
+        color: #767474bf;
+        margin: 10px 0px;
+    }
+    span{
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+    .tables_div {
+        margin: 48px 0px;
+        margin-right: 90px;
+    }
+    table {
+        text-align: center;
+        margin: 0px 38px 0px 31px;
+    }
+    th {
+        border-bottom: 2px solid #e3e1e1d9;
+        color: gray;
+        font-size: 14px;
+    }
+    td {
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+        padding-top: 14px;
+    }
+    a {
+        color: #606366;
+        font-size: 11px;
+        font-weight: 700;
+        width: 52%;
+        text-align: center;
+        height: 46px;
+        margin-right: 44px;
+        border-radius: 15px;
+        padding: 10px;
+        padding-top: 15px;
+        display: inline-block;
+        background-color: #46c9cd70;
+        transition: 0.2s;
+    }
+    }
+  
+  /*/ Extra large devices (large desktops, 1200px and up)*/
+  @media (min-width: 1200px) { 
+    .all_page {
+        width: 85%;
+        margin: 10px;
+        margin-right: 84px;
+    }
+    label {
+        font-size: 16px;
+        font-weight: 800;
+        color: #767474bf;
+        margin: 10px 0px;
+    }
+    span{
+        margin-right: 10px;
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+    }
+    .tables_div {
+        margin: 48px 0px;
+        margin-right: 90px;
+    }
+    table {
+        text-align: center;
+        margin: 0px 61px 0px 31px;
+    }
+    th {
+        border-bottom: 2px solid #e3e1e1d9;
+        color: gray;
+        font-size: 14px;
+    }
+    td {
+        font-size: 12px;
+        font-weight: 500;
+        color: black;
+        padding-top: 14px;
+    }
+    a {
+        color: #606366;
+        font-size: 13px;
+        font-weight: 700;
+        width: 52%;
+        text-align: center;
+        height: 46px;
+        margin-right: -22px;
+        border-radius: 15px;
+        padding: 10px;
+        padding-top: 15px;
+        display: inline-block;
+        background-color: #46c9cd70;
+        transition: 0.2s;
+    }
+   }

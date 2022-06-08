@@ -9,10 +9,14 @@
             direction: rtl
         }
     </style>
-    <link href="~/Medicio/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
-    <link href="~/Medicio/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
     <link href="~/ShowMedicalDetailsForPatient.css" rel="stylesheet" />
-    <style> body {background-color: rgb(155 211 211 / 58%);}</style>
+    <style>
+        body {
+            background-color: rgb(155 211 211 / 58%);
+        }
+    </style>
 }
 <div class="all_page">
     <div class="container">
@@ -43,7 +47,7 @@
 </div>
 <div class="tables_div">
     <div class="container col-12">
-        <div class="row"   style="background-color: white; width: 80%;position: relative; right: 88px;border-radius: 20px;padding: 20px;">
+        <div class="row" style="background-color: white; width: 80%;position: relative; right: 88px;border-radius: 20px;padding: 20px;">
             <div class="col-4">
                 <table>
                     <thead> <tr><th>الحساسيات</th></tr></thead>
@@ -100,7 +104,7 @@
                 <a asp-controller="External_Record" asp-action="ShowExternalRecordsPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">الملفات الخارجية</a>
             </div>
             <div class="col-4">
-                <a asp-controller="Ray" asp-action="ShowRaysForPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">الأشعة</a>
+                <a asp-controller="Medical_Ray" asp-action="ShowRaysForPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">الأشعة</a>
             </div>
             <div class="col-4">
                 <a asp-controller="Medical_Test" asp-action="ShowMedicalTestForPatient" asp-route-id="@Model.Medical_Details_Id" asp-route-PatId="@ViewBag.PatientId" style="background-color: whitesmoke;">التحاليل</a>

@@ -8,7 +8,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
-<form asp-action="Create" method="post" class="All_form">
+<form asp-action="Create" method="post" class="All_form" style="background-color:white;">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -96,7 +96,7 @@
                         <td>
                             <div class="col-12">
                                 <span id="span0"></span>
-                                <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 64%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                             </div>
                         </td>
                     </tr>
@@ -106,6 +106,7 @@
                     <input type="submit" value="Create" />
                 </div>
             </div>
+        </div>
     </div>
     <a asp-action="HoEmployees" asp-route-id="@ViewBag.MgrId">Back to List</a>
 </form>
@@ -113,7 +114,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers.js"></script>
+    <script src="~/addPhoneNumbers2.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

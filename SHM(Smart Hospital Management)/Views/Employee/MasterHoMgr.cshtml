@@ -1,11 +1,17 @@
 ﻿@model SHM_Smart_Hospital_Management_.Models.Employee
 
 @section Styles{
+    <style>
+        html {
+            direction: rtl;
+        }
+    </style>
     <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css" /><!--fontawsome icons-->
     <link href="~/Medicio2/dashborde/" rel="stylesheet" type="text/css" /><!--fontawsome icons-->
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!--bootsrap icons-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" /><!--font-->
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet" /><!--bootstrap min-->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/dashborde/managerdb2/css/newmanager2.css" rel="stylesheet" /><!--style-->
 }
 
@@ -58,7 +64,7 @@
 
                     <!-- mng info Dropdown start -->
                     <div class=" dropdown-menu dropdown-menu-right shadow animated--grow-in  info-doc " aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-action="EditMgrPersonalDetails" asp-route-id="@Model.Employee_Id">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             المعلومات الشخصية
                         </a>
@@ -170,6 +176,7 @@
 </section>
 <!-- end -->
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -178,4 +185,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
+
 }

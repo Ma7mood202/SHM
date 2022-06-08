@@ -205,7 +205,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
-                    //FCMService.UpdateToken(fc["fcmToken"].ToString(), doctor.Doctor_Id, UserType.doc, Platform.Web);
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), doctor.Doctor_Id, UserType.doc, Platform.Web);
                     return RedirectToAction("Master", "Doctor", new { id = doctor.Doctor_Id, HoId = hospital.Ho_Id });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -335,8 +335,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(doctor);
         }
         [Authorize(Roles = "DeptManager")]
-        public IActionResult Create(int id, int DocId, int HoId) // Department (id)
+        public async Task<IActionResult> Create(int id, int DocId, int HoId) // Department (id)
         {
+            var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
+            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
+            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
+                return RedirectToAction("LogOut");
             Doctor doctor = new Doctor
             {
                 Doctor_Email = "mmmmmmmmmm",
@@ -358,6 +362,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Doctor doctor, int HoId, int DocId, string[] pn) // DocId = DeptManagerId
         {
+            var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
+            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
+            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
+                return RedirectToAction("LogOut");
             ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
             TempData["national"] = "";
             TempData["national"] = "";

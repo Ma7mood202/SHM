@@ -39,7 +39,7 @@
                 <i class="fa fa-bed ic"></i> <span class="side_name">العمليات</span>
             </a>
         </div>
-       
+
         <div class="s_div">
             <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
                 <i class="fa fa-calendar ic"></i> <span class="side_name">عرض جدول الدوام</span>
@@ -66,26 +66,16 @@
                         <div class="top_div natif">
                             <i class="fas fa-bell fa-fw"></i>
                             <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter">3+</span>
+                            <span class="badge badge-danger badge-counter" id="counter">0</span>
                         </div>
                     </a>
                     <!--Alerts Dropdown start -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
-                         aria-labelledby="alertsDropdown">
+                         aria-labelledby="alertsDropdown" id="notifications">
                         <h6 class="dropdown-header">
                             مركز التنبيهات
                         </h6>
-                        <a class="dropdown-item d-flex align-items-center" href="">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-success">
-                                    <i class="fas fa-donate text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">ديسمبر 2019,7</div>
-                                $290.29 has been deposited into your account!
-                            </div>
-                        </a>
+                        
                     </div>
                     <!--Alerts Dropdown end -->
                 </li>
@@ -106,7 +96,7 @@
                     <!-- doctor Info Dropdown start -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-doc"
                          aria-labelledby="userDropdown">
-                        <a class="dropdown-item" asp-action="Details" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             المعلومات الشخصية
                         </a>
@@ -144,7 +134,7 @@
                         <div class="modal-body "> هل أنت متأكد</div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">إلغاء</button>
-                            <a asp-action="LogOut" asp-route-id="@ViewBag.DoctorId" class="btn btn-primary Logout-btn" >تسجيل خروج</a>
+                            <a asp-action="LogOut" asp-route-id="@ViewBag.DoctorId" class="btn btn-primary Logout-btn">تسجيل خروج</a>
                         </div>
                     </div>
                 </div>
@@ -154,9 +144,9 @@
             </a>
             <!-- Logout Modal start-->
             <!--pait Btn -->
-            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" class="btn modal-bt1"  style="display:flex;justify-content:center;align-items:center">
+            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" class="btn modal-bt1" style="display:flex;justify-content:center;align-items:center">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none">
-                المرضى
+                    المرضى
                 </button>
             </a>
             <!-- surg Btn-->
@@ -263,5 +253,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
 }
 

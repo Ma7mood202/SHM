@@ -185,18 +185,13 @@ namespace SHM_Smart_Hospital_Management_.Notifications
                     Data = new Dictionary<string, string>()
                     {
                         { 
-                            "Emergency", "true" 
+                            "channelId", "emrgency" 
                         },
                            { "title","حالة طوارئ!!!!" },
                            { "body","الرجاء القدوم الى المشفى حالاً!!" },
                     },
 
                     Tokens = tokens,
-                    Android=new AndroidConfig()
-                    {
-                        CollapseKey= "Emergency",
-                        Priority=Priority.High,
-                    }
                 };
                 var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
                 return;
