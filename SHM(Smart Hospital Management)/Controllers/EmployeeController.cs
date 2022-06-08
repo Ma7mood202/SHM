@@ -120,17 +120,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 _context.Add(Nurse);
                 await _context.SaveChangesAsync();
 
-                Employee_Phone_Numbers[] epn = new Employee_Phone_Numbers[pn.Length];
+                Employee_Phone_Numbers[] pns = new Employee_Phone_Numbers[pn.Length];
                 for (int i = 0; i < pn.Length; i++)
                 {
 
-                    epn[i] = new Employee_Phone_Numbers
+                    pns[i] = new Employee_Phone_Numbers
                     {
                         Employee_Id = Nurse.Employee_Id,
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(epn);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(Nurse.Employee_Id, UserType.emp);
                 return RedirectToAction("Master", new { id = EmpId });
@@ -218,7 +218,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 var hospital = _context.Hospitals.Find(employee.Ho_Id);
                 hospital.Manager = employee;
@@ -364,7 +364,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("MasterHoMgr", new { id = MgrId });
@@ -422,7 +422,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == employee.Employee_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = employee.Employee_Id });
@@ -461,7 +461,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == Mgr.Employee_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(Mgr);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = Mgr.Employee_Id });

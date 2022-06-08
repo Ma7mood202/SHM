@@ -25,7 +25,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Master()  // mahmood
         {
-            return View(_context.Hospitals.Where(h => h.Active).ToList());
+            return View(_context.Hospitals.ToList());
         }
         public IActionResult LogIn()
         {

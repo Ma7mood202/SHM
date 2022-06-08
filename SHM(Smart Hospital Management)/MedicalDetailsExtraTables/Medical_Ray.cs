@@ -11,6 +11,7 @@ namespace SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables
     public class Medical_Ray
     {
         [NotMapped]
+        [Required(ErrorMessage = "الرجاء إختيار صورة الأشعة")]
         public IFormFile File { get; set; }
         [Key]
         public int Ray_Id { get; set; }

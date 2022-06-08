@@ -31,11 +31,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var departments = await (from d in _context.Departments
                                      join s in _context.Specializations
                                      on d.Department_Name equals s.Specialization_Id
-                                     where d.Ho_Id == id && d.Active
+                                     where d.Ho_Id == id
                                      select new Specialization_Dept
                                      {
                                          Dept_Id = d.Department_Id,
-                                         Spec_Name = s.Specialization_Name
+                                         Spec_Name = s.Specialization_Name,
+                                         Active = d.Active
                                      }).ToListAsync();
 
             if (departments.Count == 0)
@@ -86,14 +87,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             }
 
             return View(department);
-        }
-        [Authorize(Roles = "IT")]
-        public async Task<IActionResult> Delete(int id ,int EmpId) // Department (id)
-        {
-            var IT = await _context.Employees.FindAsync(EmpId);
-            if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
-            return RedirectToAction("DeleteDepartment", "Request" , new { id , EmpId });
         }
 
     }

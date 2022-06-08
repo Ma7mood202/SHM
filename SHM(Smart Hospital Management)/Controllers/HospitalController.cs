@@ -40,10 +40,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
             ViewBag.Areas = new List<SelectListItem>();
-            TempData["Area"] = "";
             if (hospital.Area_Id == 0)
-            {
-                TempData["Area"] = "true";
+            { 
                 return View(hospital);
             }
             if (ModelState.IsValid)
@@ -69,6 +67,56 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             }
             return View(hospital);
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id) // Hospital (id)
+        {
+            var hospital =await _context.Hospitals.FindAsync(id);
+            hospital.Active = false;
+            foreach (var item in _context.Employees.Where(e=>e.Ho_Id == id && e.Active).ToList())
+            {
+                item.Active = false;
+            }
+            foreach (var item in _context.Departments.Include(d=>d.Department_Doctors).Where(d=>d.Ho_Id == id && d.Active).ToList())
+            {
+                item.Active = false;
+                foreach (var item1 in item.Department_Doctors.Where(d=>d.Active).ToList())
+                {
+                    item1.Active = false;
+                }
+            }
+            foreach (var item in _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToList())
+            {
+                item.Active = false;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Master" , "Admin");
+        }
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Activate(int id) // Hospital (id)
+        {
+            var hospital = await _context.Hospitals.FindAsync(id);
+            hospital.Active = true;
+            foreach (var item in _context.Employees.Where(e => e.Ho_Id == id && !e.Active).ToList())
+            {
+                item.Active = true;
+            }
+            foreach (var item in _context.Departments.Include(d => d.Department_Doctors).Where(d => d.Ho_Id == id && !d.Active).ToList())
+            {
+                item.Active = true;
+                foreach (var item1 in item.Department_Doctors.Where(d => !d.Active).ToList())
+                {
+                    item1.Active = true;
+                }
+            }
+            foreach (var item in _context.Patients.Where(p => p.Ho_Id == id && !p.Active).ToList())
+            {
+                item.Active = true;
+            }
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Master", "Admin");
+        }
+
         public async Task<IActionResult> GetAreas(string CityId)
         {
             if (!string.IsNullOrWhiteSpace(CityId))

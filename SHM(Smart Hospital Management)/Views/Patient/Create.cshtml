@@ -18,7 +18,7 @@
 
 }
 
-<form asp-action="Create" class="All_form" style="background-color: white ">
+<form asp-action="Create" class="All_form" style="background-color: white " id="form" onsubmit="event.preventDefault(MyValidations());">
     <div class="container">
         <div class="row">
             <div id="map" style="width:100%;height:250px" class="All_div"></div>
@@ -50,9 +50,9 @@
             <div class="All_div col-12">
                 <label asp-for="Patient_National_Number"></label>
                 <input asp-for="Patient_National_Number" /><br>
-                <span asp-validation-for="Patient_National_Number" class="text-danger"></span>               
+                <span asp-validation-for="Patient_National_Number" class="text-danger" id="nationalValidateSpan"></span>
             </div>
-   
+
             <div class="All_div col-12">
                 <label asp-for="Patient_Gender"></label>
                 <select asp-for="Patient_Gender">
@@ -87,18 +87,21 @@
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
                 </select><br>
-                <span asp-validation-for="Area_Id" class="text-danger"></span>
+                <span id="areaValidateSpan" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Active" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <input type="hidden" asp-for="Ho_Id" />
             <table>
                 <tr id="tr0">
-                    <td><div class="col-12 All_div"><input type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required /></div></td>
+                    <td>
+                        <div class="col-12 All_div">
+                            <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required />
+                            <span id="phoneValidateSpan0" class="text-danger"></span>
+                        </div>
+                    </td>
                     <td>
                     </td>
-
-
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
@@ -119,7 +122,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers.js"></script>
+    <script src="~/addPhoneNumbers3.js"></script>
+    <script src="~/Validations.js"></script>
 
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <!-- Arabic Language Support -->

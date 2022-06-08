@@ -35,7 +35,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         select new Specialization_Dept
                         {
                             Dept_Id = d.Department_Id,
-                            Spec_Name = spe.Specialization_Name
+                            Spec_Name = spe.Specialization_Name,
+                            Active = d.Active
                         }).ToListAsync();
             var previews =  (from pre in _context.Previews.ToList()
                             join doc in _context.Doctors.ToList()
@@ -114,8 +115,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Doctor_Id= s.Doctor_Id,
                 Day = s.Day,
-                End_Hour = s.End_Hour.ToString("c"),
-                Start_Hour = s.Start_Hour.ToString("c")
+                End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync();
             ViewBag.PatientId = id;
             ViewBag.DeptId = DeptId;
@@ -216,8 +217,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
-                End_Hour = s.End_Hour.ToString("c"),
-                Start_Hour = s.Start_Hour.ToString("c")
+                End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync());
         }
         [Authorize(Roles = "Doctor,DeptManager")]
@@ -311,8 +312,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
-                End_Hour = s.End_Hour.ToString("c"),
-                Start_Hour = s.Start_Hour.ToString("c")
+                End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync();
             ViewBag.PatientId = PatientId;
             ViewBag.EmpId = EmpId;
@@ -429,7 +430,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         select new Specialization_Dept
                         {
                             Dept_Id = dept.Department_Id,
-                            Spec_Name = spec.Specialization_Name
+                            Spec_Name = spec.Specialization_Name,
+                            Active = dept.Active
                         }).ToList();
             return data;
         }

@@ -11,6 +11,7 @@ namespace SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables
     public class Medical_Test
     {
         [NotMapped]
+        [Required(ErrorMessage = "الرجاء إختيار صورة التحليل")]
         public IFormFile File { get; set; }
         [Key]
         public int Medical_Test_Id { get; set; }

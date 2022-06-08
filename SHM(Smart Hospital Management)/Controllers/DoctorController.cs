@@ -232,7 +232,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                    join dept in _context.Departments
                                    on s.Specialization_Id equals dept.Department_Name
                                    where dept.Ho_Id == id && dept.Dept_Manager == null
-                                   select new Specialization_Dept { Dept_Id = dept.Department_Id, Spec_Name = s.Specialization_Name })
+                                   select new Specialization_Dept
+                                   {
+                                       Dept_Id = dept.Department_Id,
+                                       Spec_Name = s.Specialization_Name,
+                                       Active = dept.Active
+                                   })
                                    .ToListAsync();
             ViewBag.Specializations = specializations;
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
@@ -265,7 +270,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         });
                     }
                 }
-                doctor.Doctor_Phone_Numbers = pns;
+                doctor.Doctor_Phone_Numbers = pns.Distinct().ToList();
                 return RedirectToAction("AddDeptManager", "Request", new { EmpId, doctor = JsonConvert.SerializeObject(doctor) });
             }
             return View(doctor);
@@ -363,7 +368,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         });
                     }
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(doctor.Doctor_Id, UserType.doc);
                 return RedirectToAction("Master", new { id = DocId, HoId = HoId });
@@ -403,7 +408,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Doctor_Phone_Numbers.RemoveRange(_context.Doctor_Phone_Numbers.Where(d => d.Doctor_Id == doctor.Doctor_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(doctor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = doctor.Doctor_Id });

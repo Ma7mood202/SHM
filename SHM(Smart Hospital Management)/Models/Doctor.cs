@@ -55,6 +55,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         [StringLength(10)]
         [Display(Name = "الحالة الاجتماعية")]
         public string Doctor_Social_Status { get; set; } // single selected
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [Display(Name = "تاريخ الولادة")]
         public DateTime Doctor_Birth_Date { get; set; }
         [Display(Name = "العمر")]
