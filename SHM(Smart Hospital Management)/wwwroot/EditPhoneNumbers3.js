@@ -32,7 +32,7 @@ function Add(btn) {
         btn.setAttributeNodeNS(attribute);
         var tr = document.getElementById('tr' + (trNum - 1));
         var valueToAdd = '   <tr id="tr' + trNum + '" style=" display: flex; flex-direction: column;padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px;">' +
-            '<td> <div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" /></div></td>' +
+            '<td> <div class="col-12 All_div"><input class="ValidateNumber" type="text" name="pn" placeholder="Enter Phone Number" /></div></td>' +
             '<td>' +
             '<input type="button" onclick="Delete()" value="Delete" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
             '<div class="col-12"><span id="span' + trNum + '"></span>' +
