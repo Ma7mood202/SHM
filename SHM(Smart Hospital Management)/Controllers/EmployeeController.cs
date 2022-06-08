@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace SHM_Smart_Hospital_Management_.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class EmployeeController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -265,7 +266,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
-                    //FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
                     return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id, HoId = int.Parse(fc["hospital"]) });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -336,9 +337,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Cities =await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.MgrId = MgrId;
-            TempData["national"] = "";
-            TempData["phone"] = "";
-            TempData["Area"] = "";
             return View(e);
         }
         [HttpPost]
@@ -349,23 +347,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!manager.Active)
             {
                 return RedirectToAction("LogOut");
-            }
-            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
-            ViewBag.Areas = new List<SelectListItem>();
-            TempData["national"] = "";
-            TempData["Area"] = "";
-            if (employee.Area_Id == 0)
-            {
-                TempData["Area"] = "true";
-                return View(employee);
-            }
-            for (int i = 0; i < employee.Employee_National_Number.Length; i++)
-            {
-                if (!Char.IsDigit(employee.Employee_National_Number[i]))
-                {
-                    TempData["national"] = "true";
-                    return View(employee);
-                }
             }
             if (ModelState.IsValid)
             {
@@ -409,7 +390,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return RedirectToAction("DisplayNurses", new { id = HeadNurseId, HoId = employee.Ho_Id });
         }
 
-        [Authorize(Roles = "HeadNurse,IT,HeadNurse,Nurse,Resception")]
+        [Authorize(Roles = "HeadNurse,IT,Nurse,Resception")]
         public async Task<IActionResult> EditPersonalDetails(int id) // EMployee (id)
         {
             var employee = await _context.Employees.Include(e => e.Employee_Phone_Numbers).FirstOrDefaultAsync(e => e.Employee_Id == id);
@@ -445,6 +426,45 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 _context.Update(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = employee.Employee_Id });
+            }
+            return View();
+        }
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> EditMgrPersonalDetails(int id) // EMployee (id)
+        {
+            var Mgr = await _context.Employees.Include(e => e.Employee_Phone_Numbers).FirstOrDefaultAsync(e => e.Employee_Id == id);
+            if (!Mgr.Active)
+                return RedirectToAction("LogOut");
+            int employeeCityId = (from c in _context.Cities
+                                  join a in _context.Areas
+                                  on c.City_Id equals a.City_Id
+                                  where a.Area_Id == Mgr.Area_Id
+                                  select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.EmployeeArea = _context.Areas.Find(Mgr.Area_Id).Area_Name;
+            return View(Mgr);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMgrPersonalDetails(Employee Mgr, string[] pn)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Employee_Phone_Numbers> pns = new List<Employee_Phone_Numbers>();
+                foreach (var item in pn)
+                {
+                    pns.Add(new Employee_Phone_Numbers
+                    {
+                        Employee_Id = Mgr.Employee_Id,
+                        Employee_Phone_Number = item
+                    });
+                }
+                _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == Mgr.Employee_Id));
+                _context.AddRange(pns);
+                _context.Update(Mgr);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Master", new { id = Mgr.Employee_Id });
             }
             return View();
         }

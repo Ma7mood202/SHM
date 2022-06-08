@@ -722,20 +722,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var request = _context.Requests.Find(id);
             _context.Requests.Remove(request);
             await _context.SaveChangesAsync();
-            //#region send notification to doctor
-            ////==============================================================================================
-            //Surgery surgery = JsonConvert.DeserializeObject<Surgery>(request.Request_Data);
-            //var message = new MulticastMessage()
-            //{
-            //    Data = new Dictionary<string, string>()
-            //            {
-            //                { "channelId","other" },
-            //                { "title", "لم تتم الموافقة على عملية المريض " + _context.Patients.Find(surgery.Patient_Id).Patient_Full_Name},
-            //            }
-            //};
-            //await FCMService.SendNotificationToUserAsync((int)surgery.Doctor_Id, UserType.doc, message);
-            ////=========================================================================================
-            //#endregion
             return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
         }
         public async Task<IActionResult> EmergencyAlert(int id)

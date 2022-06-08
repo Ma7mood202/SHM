@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SHM_Smart_Hospital_Management_.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class AdminController : Controller
     {
         private readonly static string Email = "";

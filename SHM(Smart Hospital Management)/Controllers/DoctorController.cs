@@ -20,6 +20,7 @@ using SHM_Smart_Hospital_Management_.Notifications;
 
 namespace SHM_Smart_Hospital_Management_.Controllers
 {
+    [ResponseCache(Location =ResponseCacheLocation.None,NoStore =true)]
     public class DoctorController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,7 +32,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> Master(int? id, int? HoId) // Doctor/DeptManager (id)
         {
-
             var doctor = await _context.Doctors.FirstOrDefaultAsync(m => m.Doctor_Id == id);
             if (doctor == null)
             {
@@ -205,7 +205,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
-                    //FCMService.UpdateToken(fc["fcmToken"].ToString(), doctor.Doctor_Id, UserType.doc, Platform.Web);
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), doctor.Doctor_Id, UserType.doc, Platform.Web);
                     return RedirectToAction("Master", "Doctor", new { id = doctor.Doctor_Id, HoId = hospital.Ho_Id });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -239,9 +239,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.Ho_Id = id;
             ViewBag.EmpId = EmpId;
-            TempData["national"] = "";
-            TempData["phone"] = "";
-            TempData["Area"] = "";
             return View(doctor);
         }
         [HttpPost]
@@ -251,23 +248,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var IT =await  _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
                 return RedirectToAction("LogOut");
-            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
-            ViewBag.Areas = new List<SelectListItem>();
-            TempData["national"] = "";
-            TempData["Area"] = "";
-            if (doctor.Area_Id == null)
-            {
-                TempData["Area"] = "true";
-                return View(doctor);
-            }
-            for (int i = 0; i < doctor.Doctor_National_Number.Length; i++)
-            {
-                if (!Char.IsDigit(doctor.Doctor_National_Number[i]))
-                {
-                    TempData["national"] = "true";
-                    return View(doctor);
-                }
-            }
             if (ModelState.IsValid)
             {
                 doctor.Doctor_Email = doctor.Doctor_EmailName.Replace(" ", "_");
@@ -336,8 +316,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(doctor);
         }
         [Authorize(Roles = "DeptManager")]
-        public IActionResult Create(int id, int DocId, int HoId) // Department (id)
+        public async Task<IActionResult> Create(int id, int DocId, int HoId) // Department (id)
         {
+            var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
+            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
+            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
+                return RedirectToAction("LogOut");
             Doctor doctor = new Doctor
             {
                 Doctor_Email = "mmmmmmmmmm",
@@ -350,44 +334,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.DocId = DocId;
             ViewBag.DeptId = id;
-            TempData["national"] = "";
-            TempData["phone"] = "";
-            TempData["Area"] = "";
             return View(doctor);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Doctor doctor, int HoId, int DocId, string[] pn) // DocId = DeptManagerId
         {
-            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
-            ViewBag.Areas = new List<SelectListItem>();
-            TempData["national"] = "";
-            TempData["Area"] = "";
-            if(doctor.Area_Id == null)
-            {
-                TempData["Area"] = "true";
-                return View(doctor);
-            }
-            for (int i = 0; i < doctor.Doctor_National_Number.Length; i++)
-            {
-                if (!Char.IsDigit(doctor.Doctor_National_Number[i]))
-                {
-                    TempData["national"] = "true";
-                    return View(doctor);
-                }
-            }
-            //foreach (var item in doctor.Doctor_Phone_Numbers)
-            //{
-            //    for (int j = 0; j < item.Doctor_Phone_Number.Length; j++)
-            //    {
-            //    if (!Char.IsDigit(item.Doctor_Phone_Number[j]))
-            //    {
-            //            TempData["phone"] = "true";
-            //            return View(doctor);
-            //    }
-            //    }
-            //}
-            
+            var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
+            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
+            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
+                return RedirectToAction("LogOut");         
             
             if (ModelState.IsValid)
             {

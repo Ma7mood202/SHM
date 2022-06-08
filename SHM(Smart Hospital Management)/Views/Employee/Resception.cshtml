@@ -6,13 +6,17 @@
 
 @section Styles{
     <style>
-        html{direction:rtl}
+        html {
+            direction: rtl
+        }
     </style>
     <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css" /><!--fontawsome icons-->
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" /><!--font-->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet" /><!--bootstrap min-->
+    <link href="~/Medicio2/dashborde/resdb2/css/newres2.css" rel="stylesheet" /><!--style-->
 
 }
-
 <div class="sidebar">
     <div class="logo-details">
         <img src="~/Medicio2/assets/img/avatar/res.png" class="res-img" />
@@ -84,7 +88,7 @@
 
                     <!--resp Info Dropdown start-->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-res" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@Model.Employee_Id">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>المعلومات الشخصية
                         </a>
                         <div class="dropdown-divider"></div>
@@ -116,7 +120,7 @@
                     <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">
                         إلغاء
                     </button>
-                    <a class="btn btn-primary Logout-btn"  asp-action="LogOut" asp-route-id="@Model.Employee_Id">تسجيل خروج</a>
+                    <a class="btn btn-primary Logout-btn" asp-action="LogOut" asp-route-id="@Model.Employee_Id">تسجيل خروج</a>
                 </div>
             </div>
         </div>
@@ -129,7 +133,7 @@
 
             <!-- <div class="col-10 mab_div">
 
-    </div> -->
+            </div> -->
             <!-- room-resv btn-->
             <button type="button" class="btn modal-bt1" data-toggle="modal" data-target="#exampleModal3">
                 الغرف
@@ -152,12 +156,12 @@
                                 <button type="button" class="btn btn-info modal-bt4">
                                     إلغاء حجز غرفة
                                 </button>
-                                </a>
-                                <a asp-controller="Patient" asp-action="HoPatientsForReservation" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
-                                    <button type="button" class="btn btn-info modal-bt4">
-                                        حجز غرفة
-                                    </button>
-                                </a>
+                            </a>
+                            <a asp-controller="Patient" asp-action="HoPatientsForReservation" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id">
+                                <button type="button" class="btn btn-info modal-bt4">
+                                    حجز غرفة
+                                </button>
+                            </a>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary close_btn1" data-dismiss="modal">
@@ -180,15 +184,15 @@
             <!-- show-pai btn -->
             <a asp-controller="Patient" asp-action="HoPatientsForResception" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn modal-bt3" style="display:flex;justify-content:center;align-items:center">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none">عرض المرضى</button>
-                </a>
+            </a>
 
 
-                <!-- show-paibill btn -->
-                <a asp-controller="Patient" asp-action="HoPatientsForBill" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn modal-bt2" style="display:flex;justify-content:center;align-items:center">
-                    <button type="button" style="background:transparent;color:white;outline:none;border:none">
-                        استعراض الفواتير
-                    </button>
-                </a>
+            <!-- show-paibill btn -->
+            <a asp-controller="Patient" asp-action="HoPatientsForBill" asp-route-id="@Model.Ho_Id" asp-route-EmpId="@Model.Employee_Id" class="btn modal-bt2" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
+                    استعراض الفواتير
+                </button>
+            </a>
 
         </div>
     </div>
@@ -215,4 +219,6 @@
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
     <!-- Page level plugins -->
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
+
 }

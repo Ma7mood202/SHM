@@ -6,11 +6,16 @@
 
 
 @section Styles{
-    <link href="../vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons-->
-    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <style>
+        html {
+            direction: rtl;
+        }
+    </style>
+    <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons-->
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font-->
-    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet"><!-- bootstrap min-->
-    <link href="../doctor-mngdb/css/doctor-mng.css" rel="stylesheet"><!-- style -->
+    <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet" /><!-- bootstrap min-->
+    <link href="~/Medicio2/dashborde/doctor-mngdb/css/doctor-mng.css" rel="stylesheet"><!-- style -->
 }
 
 <!--sidebar start-->
@@ -37,9 +42,9 @@
             </a>
         </div>
         <div class=" f_div">
-            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
+            <a asp-controller="Surgery" asp-action="DisplaySurgeries" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
                 <span class="side_name"><i class="fa fa-bed ic"></i> عمليات</span>
-                </a>
+            </a>
         </div>
         <div class="f_div">
             <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
@@ -135,7 +140,7 @@
                     <!-- doctormgr Info Dropdown start -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-doc"
                          aria-labelledby="userDropdown">
-                        <a class="dropdown-item" asp-action="Details" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                             المعلومات الشخصية
                         </a>
@@ -177,33 +182,33 @@
     <!-- dates btn-->
     <div class="container ">
         <div class="row">
-            <a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HoId" asp-route-DocId="@ViewBag.DeptMgrId">
-                <button type="button" class="btn modal-bt1 ">
+            <a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HoId" asp-route-DocId="@ViewBag.DeptMgrId" class="btn modal-bt1" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     حجز موعد
                 </button>
             </a>
             <!--pait Btn -->
-            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
-                <button type="button" class="btn   modal-bt1 ">
+            <a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt1 " style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     المرضى
                 </button>
             </a>
 
             <!--doctor Btn -->
-            <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
-                <button type="button" class="btn   modal-bt1 "> أطباء</button>
+            <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt1 " style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none"> أطباء</button>
             </a>
 
             <!-- surg btn -->
-            <a asp-controller="Preview" asp-action="Create" asp-route-id="@ViewBag.DeptMgrId">
-                <button type="button" class="btn modal-bt3">
+            <a asp-controller="Surgery" asp-action="DisplaySurgeries" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn modal-bt3" style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     العمليات
                 </button>
             </a>
 
             <!--doctor Btn -->
-            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
-                <button type="button" class="btn   modal-bt2 ">عرض جدول الدوام</button>
+            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+                <button type="button" style="background:transparent;color:white;outline:none;border:none">عرض جدول الدوام</button>
             </a>
 
         </div>
@@ -301,4 +306,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
+
 }

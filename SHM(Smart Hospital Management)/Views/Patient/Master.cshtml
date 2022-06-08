@@ -172,7 +172,7 @@
                     الملف الطبي
                 </button>
             </a>
-            <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id"style="display:flex;justify-content:center;align-items:center" class="btn  modal-bt2 ">
+            <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id" style="display:flex;justify-content:center;align-items:center" class="btn  modal-bt2 ">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     الفاتورة
                 </button>
@@ -197,5 +197,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
+
 }
 

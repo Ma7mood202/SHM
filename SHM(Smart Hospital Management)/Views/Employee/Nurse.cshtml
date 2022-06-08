@@ -59,7 +59,7 @@
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in info-nurse"
                          aria-labelledby="userDropdown">
-                        <a class="dropdown-item"  asp-action="EditPersonalDetails" asp-route-id="@Model.Employee_Id">
+                        <a class="dropdown-item" asp-action="EditPersonalDetails" asp-route-id="@Model.Employee_Id">
                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;&nbsp;&nbsp;
                             المعلومات الشخصية
                         </a>
@@ -210,5 +210,7 @@
 
     <!-- Custom scripts for all pages-->
     <script src="~/Medicio2/dashborde/js/sb-admin-2.js"></script>
+    <script type="module" src="~/firebase/src/foreground_FCM.js"></script>
+
 }
 

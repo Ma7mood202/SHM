@@ -50,10 +50,7 @@
             <div class="All_div col-12">
                 <label asp-for="Patient_National_Number"></label>
                 <input asp-for="Patient_National_Number" /><br>
-                @if (@TempData["national"].ToString() == "true")
-                {
-                    <span asp-validation-for="Patient_National_Number" class="text-danger">الرجاء ادخال رقم وطني صالح</span>
-                }
+                <span asp-validation-for="Patient_National_Number" class="text-danger"></span>               
             </div>
    
             <div class="All_div col-12">
@@ -90,10 +87,7 @@
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
                 </select><br>
-                @if (TempData["Area"].ToString() == "true")
-                {
-                    <span asp-validation-for="Area_Id" class="text-danger">الرجاء اختيار منطقة</span>
-                }
+                <span asp-validation-for="Area_Id" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Active" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />

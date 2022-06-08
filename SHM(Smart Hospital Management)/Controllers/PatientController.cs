@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace SHM_Smart_Hospital_Management_.Controllers
 {
+    [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class PatientController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -258,32 +259,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.EmpId = EmpId;
-            TempData["national"] = "";
-            TempData["phone"] = "";
-            TempData["Area"] = "";
             return View(p);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Patient patient, int EmpId, string[] pn)
-        {
-            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
-            ViewBag.Areas = new List<SelectListItem>();
-            TempData["national"] = "";
-            TempData["Area"] = "";
-            if (patient.Area_Id == 0)
-            {
-                TempData["Area"] = "true";
-                return View(patient);
-            }
-            for (int i = 0; i < patient.Patient_National_Number.Length; i++)
-            {
-                if (!Char.IsDigit(patient.Patient_National_Number[i]))
-                {
-                    TempData["national"] = "true";
-                    return View(patient);
-                }
-            }
+        {      
             if (ModelState.IsValid)
             {
                 patient.Patient_Email = patient.Patient_EmailName.Replace(" ", "_"); // Name in english
