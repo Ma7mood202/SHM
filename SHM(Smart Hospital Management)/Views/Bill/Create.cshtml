@@ -59,11 +59,11 @@
             <input type="hidden" name="id" value="@ViewBag.HospitalId" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إنشاء الفاتورة" />
             </div>
         </div>
     </div>
-    <a asp-controller="Patient" asp-action="HoPatientsForBill" asp-route-id="@ViewBag.HospitalId" asp-route-EmpId="@ViewBag.EmpId">Back to List</a>
+    <a asp-controller="Patient" asp-action="HoPatientsForBill" asp-route-id="@ViewBag.HospitalId" asp-route-EmpId="@ViewBag.EmpId">رجوع للخلف</a>
 </form>
 
 @section Scripts {

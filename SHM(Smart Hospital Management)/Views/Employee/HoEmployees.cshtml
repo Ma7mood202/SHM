@@ -6,6 +6,7 @@
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
     <style>
         html {
@@ -14,7 +15,7 @@
     </style>
 }
 <p>
-    <a asp-action="Create" asp-route-MgrId="@ViewBag.MgrId" asp-route-HoId="@ViewBag.HospitalId" style=" position: relative; left: 46%;">Create New</a>
+    <a asp-action="Create" asp-route-MgrId="@ViewBag.MgrId" asp-route-HoId="@ViewBag.HospitalId" style=" position: relative; left: 46%;">إضافة موظف</a>
 </p>
 <div class="All_form" style="direction: rtl; width: 92%; position: relative; right: 22%; background-color: white ">
     <table class="table">
@@ -89,7 +90,7 @@
         </tbody>
     </table>
 </div>
-<a asp-action="MasterHoMgr" asp-route-id="@ViewBag.MgrId" style=" position: relative; left: 46%;">Back to Master Page</a>
+<a asp-action="MasterHoMgr" asp-route-id="@ViewBag.MgrId" style=" position: relative; left: 44.5%;">رجوع للصفحة الرئيسية</a>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

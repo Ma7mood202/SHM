@@ -18,7 +18,7 @@
 <div class="container">
     <div class="row">
         <form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Employee_Id" />
                 <input type="hidden" asp-for="Employee_First_Name" />
@@ -50,7 +50,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="margin:20px 0px">
-                    <label>City</label>
+                    <label>السكن</label>
                     <select id="City" asp-items="@ViewBag.Cities">
                     </select>
                 </div>
@@ -132,19 +132,19 @@
 
                 </table>
                 <div class="form-group">
-                    <input type="submit" value="Save" style="width: 120px;" />
+                    <input type="submit" value="حفظ" style="width: 120px;" />
                 </div>
             </div>
         </form>
     </div>
 </div>
 <div>
-    <a asp-action="Master" asp-route-id="@Model.Employee_Id" style=" position: relative; left: 45.5%;">Back to Mater Page</a>
+    <a asp-action="Master" asp-route-id="@Model.Employee_Id" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbers2.js"></script>
+    <script src="~/EditPhoneNumbers5.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

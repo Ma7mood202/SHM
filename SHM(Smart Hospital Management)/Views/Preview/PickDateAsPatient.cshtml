@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowWorkDays>
 
 @{
     ViewData["Title"] = "Create";
@@ -44,13 +44,13 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Day)
+                    اليوم
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Start_Hour)
+                    بداية الدوام
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.End_Hour)
+                    نهاية الدوام
                 </th>
                 <th></th>
             </tr>
@@ -74,7 +74,7 @@
         </tbody>
     </table>
 </div>
-<a asp-action="DeptDoctorsForPatient" asp-route-id="@ViewBag.PatientId" asp-route-DeptId="@ViewBag.DeptId" style=" position: relative; left: 48%;">Back to List</a>
+<a asp-action="DeptDoctorsForPatient" asp-route-id="@ViewBag.PatientId" asp-route-DeptId="@ViewBag.DeptId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

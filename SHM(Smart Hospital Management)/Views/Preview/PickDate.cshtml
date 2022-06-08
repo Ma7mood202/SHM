@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowWorkDays>
 
 @{
     ViewData["Title"] = "PickTime";
@@ -33,6 +33,7 @@
                 </select>
             </div>
             <div class="All_div col-12">
+                <label>هل يحتاج المريض لأكثر من معاينة</label>
                 <input type="checkbox"  id="chk" onchange="changeChk()" />
                 <input type="hidden" id="isCaring" name="isCaring" value="false" />
             </div>
@@ -77,7 +78,7 @@
         </tbody>
     </table>
 </div>
-<a asp-controller="Preview" asp-action="DeptDoctorsForResception" asp-route-id="@ViewBag.DeptId" asp-route-EmpId="@ViewBag.EmpId" asp-route-PatientId="@ViewBag.PatientId" style=" position: relative; left: 48%;">Back to List</a>
+<a asp-controller="Preview" asp-action="DeptDoctorsForResception" asp-route-id="@ViewBag.DeptId" asp-route-EmpId="@ViewBag.EmpId" asp-route-PatientId="@ViewBag.PatientId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 
 @section Scripts{
 

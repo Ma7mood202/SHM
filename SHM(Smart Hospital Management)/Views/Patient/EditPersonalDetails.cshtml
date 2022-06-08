@@ -17,8 +17,8 @@
 
 <div class="container">
     <div class="row">
-            <form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;">
-        <div class="col-md-12">
+        <form asp-action="EditPersonalDetails" class="All_form" method="post" style="background-color:white">
+            <div class="col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Patient_Id" />
                 <input type="hidden" asp-for="Patient_First_Name" />
@@ -74,26 +74,26 @@
                         <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px;">
                             @if (i == 0 && Model.Patient_Phone_Numbers.Count == 1)
                             {
-                                <td><div class="All_div col-12"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                <td><div class="All_div col-12"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
                                 <td>
                                 </td>
                                 <td>
                                     <div class="col-12">
                                         <span id="@span"></span>
-                                        <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                        <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </div>
                                 </td>
                             }
                             else if (i + 1 == Model.Patient_Phone_Numbers.Count)
                             {
-                                <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
                                 <td>
-                                    <input type="button" onclick="Delete()" value="Delete" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                    <input type="button" onclick="Delete()" value="حذف" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                 </td>
                                 <td>
                                     <div class="col-12">
                                         <span id="@span"></span>
-                                        <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                        <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </div>
                                 </td>
                             }
@@ -101,7 +101,7 @@
                             {
                                 if (i == 0)
                                 {
-                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
                                     <td>
                                     </td>
                                     <td>
@@ -112,9 +112,9 @@
                                 }
                                 else
                                 {
-                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" value="@item.Patient_Phone_Number" required /></div></td>
+                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
                                     <td>
-                                        <input type="button" onclick="Delete()" value="Delete" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                        <input type="button" onclick="Delete()" value="حذف" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </td>
                                     <td>
                                         <div class="col-12">
@@ -130,19 +130,19 @@
 
                 </table>
                 <div class="form-group">
-                    <input type="submit" value="Save" style="width: 120px;" />
+                    <input type="submit" value="حفظ" style="width: 120px;" />
                 </div>
-        </div>
-            </form>
+            </div>
+        </form>
     </div>
-    </div>
+</div>
 <div>
-    <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45.5%;">Back to Mater Page</a>
+    <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbers3.js"></script>
+    <script src="~/EditPhoneNumbers5.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

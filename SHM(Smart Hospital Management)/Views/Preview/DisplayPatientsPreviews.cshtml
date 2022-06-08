@@ -19,16 +19,16 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.DocName)
+                    تاريخ الموعد
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PreviewDate)
+                    وقت الموعد
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PreviewHour)
+                    اسم الدكتور
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Speclization)
+                    اختصاص
                 </th>
                 <th></th>
             </tr>
@@ -36,28 +36,29 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DocName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PreviewDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PreviewHour)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Speclization)
-                    </td>
-                    <td>
-                        @if (item.IsToday)
-                        {
-                            <a asp-action="CancelPreview" asp-route-id="@item.PreviewId" asp-route-PatId="@ViewBag.PatientId">إلغاء الموعد</a>
-                        }
-                    </td>
-                </tr>
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.PreviewDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PreviewHour)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Speclization)
+                </td>
+                <td>
+                    @if (item.IsToday)
+                    {
+                        <a asp-action="CancelPreview" asp-route-id="@item.PreviewId" asp-route-PatId="@ViewBag.PatientId">إلغاء الموعد</a>
+                    }
+                </td>
+            </tr>
             }
         </tbody>
     </table>
 </div>
-<a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 45.5%;">Back to Master Page</a>
+<a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>

@@ -29,9 +29,9 @@
                     @Html.DisplayNameFor(model => model.Room.Room_Number)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.EmptyBedCount)
+                    عدد الأسرة المتاحة
                 </th>
-                <th>Number Of Beds Wanted</th>
+                <th>عدد الأسرّة</th>
 
             </tr>
         </thead>
@@ -61,7 +61,7 @@
         </tbody>
     </table>
 </div>
-<a asp-controller="Patient" asp-action="HoPatientsForReservation" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmployeeId" style="position: relative; left: 45%;">Back to List</a>
+<a asp-controller="Patient" asp-action="HoPatientsForReservation" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmployeeId" style="position: relative; left: 45%;">رجوع للخلف</a>
 @section Scripts{
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

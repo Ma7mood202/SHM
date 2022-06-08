@@ -16,7 +16,7 @@
     </style>
 }
 
-<a asp-action="Create" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 46%;">Create New</a>
+<a asp-action="Create" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 46%;">إنشاء غرفة</a>
 <div class="All_form" style="direction: rtl; width: auto; position: relative; right: 13%; background-color: white">
     <table class="table">
         <thead>
@@ -66,7 +66,7 @@
         </tbody>
     </table>
 </div>
-<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 44%;">Back to Master Page</a>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

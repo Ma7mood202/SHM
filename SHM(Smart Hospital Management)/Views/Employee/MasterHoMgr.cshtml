@@ -110,7 +110,7 @@
         <div class="row ">
             <div class="col-4 ">
                 <!-- show-rep btn -->
-                <button type="button" class="btn modal-bt1">
+                <button type="button" class="btn modal-bt1" style=" position: relative; right: 75px;">
                     إستعراض التقارير
                 </button>
             </div>
@@ -118,7 +118,7 @@
             <!-- show-emp btn -->
             <div class="col-4 ">
                 <a asp-action="HoEmployees" asp-route-id="@Model.Employee_Id">
-                    <button type="button" class="btn modal-bt1">
+                    <button type="button" class="btn modal-bt1" style=" position: relative; right: 75px;">
                         إستعراض الموظفين
                     </button>
                 </a>
@@ -126,7 +126,7 @@
         </div>
     </div>
     <!-- page end -->
-    <table class="table" style=" position: absolute; top: 50%; right: 27%;">
+    <table class="table" style="position: absolute; top: 50%; right: 15%; width: auto;">
         <thead>
             <tr>
                 <th>
@@ -150,7 +150,7 @@
                         @Html.DisplayFor(modelItem => item.Request_Date)
                     </td>
                     <td>
-                        <a asp-controller="Request" asp-action="AcceptRequest" asp-route-id="@item.Request_Id" asp-route-mgrId="@Model.Employee_Id">Confirm</a> |
+                        <a asp-controller="Request" asp-action="AcceptRequest" asp-route-id="@item.Request_Id" asp-route-mgrId="@Model.Employee_Id">قبول</a> |
                         @{
                             string confirm = "confirm" + i;
                             string cancel = "cancel" + i;

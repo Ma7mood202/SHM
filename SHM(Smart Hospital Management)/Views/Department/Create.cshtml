@@ -28,11 +28,11 @@
             <input type="hidden" asp-for="Active" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إنشاء القسم" />
             </div>
         </div>
     </div>
-    <a asp-action="HoDepartments" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId">Back to List</a>
+    <a asp-action="HoDepartments" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId">رجوع للخلف</a>
 </form>
 
 @section Scripts {

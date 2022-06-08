@@ -3,6 +3,8 @@
     ViewData["Title"] = "Edit";
 }
 @section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/Edit.css" rel="stylesheet" />
 }
 
@@ -28,178 +30,180 @@
 
 </div>
 
-<form asp-action="Edit" method="post" class="All_form">
+<form asp-action="Edit" method="post" class="All_form" style="background-color:white">
     <input type="hidden" asp-for="Medical_Details_Id" />
     <div class="container">
         <div class="row">
-            <input type="hidden" name="HoId" value="@ViewBag.DocId" />
-            <input type="hidden" name="DocId" value="@ViewBag.HoId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="All_div col-12">
-                <label asp-for="MD_Patient_Blood_Type"></label>
-                <select asp-for="MD_Patient_Blood_Type">
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                </select>
-            </div>
-            <div class="All_div col-12">
-                <label asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements"></label>
-                <input asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" /><br />
-                <span asp-validation-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" class="text-danger"></span>
-            </div>
-            <div class="All_div col-12">
-                <label asp-for="MD_Patient_Special_Needs"></label>
-                <input asp-for="MD_Patient_Special_Needs" /><br />
-                <span asp-validation-for="MD_Patient_Special_Needs" class="text-danger"></span>
-            </div>
-            <div class="All_div col-12">
-                <label>Allergies</label>
-                <span id="span"></span>
-                @{ List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy> patientAllergis = ViewBag.PatientAllergies;}
-                <span id="AllergyCount" style="display:none">@patientAllergis.Count</span>
-                @if (patientAllergis.Count == 0)
-                {
+                <input type="hidden" name="HoId" value="@ViewBag.DocId" />
+                <input type="hidden" name="DocId" value="@ViewBag.HoId" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="All_div col-12">
+                    <label asp-for="MD_Patient_Blood_Type"></label>
+                    <select asp-for="MD_Patient_Blood_Type">
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements"></label>
+                    <input asp-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" /><br />
+                    <span asp-validation-for="MD_Patient_Treatment_Plans_And_Daily_Supplements" class="text-danger"></span>
+                </div>
+                <div class="All_div col-12">
+                    <label asp-for="MD_Patient_Special_Needs"></label>
+                    <input asp-for="MD_Patient_Special_Needs" /><br />
+                    <span asp-validation-for="MD_Patient_Special_Needs" class="text-danger"></span>
+                </div>
+                <div class="All_div col-12">
+                    <label>Allergies</label>
                     <span id="span"></span>
-                    <div id="AlergyDiv0">
-                        <button type="button" onclick="AddAllergy(this,0)"> إضافة اشعة</button>
+                    @{ List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy> patientAllergis = ViewBag.PatientAllergies;}
+                    <span id="AllergyCount" style="display:none">@patientAllergis.Count</span>
+                    @if (patientAllergis.Count == 0)
+                    {
+                        <span id="span"></span>
+                        <div id="AlergyDiv0">
+                            <button type="button" onclick="AddAllergy(this,0)"> إضافة اشعة</button>
+                        </div>
+                    }
+                    else
+                    {
+                        @for (int i = 0; i < patientAllergis.Count; i++)
+                        {
+                            string divId = "AlergyDiv" + i;
+                            <div id=@divId>
+                                <select name="Allergies" style="min-height: 75px; max-height: 100px;">
+                                    @foreach (var item in @ViewBag.Allergies as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy>)
+                                    {
+                                        if (item.Allergy_Id == patientAllergis[i].Allergy_Id)
+                                        {
+                                            <option value="@item.Allergy_Id" selected> @item.Allergy_Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Allergy_Id"> @item.Allergy_Name</option>
+                                        }
+                                    }
+                                </select>
+                                @if (i == patientAllergis.Count - 1)
+                                {
+                                    <span class="AddSpans" id="@i"></span>
+
+                                    <button type="button" onclick="AddAllergy(this,@i)">إضافة</button>
+                                }
+                                else
+                                {
+                                    <span id="span"></span>
+                                    <button type="button" onclick="AddAllergy(this,@i)" style="display:none">إضافة</button>
+                                }
+                                <button type="button" onclick="DeleteAllergy(@i)">حذف</button>
+                            </div>
+
+                        }
+                    }
+
+
+                </div>
+
+                <span id="DiseaseSpan"></span>
+                @{
+                    List<SHM_Smart_Hospital_Management_.ViewModels.PatientDiseases> patientDiseases = ViewBag.PatientDiseases;
+                    List<SelectListItem> diseaseTypes = ViewBag.Diseases_Type;
+                }
+                <span id="DiseasesCount" style="display:none">@patientDiseases.Count</span>
+                @if (patientDiseases.Count == 0)
+                {
+                    <div id="div0">
+                        <span id="DiseaseSpan"></span>
+                        <button type="button" onclick="Add(this,0)">إضافة امراض</button>
                     </div>
                 }
                 else
                 {
-                    @for (int i = 0; i < patientAllergis.Count; i++)
+                    for (int i = 0; i < patientDiseases.Count; i++)
                     {
-                        string divId = "AlergyDiv" + i;
-                        <div id=@divId>
-                            <select name="Allergies" style="min-height: 75px; max-height: 100px;">
-                                @foreach (var item in @ViewBag.Allergies as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy>)
-                                {
-                                    if (item.Allergy_Id == patientAllergis[i].Allergy_Id)
-                                    {
-                                        <option value="@item.Allergy_Id" selected> @item.Allergy_Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Allergy_Id"> @item.Allergy_Name</option>
-                                    }
-                                }
-                            </select>
-                            @if (i == patientAllergis.Count - 1)
-                            {
-                                <span class="AddSpans" id="@i"></span>
 
-                                <button type="button" onclick="AddAllergy(this,@i)">إضافة</button>
+                        string divNum = "div" + i;
+                        string diseaseNum = "Diseases" + i;
+                        string diseaseTypeNum = "Diseases_Type" + i;
+                        string chrNum = "chr" + i;
+                        string famNum = "fam" + i;
+                        string ChronicNum = "Chronic" + i;
+                        string FamilyNum = "Family" + i;
+                        <div id="@divNum">
+                            <div class="All_div col-12">
+                                <label for="Diseases_Type">Diseases Type</label>
+                                <select id="@diseaseTypeNum" onchange="ChangeSelect(@i)" name="Diseases_Type">
+                                    @foreach (var item in diseaseTypes)
+                                    {
+                                        bool b = patientDiseases[i].Disease_Type.Disease_Type_Id.ToString() == item.Value;
+                                        @if (!b)
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value" selected>@item.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div>
+                                <label for="Diseases">Diseases</label>
+                                <select id="@diseaseNum" name="Diseases" asp-items="@ViewBag.Diseases">
+                                    <option value="@patientDiseases[i].Disease.Disease_Id" selected>@patientDiseases[i].Disease.Disease_Name</option>
+
+                                </select>
+                                <label for="Chronic">Chronic Disease</label>
+                                @if (patientDiseases[i].IsChronic)
+                                {
+                                    <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" checked />
+                                    <input id="@ChronicNum" type="hidden" name="Chronic" value="true" />
+                                }
+                                else
+                                {
+                                    <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" />
+                                    <input id="@ChronicNum" type="hidden" name="Chronic" value="false" />
+                                }
+                                <label for="Family">Family Health History</label>
+                                @if (patientDiseases[i].IsFamily)
+                                {
+                                    <input id="@famNum" type="checkbox" onchange="changeChk1(@i)" checked />
+                                    <input id="@FamilyNum" type="hidden" name="Family" value="true" />
+                                }
+                                else
+                                {
+                                    <input id="@famNum" type="checkbox" onchange="changeChk1(@i)" />
+                                    <input id="@FamilyNum" type="hidden" name="Family" value="false" />
+                                }
+                            </div>
+
+                            @if (i == patientDiseases.Count - 1)
+                            {
+                                <span class="DiseaseAddSpans" id="@i"></span>
+                                <input type="button" onclick="Add(this,@i)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                             }
                             else
                             {
-                                <span id="span"></span>
-                                <button type="button" onclick="AddAllergy(this,@i)" style="display:none">إضافة</button>
+                                <span id="DiseaseSpan"></span>
+                                // <span class="DiseaseAddSpans" id="@i"></span>
+                                <input type="button" onclick="Add(this,0)" value="Add" style=" display:none;" />
+
                             }
-                            <button type="button" onclick="DeleteAllergy(@i)">حذف</button>
+                            <input type="button" onclick="Delete(@i)" value="Delete" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
-
                     }
                 }
-
-
-            </div>
-
-            <span id="DiseaseSpan"></span>
-            @{
-                List<SHM_Smart_Hospital_Management_.ViewModels.PatientDiseases> patientDiseases = ViewBag.PatientDiseases;
-                List<SelectListItem> diseaseTypes = ViewBag.Diseases_Type;
-            }
-            <span id="DiseasesCount" style="display:none">@patientDiseases.Count</span>
-            @if (patientDiseases.Count == 0)
-            {
-                <div id="div0">
-                    <span id="DiseaseSpan"></span>
-                    <button type="button" onclick="Add(this,0)">إضافة امراض</button>
+                <div class="All_div col-12">
+                    <input type="submit" value="Create" />
                 </div>
-            }
-            else
-            {
-                for (int i = 0; i < patientDiseases.Count; i++)
-                {
-
-                    string divNum = "div" + i;
-                    string diseaseNum = "Diseases" + i;
-                    string diseaseTypeNum = "Diseases_Type" + i;
-                    string chrNum = "chr" + i;
-                    string famNum = "fam" + i;
-                    string ChronicNum = "Chronic" + i;
-                    string FamilyNum = "Family" + i;
-        <div id="@divNum">
-            <div class="All_div col-12">
-                <label for="Diseases_Type">Diseases Type</label>
-                <select id="@diseaseTypeNum" onchange="ChangeSelect(@i)" name="Diseases_Type">
-                    @foreach (var item in diseaseTypes)
-                    {
-                        bool b = patientDiseases[i].Disease_Type.Disease_Type_Id.ToString() == item.Value;
-                        @if (!b)
-                        {
-                            <option value="@item.Value">@item.Text</option>
-                        }
-                        else
-                        {
-                            <option value="@item.Value" selected>@item.Text</option>
-                        }
-                    }
-                </select>
-            </div>
-            <div>
-                <label for="Diseases">Diseases</label>
-                <select id="@diseaseNum" name="Diseases" asp-items="@ViewBag.Diseases">
-                    <option value="@patientDiseases[i].Disease.Disease_Id" selected>@patientDiseases[i].Disease.Disease_Name</option>
-
-                </select>
-                <label for="Chronic">Chronic Disease</label>
-                @if (patientDiseases[i].IsChronic)
-                {
-                    <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" checked />
-                    <input id="@ChronicNum" type="hidden" name="Chronic" value="true" />
-                }
-                else
-                {
-                    <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" />
-                    <input id="@ChronicNum" type="hidden" name="Chronic" value="false" />
-                }
-                <label for="Family">Family Health History</label>
-                @if (patientDiseases[i].IsFamily)
-                {
-                    <input id="@famNum" type="checkbox" onchange="changeChk1(@i)" checked />
-                    <input id="@FamilyNum" type="hidden" name="Family" value="true" />
-                }
-                else
-                {
-                    <input id="@famNum" type="checkbox" onchange="changeChk1(@i)" />
-                    <input id="@FamilyNum" type="hidden" name="Family" value="false" />
-                }
-            </div>
-
-            @if (i == patientDiseases.Count - 1)
-            {
-                <span class="DiseaseAddSpans" id="@i"></span>
-                <input type="button" onclick="Add(this,@i)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
-            }
-            else
-            {
-                <span id="DiseaseSpan"></span>
-               // <span class="DiseaseAddSpans" id="@i"></span>
-                <input type="button" onclick="Add(this,0)" value="Add" style=" display:none;" />
-
-            }
-            <input type="button" onclick="Delete(@i)" value="Delete" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
-        </div>
-                }
-            }
-            <div class="All_div col-12">
-                <input type="submit" value="Create" />
             </div>
         </div>
     </div>
@@ -385,7 +389,7 @@
                 var div = document.getElementById("AlergyDiv" + i);
                 div.parentNode.removeChild(div);
             }
-            
+
             AllergiesCount--;
 
 

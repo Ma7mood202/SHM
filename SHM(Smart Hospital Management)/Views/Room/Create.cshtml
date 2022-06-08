@@ -33,7 +33,7 @@
             <input type="hidden" asp-for="Room_Empty" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إنشاء الغرفة" />
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
 
 
     <div>
-        <a asp-action="DisplayRooms" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id" style="position: relative; left: 47.5%;">Back to List</a>
+        <a asp-action="DisplayRooms" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id" style="position: relative; left: 47.5%;">رجوع للخلف</a>
     </div>
 
     @section Scripts {

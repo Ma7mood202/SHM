@@ -13,17 +13,17 @@
         }
     </style>
 }
-<a asp-action="CreateDeptManager" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style="position: relative; left: 43%;">Add New Dept Manager</a>
+<a asp-action="CreateDeptManager" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style="position: relative; left: 43%;">إضافة رئيس قسم جديد</a>
 <div class="All_form" style="direction: rtl; width: auto; position: relative; right: 13%; background-color: white">
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    Manager
+                    المدير
 
                 </th>
                 <th>
-                    Dept
+                    قسم
                 </th>
 
             </tr>
@@ -40,14 +40,14 @@
                     </td>
                     <td>
                         <input type="hidden" value="@item.Id" />
-                        <a asp-action="EditDeptManager" asp-route-id="@item.Id" asp-route-DoctorId="@item.DoctorManagerId" asp-route-EmpId="@ViewBag.EmpId">Edit</a>
+                        <a asp-action="EditDeptManager" asp-route-id="@item.Id" asp-route-DoctorId="@item.DoctorManagerId" asp-route-EmpId="@ViewBag.EmpId">تعديل</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 46%;">Back To List</a>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 46%;">رجوع للخلف</a>
 @section Scripts{
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

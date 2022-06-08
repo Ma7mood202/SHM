@@ -48,11 +48,11 @@
         </dd>
 
         <dt class="col-6" style=" margin: 20px 0px; ">
-            Phone numbers
+            أرقام الهاتف
         </dt>
         @if (ViewBag.PhoneNumbers.Count == 0)
         {
-            <dd class="col-3" style="margin: 20px 0px;">No Phone Numbers</dd>
+            <dd class="col-3" style="margin: 20px 0px;">لا يوجد</dd>
         }
         else
             @foreach (var item in ViewBag.PhoneNumbers as List<SHM_Smart_Hospital_Management_.PhoneNumbers.Patient_Phone_Numbers>)
@@ -62,6 +62,6 @@
             }
     </dl>
 </div>
-<a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 47%;">Back to List</a>
+<a asp-controller="Patient" asp-action="DoctorIndex" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 47%;">رجوع للخلف</a>
 <br />
-<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 45%;">Back to Master Page</a>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44.5%;">رجوع للصفحة الرئيسية</a>

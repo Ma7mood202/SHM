@@ -16,30 +16,32 @@
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <input type="hidden" name="PatId" value="@ViewBag.PatId" />
             <div class="All_div col-12">
-                <label for="name">Surgery Name</label>
+                <label for="name">اسم العملية</label>
                 <input type="text" name="name" value="" required/> <br />
             </div>
             <div class="All_div col-12">
-                <label for="length">Surgery Length (in Hours)</label>
+                <label for="length"> مدة العملية (ساعات)</label>
                 <input id="hour" type="number" name="hour" value="" />    <br />
             </div>
             <span id="HourSpan" style="color:red"></span>
             <div class="All_div col-12">
-                <label for="length">Surgery Length (in minutes)</label>
+                <label for="length">مدة العملية (دقائق)</label>
                 <input id="minute" type="number" name="minute" value="" /><br />
             </div>
             <span id="MinuteSpan" style="color:red"></span> <br />
             <div class="All_div col-12">
+                <label for="length">تاريخ العملية</label>
                 <input id="date" min="@DateTime.Now" type="date" name="date" /> <br />
             </div>
                 <span id="message" style="color:red"></span>
                 <div class="All_div col-12">
-                    <select id="time" name="time" asp-items="@ViewBag.Times" >
+                    <label for="length">الأوقات المتاحة</label>
+                    <select id="time" name="time" asp-items="@ViewBag.Times">
                     </select>
                 </div>
 
                 <div class="All_div col-12">
-                    <input type="submit" value="Create"/>
+                    <input type="submit" value="إنشاء العملية"/>
                 </div>
             </div>
         </div>
@@ -47,7 +49,7 @@
 
 
 <div>
-    <a asp-action="DisplayPatients" asp-route-id="@ViewBag.SrId" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 47%;">Back to List</a>
+    <a asp-action="DisplayPatients" asp-route-id="@ViewBag.SrId" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 48%;">رجوع للخلف</a>
 </div>
 
 @section Scripts {

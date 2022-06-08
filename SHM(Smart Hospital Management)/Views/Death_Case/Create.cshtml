@@ -4,41 +4,46 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
 
-<h4>Death_Case</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white;">
+    <div class="container">
+        <div class="row">
             <input type="hidden" asp-for="PatientId" />
             <input type="hidden" asp-for="Death_Cause" />
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
-            
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-       
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input type="file" asp-for="Image" class="form-control" />
+
+            <div class="All_div col-12">
+                <label asp-for="Image">سبب الوفاة</label>
+                <input type="file" asp-for="Image" />
                 <span asp-validation-for="Image" class="text-danger"></span>
-            </div> 
-            <div class="form-group">
-                <label asp-for="Death_Date" class="control-label"></label>
-                <input asp-for="Death_Date" class="form-control" />
+            </div>
+            <div class="All_div col-12">
+                <label asp-for="Death_Date"></label>
+                <input type="date" asp-for="Death_Date"/>
                 <span asp-validation-for="Death_Date" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="All_div col-12">
+                <input type="submit" value="تسجيل الوفية" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="HoPatientsForResception" asp-route-id="">Back to List</a>
+    <a asp-controller="Patient" asp-action="HoPatientsForResception" asp-route-id="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
 }

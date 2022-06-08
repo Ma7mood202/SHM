@@ -7,7 +7,7 @@
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    @*<link href="~/Medicio2/delete.css" rel="stylesheet" />*@
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
     <style>
         html {
@@ -58,8 +58,8 @@
                         @Html.DisplayFor(modelItem => item.Patient_Birth_Date)
                     </td>
                     <td>
-                        <a asp-action="DetailsForDoctor" asp-route-id="@item.Patient_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Details</a> |
-                        <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForDoctor" asp-route-id="@item.Patient_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Show Medical Detail</a>|
+                        <a asp-action="DetailsForDoctor" asp-route-id="@item.Patient_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تفاصيل</a> |
+                        <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForDoctor" asp-route-id="@item.Patient_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">عرض الملف الطبي</a> |
                         @{
                             string confirm = "confirm" + i;
                             string cancel = "cancel" + i;
@@ -75,7 +75,7 @@
         </tbody>
     </table>
 </div>
-<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 45%;">Back To Master Page</a>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

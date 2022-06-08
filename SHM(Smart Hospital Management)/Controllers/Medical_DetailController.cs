@@ -181,9 +181,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(DocId);
             if(!doctor.Active)
                 return RedirectToAction("LogOut" , "Doctor");
-            var dept = _context.Departments.Where(d => d.Department_Id == doctor.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
-            if (doctor.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return RedirectToAction("LogOut", "Doctor");
             var medical = _context.Medical_Details.FirstOrDefault(m => m.Medical_Details_Id == id);
 
             var allergies = await (from a in _context.Medical_Allergies
