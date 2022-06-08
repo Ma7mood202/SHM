@@ -9,5 +9,6 @@ namespace SHM_Smart_Hospital_Management_.ViewModels
     {
         public int Dept_Id { get; set; }
         public string Spec_Name { get; set; }
+        public bool Active { get; set; }
     }
 }

@@ -80,7 +80,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(HeadNurse);
         }
         [Authorize(Roles = "HeadNurse")]
-        public async Task<IActionResult> DisplayNurses(int id, int HoId)
+        public async Task<IActionResult> DisplayNurses(int id, int HoId, string search = "")
         {
             var HeadNurse = await _context.Employees.FindAsync(id);
             if (!HeadNurse.Active)
@@ -88,7 +88,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.EmpId = id;
             var employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active).ToListAsync();
-            return View(employees);
+            if (string.IsNullOrEmpty(search))
+                return View(employees);
+            else
+            {
+                employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(employees);
+            }
         }
         [Authorize(Roles = "HeadNurse")]
         public async Task<IActionResult> CreateNurse(int id, int EmpId) // Hospital (id)
@@ -120,17 +126,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 _context.Add(Nurse);
                 await _context.SaveChangesAsync();
 
-                Employee_Phone_Numbers[] epn = new Employee_Phone_Numbers[pn.Length];
+                Employee_Phone_Numbers[] pns = new Employee_Phone_Numbers[pn.Length];
                 for (int i = 0; i < pn.Length; i++)
                 {
 
-                    epn[i] = new Employee_Phone_Numbers
+                    pns[i] = new Employee_Phone_Numbers
                     {
                         Employee_Id = Nurse.Employee_Id,
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(epn);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(Nurse.Employee_Id, UserType.emp);
                 return RedirectToAction("Master", new { id = EmpId });
@@ -169,7 +175,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(employee);
         }
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> HoEmployees(int id)
+        public async Task<IActionResult> HoEmployees(int id, string search = "")
         {
             var manager =await _context.Employees.FindAsync(id);
             if (!manager.Active)
@@ -180,7 +186,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active).ToListAsync();
             ViewBag.HospitalId = hospital.Ho_Id;
             ViewBag.MgrId = id;
-            return View(Employees);
+            if (string.IsNullOrEmpty(search))
+                return View(Employees);
+            else
+            {
+                Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(Employees);
+            }
         }
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateManager(int id)
@@ -218,7 +230,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 var hospital = _context.Hospitals.Find(employee.Ho_Id);
                 hospital.Manager = employee;
@@ -364,7 +376,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         Employee_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("MasterHoMgr", new { id = MgrId });
@@ -422,7 +434,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == employee.Employee_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = employee.Employee_Id });
@@ -461,7 +473,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Employee_Phone_Numbers.RemoveRange(_context.Employee_Phone_Numbers.Where(d => d.Employee_Id == Mgr.Employee_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(Mgr);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = Mgr.Employee_Id });
@@ -469,14 +481,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View();
         }
         [Authorize(Roles = "IT")]
-        public async Task<IActionResult> ShowActiveEmployeesForIT(int id) // IT (id)
+        public async Task<IActionResult> ShowActiveEmployeesForIT(int id , string search = "") // IT (id)
         {
             var IT = _context.Employees.Find(id);
             if (!IT.Active)
                 return RedirectToAction("LogOut", "Employee");
             ViewBag.EmpId = id;
             var Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse").ToListAsync();
-            return View(Nurses);
+            if (string.IsNullOrEmpty(search))
+                return View(Nurses);
+            else
+            {
+                Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse" &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(Nurses);
+            }
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActiveEmployeesForIT(int id) // IT (id)

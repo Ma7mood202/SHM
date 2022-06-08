@@ -17,6 +17,19 @@
     </style>
 }
 <div class="All_form" style="direction: rtl; text-align: right; background-color: white ">
+    <form asp-action="HoPatientsForReservation" asp-route-id="@ViewBag.HoId" method="get">
+        <div class="container">
+            <div class="row" style="width: 200%; position: relative; right: 40%;">
+                <p>
+                    <div class="All_div col-12">
+                        <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
+                        <input type="text" name="search" style="width:70%;" />
+                        <input type="submit" value="بحث" />
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>

@@ -10,6 +10,7 @@ namespace SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables
 {
     public class External_Records
     {
+        [Required(ErrorMessage = "الرجاء إختيار صورة الملف الخارجي")]
         [NotMapped]
         public IFormFile File { get; set; }
         [Key]

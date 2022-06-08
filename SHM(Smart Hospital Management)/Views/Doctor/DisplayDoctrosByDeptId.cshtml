@@ -15,6 +15,19 @@
 }
 <a asp-action="Create" asp-route-id="@ViewBag.DeptId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 46%;">Create New</a>
 <div class="All_form" style=" direction: rtl; width: 92%; position: relative; right: 22%;">
+    <form asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" method="get">
+        <div class="container">
+            <div class="row" style="width: 200%; position: relative; right: 40%;">
+                <p>
+                    <div class="All_div col-12">
+                        <input type="hidden" name="HoId" value="@ViewBag.HoId" />   
+                        <input type="text" name="search" style="width:70%;" />
+                        <input type="submit" value="بحث" />
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>

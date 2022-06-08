@@ -17,7 +17,7 @@
 
 <div class="container">
     <div class="row">
-        <form asp-action="EditPersonalDetails" class="All_form" method="post" style="background-color:white">
+        <form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;" id="form" onsubmit="event.preventDefault(MyValidations());">
             <div class="col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Patient_Id" />
@@ -71,10 +71,17 @@
                     {
                         string span = "span" + i;
                         string tr = "tr" + i;
+                        string phoneValidateSpan = "phoneValidateSpan" + i;
                         <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px;">
                             @if (i == 0 && Model.Patient_Phone_Numbers.Count == 1)
                             {
-                                <td><div class="All_div col-12"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
+
+                                <td>
+                                    <div class="All_div col-12">
+                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                        <span id="@phoneValidateSpan" class="text-danger"></span>
+                                    </div>
+                                </td>
                                 <td>
                                 </td>
                                 <td>
@@ -86,7 +93,13 @@
                             }
                             else if (i + 1 == Model.Patient_Phone_Numbers.Count)
                             {
-                                <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
+
+                                <td>
+                                    <div class="col-12 All_div">
+                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                        <span id="@phoneValidateSpan" class="text-danger"></span>
+                                    </div>
+                                </td>
                                 <td>
                                     <input type="button" onclick="Delete()" value="حذف" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                 </td>
@@ -101,7 +114,12 @@
                             {
                                 if (i == 0)
                                 {
-                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
+                                    <td>
+                                        <div class="col-12 All_div">
+                                            <input class="ValidateNumber" type="text" name="pn" placeholder="Enter Phone Numberأدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                            <span id="@phoneValidateSpan" class="text-danger"></span>
+                                        </div>
+                                    </td>
                                     <td>
                                     </td>
                                     <td>
@@ -112,7 +130,12 @@
                                 }
                                 else
                                 {
-                                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required /></div></td>
+                                    <td>
+                                        <div class="col-12 All_div">
+                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                            <span id="@phoneValidateSpan" class="text-danger"></span>
+                                        </div>
+                                    </td>
                                     <td>
                                         <input type="button" onclick="Delete()" value="حذف" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </td>
@@ -142,7 +165,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbers5.js"></script>
+    <script src="~/EditPhoneNumbers55.js"></script>
+    <script src="~/Validations.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

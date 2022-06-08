@@ -283,6 +283,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
+        [Authorize(Roles = "IT")]
+        public async Task<IActionResult> ActivateDepartment(int id , int EmpId) // Deprtment (id)
+        {
+            var department = await _context.Departments.FindAsync(id);
+            department.Active = true;
+            foreach (var item in _context.Doctors.Where(d=>d.Department_Id == id).ToList())
+            {
+                item.Active = true;
+            }
+            return RedirectToAction("Master", "Employee" , new { id = EmpId});
+        }
 
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> AddRoom(int EmpId, string room)
@@ -530,6 +541,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 request.Accept = true;
                 var department = _context.Departments.Find(int.Parse(request.Request_Data));
                 department.Active = false;
+                foreach (var item in _context.Doctors.Where(d=>d.Department_Id==department.Department_Id && d.Active).ToList())
+                {
+                    item.Active = false;
+                }
                 await _context.SaveChangesAsync();
                 #region send notification
                 //==============================================================================================
@@ -724,6 +739,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("MasterHoMgr", "Employee", new { id = mgrId });
         }
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EmergencyAlert(int id)
         {
             var hoId = _context.Employees.Find(id).Ho_Id;

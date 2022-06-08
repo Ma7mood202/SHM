@@ -50,8 +50,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
-                End_Hour = s.End_Hour.ToString("c"),
-                Start_Hour = s.Start_Hour.ToString("c")
+                End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync());
         }
         [Authorize(Roles = "Resception")]
@@ -68,8 +68,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Doctor_Id = s.Doctor_Id,
                 Day = s.Day,
-                End_Hour = s.End_Hour.ToString("c"),
-                Start_Hour = s.Start_Hour.ToString("c")
+                End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync());
         }
         [Authorize(Roles = "DeptManager")]

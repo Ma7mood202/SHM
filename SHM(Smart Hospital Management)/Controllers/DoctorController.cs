@@ -87,7 +87,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(doctorPreviews);
         }
         [Authorize(Roles = "DeptManager")]
-        public async Task<IActionResult> DisplayDoctrosByDeptId(int id, int HoId) // DeptManager (id)
+        public async Task<IActionResult> DisplayDoctrosByDeptId(int id, int HoId, string search = "") // DeptManager (id)
         {
             var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == id);
             var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
@@ -98,10 +98,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.DeptMgrId = id;
             ViewBag.DeptId = Deptmanager.Department_Id;
             ViewBag.HoId = HoId;
-            return View(doctors);
+            if (string.IsNullOrEmpty(search))
+                return View(doctors);
+            else
+            {
+                doctors = await _context.Doctors.Where(d => d.Department_Id == Deptmanager.Department_Id && d.Doctor_Id != Deptmanager.Doctor_Id && d.Active && (d.Doctor_First_Name.Contains(search)|| d.Doctor_Last_Name.Contains(search)|| d.Doctor_Middle_Name.Contains(search))).ToListAsync();
+                return View(doctors);
+            }
         }
         [Authorize(Roles ="Resception")]
-        public async Task<IActionResult> HoDoctors(int id, int EmpId) // Hospital (id)
+        public async Task<IActionResult> HoDoctors(int id, int EmpId, string search = "") // Hospital (id)
         { // تفاصيل عامة ===> ساعات الدوام 
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -120,10 +126,26 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                            }).ToList();
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
-            return View(doctors);
+            if (string.IsNullOrEmpty(search))
+                return View(doctors);
+            else
+            {
+                doctors = (from d in _context.Doctors.ToList()
+                           join dept in departments
+                           on d.Department_Id equals dept.Department_Id
+                           where d.Active == true && (d.Doctor_First_Name.Contains(search) || d.Doctor_Last_Name.Contains(search) || d.Doctor_Middle_Name.Contains(search))
+                           select new HoDoctors
+                           {
+                               DoctorId = d.Doctor_Id,
+                               DoctorFullName = d.Doctor_Full_Name,
+                               Specialization = _context.Specializations.Find(dept.Department_Name).Specialization_Name,
+                               PhoneNumbers = _context.Doctor_Phone_Numbers.Where(pn => pn.Doctor_Id == d.Doctor_Id).Select(s => s.Doctor_Phone_Number).ToList()
+                           }).ToList();
+                return View(doctors);
+            }
         }
         [Authorize(Roles = "IT")]
-        public async Task<IActionResult> DeptManagers(int id, int EmpId) // Hospital (id)
+        public async Task<IActionResult> DeptManagers(int id, int EmpId, string search = "") // Hospital (id)
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
@@ -148,7 +170,29 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                 }).ToList();
             ViewBag.Ho_Id = id;
             ViewBag.EmpId = EmpId;
-            return View(deptmanagers);
+            if (string.IsNullOrEmpty(search))
+                return View(deptmanagers);
+            else
+            {
+                deptmanagers = (from doc in _context.Doctors.ToList()
+                                join d in dept
+                                on doc.Doctor_Id equals d.Dept_Manager.Doctor_Id
+                                into groupDept
+                                from c in groupDept.DefaultIfEmpty()
+                                where c is not null && (doc.Doctor_First_Name.Contains(search) || doc.Doctor_Last_Name.Contains(search) || doc.Doctor_Middle_Name.Contains(search))
+                                select new { c, doc }
+                                into a
+                                join spec in _context.Specializations.ToList()
+                                on a.c.Department_Name equals spec.Specialization_Id
+                                select new DeptManagers
+                                {
+                                    MgrName = a.doc.Doctor_Full_Name,
+                                    DeptName = spec.Specialization_Name,
+                                    Id = a.c.Department_Id,
+                                    DoctorManagerId = a.doc.Doctor_Id
+                                }).ToList();
+                return View(deptmanagers);
+            }
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> EditDeptManager(int id, int DoctorId, int EmpId, string search = "") // Department (id)
@@ -232,7 +276,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                    join dept in _context.Departments
                                    on s.Specialization_Id equals dept.Department_Name
                                    where dept.Ho_Id == id && dept.Dept_Manager == null
-                                   select new Specialization_Dept { Dept_Id = dept.Department_Id, Spec_Name = s.Specialization_Name })
+                                   select new Specialization_Dept
+                                   {
+                                       Dept_Id = dept.Department_Id,
+                                       Spec_Name = s.Specialization_Name,
+                                       Active = dept.Active
+                                   })
                                    .ToListAsync();
             ViewBag.Specializations = specializations;
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
@@ -265,7 +314,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         });
                     }
                 }
-                doctor.Doctor_Phone_Numbers = pns;
+                doctor.Doctor_Phone_Numbers = pns.Distinct().ToList();
                 return RedirectToAction("AddDeptManager", "Request", new { EmpId, doctor = JsonConvert.SerializeObject(doctor) });
             }
             return View(doctor);
@@ -363,7 +412,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         });
                     }
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 FCMService.AddToken(doctor.Doctor_Id, UserType.doc);
                 return RedirectToAction("Master", new { id = DocId, HoId = HoId });
@@ -403,7 +452,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Doctor_Phone_Numbers.RemoveRange(_context.Doctor_Phone_Numbers.Where(d => d.Doctor_Id == doctor.Doctor_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(doctor);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = doctor.Doctor_Id });
@@ -420,7 +469,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return RedirectToAction("DisplayDoctrosByDeptId", new { id = DeptMgrId, HoId = HoId });
         }
         [Authorize(Roles = "IT")]
-        public async Task<IActionResult> ShowActiveDoctorsForIT(int id) //IT(id)
+        public async Task<IActionResult> ShowActiveDoctorsForIT(int id, string search = "") //IT(id)
         {
             var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
@@ -432,7 +481,18 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                               where dept.Ho_Id == IT.Ho_Id
                               && doc.Active
                               select doc).ToListAsync();
-            return View(data);
+            if (string.IsNullOrEmpty(search))
+                return View(data);
+            else
+            {
+                 data = await (from doc in _context.Doctors
+                                 join dept in _context.Departments
+                                 on doc.Department_Id equals dept.Department_Id
+                                 where dept.Ho_Id == IT.Ho_Id && (doc.Doctor_First_Name.Contains(search) || doc.Doctor_Last_Name.Contains(search) || doc.Doctor_Middle_Name.Contains(search))
+                                 && doc.Active
+                                 select doc).ToListAsync();
+                return View(data);
+            }
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActiveDoctorsForIT(int id) //IT(id)
