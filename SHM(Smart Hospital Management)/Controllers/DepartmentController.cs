@@ -21,13 +21,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             _context = context;
         }
         [Authorize(Roles = "IT")]
-        public async Task<IActionResult> HoDepartments(int? id, int EmpId) //IT.Ho_Id
+        public async Task<IActionResult> HoDepartments(int? id, int EmpId, string search = "") //IT.Ho_Id
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
                 return RedirectToAction("LogOut", "Employee");
             if (id == null) return NotFound();
-            //  var Departments = _context.Departments.Where(d => d.Ho_Id == id && d.Active).ToList();
             var departments = await (from d in _context.Departments
                                      join s in _context.Specializations
                                      on d.Department_Name equals s.Specialization_Id
@@ -42,7 +41,22 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return Ok("No Departments in this Hospital yet");
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
-            return View(departments);
+            if (string.IsNullOrEmpty(search))
+                return View(departments);
+            else 
+            {
+                departments = await (from d in _context.Departments
+                                     join s in _context.Specializations
+                                     on d.Department_Name equals s.Specialization_Id
+                                     where d.Ho_Id == id && d.Active && s.Specialization_Name.Contains(search)
+                                     select new Specialization_Dept
+                                     {
+                                         Dept_Id = d.Department_Id,
+                                         Spec_Name = s.Specialization_Name
+                                     }).ToListAsync();
+
+                return View(departments);
+            }
         }
         //***********************************************************
         // GET: Department/Create

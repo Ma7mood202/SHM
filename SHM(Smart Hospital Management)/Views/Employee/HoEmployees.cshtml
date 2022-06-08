@@ -17,6 +17,18 @@
     <a asp-action="Create" asp-route-MgrId="@ViewBag.MgrId" asp-route-HoId="@ViewBag.HospitalId" style=" position: relative; left: 46%;">Create New</a>
 </p>
 <div class="All_form" style="direction: rtl; width: 92%; position: relative; right: 22%; background-color: white ">
+    <form asp-action="HoEmployees" asp-route-id="@ViewBag.MgrId" method="get">
+        <div class="container">
+            <div class="row" style="width: 200%; position: relative; right: 40%;">
+                <p>
+                    <div class="All_div col-12">
+                        <input type="text" name="search" style="width:70%;" />
+                        <input type="submit" value="بحث" />
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>

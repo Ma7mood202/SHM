@@ -80,7 +80,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(HeadNurse);
         }
         [Authorize(Roles = "HeadNurse")]
-        public async Task<IActionResult> DisplayNurses(int id, int HoId)
+        public async Task<IActionResult> DisplayNurses(int id, int HoId, string search = "")
         {
             var HeadNurse = await _context.Employees.FindAsync(id);
             if (!HeadNurse.Active)
@@ -88,7 +88,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.EmpId = id;
             var employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active).ToListAsync();
-            return View(employees);
+            if (string.IsNullOrEmpty(search))
+                return View(employees);
+            else
+            {
+                employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(employees);
+            }
         }
         [Authorize(Roles = "HeadNurse")]
         public async Task<IActionResult> CreateNurse(int id, int EmpId) // Hospital (id)
@@ -169,7 +175,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(employee);
         }
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> HoEmployees(int id)
+        public async Task<IActionResult> HoEmployees(int id, string search = "")
         {
             var manager =await _context.Employees.FindAsync(id);
             if (!manager.Active)
@@ -180,7 +186,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active).ToListAsync();
             ViewBag.HospitalId = hospital.Ho_Id;
             ViewBag.MgrId = id;
-            return View(Employees);
+            if (string.IsNullOrEmpty(search))
+                return View(Employees);
+            else
+            {
+                Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(Employees);
+            }
         }
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateManager(int id)
@@ -469,14 +481,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View();
         }
         [Authorize(Roles = "IT")]
-        public async Task<IActionResult> ShowActiveEmployeesForIT(int id) // IT (id)
+        public async Task<IActionResult> ShowActiveEmployeesForIT(int id , string search = "") // IT (id)
         {
             var IT = _context.Employees.Find(id);
             if (!IT.Active)
                 return RedirectToAction("LogOut", "Employee");
             ViewBag.EmpId = id;
             var Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse").ToListAsync();
-            return View(Nurses);
+            if (string.IsNullOrEmpty(search))
+                return View(Nurses);
+            else
+            {
+                Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse" &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                return View(Nurses);
+            }
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActiveEmployeesForIT(int id) // IT (id)

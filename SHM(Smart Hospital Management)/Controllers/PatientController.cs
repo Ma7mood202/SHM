@@ -53,7 +53,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(patients);
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> HoPatientsForBill(int id, int EmpId) // Hospital (id)
+        public async Task<IActionResult> HoPatientsForBill(int id, int EmpId, string search = "") // Hospital (id)
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -61,10 +61,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patients =await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
             ViewBag.HospitalId = id;
             ViewBag.EmpId = EmpId;
-            return View(patients);
+            if (string.IsNullOrEmpty(search))
+                return View(patients);
+            else
+            {
+                patients = await _context.Patients.Where(p => p.Ho_Id == id && p.Active &&(p.Patient_First_Name.Contains(search) || p.Patient_Last_Name.Contains(search) || p.Patient_Middle_Name.Contains(search))).ToListAsync();
+                return View(patients);
+            }
         }
         [Authorize(Roles = "Doctor,DeptManager")]
-        public async Task<IActionResult> HoPatientsForPreview(int id, int DocId) // Hospital (id)
+        public async Task<IActionResult> HoPatientsForPreview(int id, int DocId, string search = "") // Hospital (id)
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
@@ -76,10 +82,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         select pat).Distinct().ToListAsync();
             ViewBag.HospitalId = id;
             ViewBag.DocId = DocId;
-            return View(data);
+            if (string.IsNullOrEmpty(search))
+                return View(data);
+            else
+            {
+                data = await (from pat in _context.Patients
+                              join pre in _context.Previews
+                              on pat.Patient_Id equals pre.Patient_Id
+                              where pre.Doctor_Id == DocId && (pat.Patient_First_Name.Contains(search) || pat.Patient_Last_Name.Contains(search) || pat.Patient_Middle_Name.Contains(search))
+                              select pat).Distinct().ToListAsync();
+                return View(data);
+            }
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> HoPatientsForReservation(int id, int EmpId)// Hospital (id)
+        public async Task<IActionResult> HoPatientsForReservation(int id, int EmpId, string search = "")// Hospital (id)
         {
             var Resception =await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -87,10 +103,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patients = await _context.Patients.Include(p => p.Patient_Phone_Numbers).Where(p => p.Ho_Id == id).ToListAsync();
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
-            return View(patients);
+            if (string.IsNullOrEmpty(search))
+                return View(patients);
+            else
+            {
+                patients = await _context.Patients.Include(p => p.Patient_Phone_Numbers).Where(p => p.Ho_Id == id &&(p.Patient_First_Name.Contains(search) || p.Patient_Last_Name.Contains(search) || p.Patient_Middle_Name.Contains(search))).ToListAsync();
+                return View(patients);
+            }
         }
         [Authorize(Roles = "Resception")]
-        public async Task<IActionResult> HoPatientsForResception(int id, int EmpId)// Hospital (id)
+        public async Task<IActionResult> HoPatientsForResception(int id, int EmpId, string search = "")// Hospital (id)
         {
             var Resception =await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
@@ -98,7 +120,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patients = await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
-            return View(patients);
+            if (string.IsNullOrEmpty(search))
+                return View(patients);
+            else
+            {
+                patients = await _context.Patients.Where(p => p.Ho_Id == id && p.Active&&(p.Patient_First_Name.Contains(search) || p.Patient_Last_Name.Contains(search) || p.Patient_Middle_Name.Contains(search))).ToListAsync();
+                return View(patients);
+            }
         }
         [Authorize(Roles = "Nurse,HeadNurse")]
         public async Task<IActionResult> DisplayPatientsByName(int id, int EmpId, string patientName = "") // Hospital (id)
@@ -292,13 +320,18 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
         [Authorize(Roles ="IT")]
 
-        public async Task<IActionResult> ShowActivePatientsForIT(int id) //IT (id)
+        public async Task<IActionResult> ShowActivePatientsForIT(int id, string search = "") //IT (id)
         {
             var IT = _context.Employees.Find(id);
             if (!IT.Active)
                 return RedirectToAction("LogOut", "Employee");
             ViewBag.EmpId = id;
-            return View(await _context.Patients.Where(p => p.Ho_Id == IT.Ho_Id && p.Active).ToListAsync());
+            if (string.IsNullOrEmpty(search))
+                return View(await _context.Patients.Where(p => p.Ho_Id == IT.Ho_Id && p.Active).ToListAsync());
+            else
+            {
+                return View(await _context.Patients.Where(p => p.Ho_Id == IT.Ho_Id && p.Active&&(p.Patient_First_Name.Contains(search) || p.Patient_Last_Name.Contains(search) || p.Patient_Middle_Name.Contains(search))).ToListAsync());
+            }
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActivePatientsForIT(int id) //IT (id)
