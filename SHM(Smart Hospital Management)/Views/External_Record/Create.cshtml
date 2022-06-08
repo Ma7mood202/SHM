@@ -14,7 +14,7 @@
             <div id="div0">
                 <div class="form-group">
                     <label for="files" class="control-label"></label>
-                    <input type="file" name="files" />
+                    <input type="file" name="files" accept="image/*" />
                 </div>
                 <div class="form-group">
                     <label for="date" class="control-label"></label>
@@ -35,7 +35,7 @@
 </div>
 
 <div>
-    <a asp-action="ShowExternalRecordsForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Back to List</a>
+    <a asp-action="ShowExternalRecordsPatient" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.PatId">Back to List</a>
 </div>
 
 @section Scripts {

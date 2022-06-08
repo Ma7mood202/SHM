@@ -21,6 +21,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         [ForeignKey("Patient_Id")] // unique // cascade
         public virtual Patient Dead_Patient { get; set; }
         [NotMapped]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         public IFormFile Image { set; get; }
         [NotMapped]
         public int PatientId { get; set; }

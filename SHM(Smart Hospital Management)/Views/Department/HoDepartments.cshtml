@@ -55,9 +55,19 @@
                             string cancel = "cancel" + i;
                             string delete = "delete" + i;
                         }
-                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
-                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
-                        <a id="@confirm" class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.Dept_Id" asp-route-HoId="@ViewBag.HoId" asp-route-EmpId="@ViewBag.EmpId">تأكيد</a>
+                        @if (item.Active)
+                        {
+                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">تعطيل</a>
+                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                            <a id="@confirm" class="btn Confirm_btn" asp-controller="Request" asp-action="DeleteDepartment" asp-route-id="@item.Dept_Id" asp-route-EmpId="@ViewBag.EmpId">تأكيد</a>
+                        }
+                        else
+                        {
+                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">تفعيل</a>
+                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                            <a id="@confirm" class="btn Confirm_btn" asp-controller="Request" asp-action="ActivateDepartment" asp-route-id="@item.Dept_Id" asp-route-EmpId="@ViewBag.EmpId">تأكيد</a>
+                        }
+
                         @{i++;}
                     </td>
                 </tr>

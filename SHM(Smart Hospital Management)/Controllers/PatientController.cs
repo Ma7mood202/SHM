@@ -222,7 +222,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     });
                 }
                 _context.Patient_Phone_Numbers.RemoveRange(_context.Patient_Phone_Numbers.Where(p=>p.Patient_Id == patient.Patient_Id));
-                _context.AddRange(pns);
+                _context.AddRange(pns.Distinct());
                 _context.Update(patient);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = patient.Patient_Id });
@@ -309,7 +309,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         Patient_Phone_Number = pn[i]
                     };
                 }
-                await _context.AddRangeAsync(pns);
+                await _context.AddRangeAsync(pns.Distinct());
                 await _context.SaveChangesAsync();
                 TempData["PatientAdded"] = "تمت إضافة" + patient.Patient_Full_Name;
                 FCMService.AddToken(patient.Patient_Id, UserType.pat);

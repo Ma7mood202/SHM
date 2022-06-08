@@ -9,7 +9,7 @@
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
 
-<form asp-action="Create" method="post" class="All_form" style="background-color:white">
+<form asp-action="Create" method="post" class="All_form" style="background-color:white" id="form" onsubmit="event.preventDefault(MyValidations());">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -36,7 +36,7 @@
             <div class="All_div col-12">
                 <label asp-for="Doctor_National_Number"></label>
                 <input asp-for="Doctor_National_Number" /><br>
-                 <span asp-validation-for="Doctor_National_Number" class="text-danger"></span>
+                <span asp-validation-for="Doctor_National_Number" class="text-danger" id="nationalValidateSpan"></span>
             </div>
                 <div class="All_div col-12">
                     <label asp-for="Doctor_Gender"></label>
@@ -88,13 +88,17 @@
                     <label asp-for="Area_Id"></label>
                     <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
                     </select><br>
-                    <span asp-validation-for="Area_Id" class="text-danger"></span>
+                    <span id="areaValidateSpan" class="text-danger"></span>
                 </div>
                 <input type="hidden" name="DocId" value="@ViewBag.DocId" />
                 <input type="hidden" name="HoId" value="@ViewBag.HoId" />
                 <table>
                     <tr id="tr0">
-                        <td><div class="col-12 All_div"><input type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" required /></div></td>
+                        <td>
+                            <div class="col-12 All_div">
+                                <input class="ValidateNumber" type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" required />
+                                <span id="phoneValidateSpan0" class="text-danger"></span>
+                            </div></td>
                         <td>
                         </td>
 
@@ -119,7 +123,8 @@
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers2.js"></script>
+    <script src="~/addPhoneNumbers3.js"></script>
+    <script src="~/Validations.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {
