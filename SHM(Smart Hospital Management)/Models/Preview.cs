@@ -10,13 +10,14 @@ namespace SHM_Smart_Hospital_Management_.Models
     {
         [Key]
         public int Preview_Id { get; set; }
-        [Required]
-        [Display(Name = "Preview Date")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "تاريخ المعاينة")]
         public DateTime Preview_Date { get; set; }
-        [Display(Name = "Is Taking Care of")]
+        [Display(Name = "العناية")]
         public bool Caring { get; set; }
+        [Display(Name = "التشخيص")]
         public string ExaminationRecord { get; set; }
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         public int Patient_Id { get; set; } // Foreign Key // cascade
         [Required]
         public int? Doctor_Id { get; set; } // Foreign Key // Set null 

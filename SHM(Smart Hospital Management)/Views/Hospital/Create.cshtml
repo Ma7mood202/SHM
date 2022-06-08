@@ -20,37 +20,40 @@
             <input type="hidden" asp-for="Ho_Subscribtion_Date" />
             <input type="hidden" asp-for="Active" />
             <div class="All_div col-12">
-                <label>City</label>
+                <label>المدينة</label>
                 <select id="City" asp-items="@ViewBag.Cities">
                 </select>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
-                </select>
+                </select><br>
+                @if (TempData["Area"].ToString() == "true")
+                {
+                    <span asp-validation-for="Area_Id" class="text-danger">الرجاء اختيار منطقة</span>
+                }
             </div>
             <table>
                 <tr id="tr0">
-                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                    <td><div class="col-12 All_div"><input type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required /></div></td>
                     <td>
                     </td>
-
 
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
                 </tr>
             </table>
 
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إضافة مشفى" />
             </div>
         </div>
     </div>
-    <a asp-controller="Admin" asp-action="Master">Back to Master Page</a>
+    <a asp-controller="Admin" asp-action="Master">العودةإلى الصفحة الرئيسية</a>
 </form>
 
 

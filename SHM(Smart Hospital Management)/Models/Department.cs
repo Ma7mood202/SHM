@@ -12,9 +12,10 @@ namespace SHM_Smart_Hospital_Management_.Models
 
         [Key]
         public int Department_Id { get; set; }
-        [Display(Name = "Is Active")]
+        [Display(Name = "فعّال")]
         public bool Active { get; set; } = true;
-        [Required]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "اسم القسم")]
         public int Department_Name { get; set; } // Foreign Key
         public int Ho_Id { get; set; } // Foreign Key // cascade
         [ForeignKey("Dept_Mgr_Id")] // Foreign Key // set null unique // type<int?>

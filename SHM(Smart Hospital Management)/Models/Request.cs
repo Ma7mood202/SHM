@@ -11,12 +11,12 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Key]
         public int Request_Id { get; set; }
         [StringLength(200)]
-        [Display(Name = "Type")]
+        [Display(Name = "نوع الطلب")]
         public string Request_Type { get; set; } // hidden
-        [Display(Name = "Description")]
+        [Display(Name = "الوصف")]
         public string Request_Description { get; set; } // hidden
-        [Required]
-        [Display(Name = "Date")]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "تاريخ الطلب")]
         public DateTime Request_Date { get; set; }
         public bool Accept { get; set; }
         public int? Patient_Id { get; set; } //Foreign Key

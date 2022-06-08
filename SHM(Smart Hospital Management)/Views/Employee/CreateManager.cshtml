@@ -9,7 +9,7 @@
 }
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateManager">
+        <form asp-action="CreateManager" method="post" id="form" onsubmit="event.preventDefault(MyValidations());">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Employee_First_Name" class="control-label"></label>
@@ -36,7 +36,7 @@
             <input type="hidden" asp-for="Employee_Hire_Date" />
             <div class="form-group">
                 <label asp-for="Employee_National_Number" class="control-label"></label>
-                <input asp-for="Employee_National_Number" class="form-control" />
+                <input id="NationalNumber" asp-for="Employee_National_Number" class="form-control" />
                 <span asp-validation-for="Employee_National_Number" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -65,12 +65,16 @@
                 <input asp-for="Employee_Birth_Date" class="form-control" />
                 <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
             </div>
-
+            <div class="All_div col-12">
+                <label asp-for="Employee_Birth_Place">مكان الولادة</label>
+                <select asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
             <input type="hidden" asp-for="Active" />
 
-            <div class="form-group">
-                <label class="control-label">City</label>
-                <select id="City" asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities" class="form-control">
+            <div class="All_div col-12">
+                <label>السكن</label>
+                <select id="City" asp-items="@ViewBag.Cities">
                 </select>
             </div>
             <div class="form-group">
@@ -80,32 +84,33 @@
             </div>
             <table>
                 <tr id="tr0">
-                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                    <td><div class="col-12 All_div"><input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required /></div></td>
                     <td>
                     </td>
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
                 </tr>
             </table>
             <input type="hidden" asp-for="Ho_Id" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="إضافة مدير" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">العودة إلى الخلف</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers.js"></script>
+    <script src="~/JavaScript2.js"></script>
+    <script src="~/addPhoneNumbers2.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

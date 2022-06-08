@@ -49,9 +49,13 @@
 
             <div class="All_div col-12">
                 <label asp-for="Patient_National_Number"></label>
-                <input asp-for="Patient_National_Number" /><br />
-                <span asp-validation-for="Patient_National_Number" class="text-danger"></span>
+                <input asp-for="Patient_National_Number" /><br>
+                @if (@TempData["national"].ToString() == "true")
+                {
+                    <span asp-validation-for="Patient_National_Number" class="text-danger">الرجاء ادخال رقم وطني صالح</span>
+                }
             </div>
+   
             <div class="All_div col-12">
                 <label asp-for="Patient_Gender"></label>
                 <select asp-for="Patient_Gender">
@@ -73,21 +77,30 @@
                 <span asp-validation-for="Patient_Birth_Date" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
-                <label>City</label>
-                <select id="City" asp-for="Patient_Birth_Place" asp-items="@ViewBag.Cities">
+                <label asp-for="Patient_Birth_Place">مكان الولادة</label>
+                <select asp-for="Patient_Birth_Place" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label>السكن</label>
+                <select id="City" asp-items="@ViewBag.Cities">
                 </select>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
-                </select>
+                </select><br>
+                @if (TempData["Area"].ToString() == "true")
+                {
+                    <span asp-validation-for="Area_Id" class="text-danger">الرجاء اختيار منطقة</span>
+                }
             </div>
             <input type="hidden" asp-for="Active" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <input type="hidden" asp-for="Ho_Id" />
             <table>
                 <tr id="tr0">
-                    <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                    <td><div class="col-12 All_div"><input type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required /></div></td>
                     <td>
                     </td>
 
@@ -95,17 +108,17 @@
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
                 </tr>
             </table>
             <div class="col-12">
-                <input type="submit" value="Create" style="margin-bottom:10px" />
+                <input type="submit" value="إضافة مريض" style="margin-bottom:10px" />
             </div>
         </div>
     </div>
-    <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId">Back to My Page</a>
+    <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId">العودة إلى الصفحة الرئيسية</a>
 
 </form>
 

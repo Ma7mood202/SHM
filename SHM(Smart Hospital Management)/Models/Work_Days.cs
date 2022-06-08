@@ -15,10 +15,11 @@ namespace SHM_Smart_Hospital_Management_.Models
         public int Doctor_Id { get; set; } // foreign key
         [Key]
         [Column(Order = 2)]
+        [Display(Name = "اليوم")]
         public WeekDays Day { get; set; }
-        [Display(Name = "Start Hour")]
+        [Display(Name = "بداية الدوام")]
         public TimeSpan Start_Hour { get; set; }
-        [Display(Name = "End Hour")]
+        [Display(Name = "نهاية الدوام")]
         public TimeSpan End_Hour { get; set; }
     }
 }

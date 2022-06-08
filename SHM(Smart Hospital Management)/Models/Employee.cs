@@ -39,7 +39,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         public string Employee_Password { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [Display(Name = " الرقم الوطني")]
-        [StringLength(25)]
+        [StringLength(11, MinimumLength = 11, ErrorMessage = "الرجاء ادخال رقم وطني صالح")]
         public string Employee_National_Number { get; set; }
         [StringLength(6)]
         [Display(Name = "الجنس")]

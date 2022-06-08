@@ -204,7 +204,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 employee.Employee_Email = employee.Employee_EmailName.Replace(" ", "_");
                 employee.Employee_Password = PasswordHashing.HashPassword(employee.Employee_National_Number);
                 _context.Add(employee);
@@ -284,7 +283,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogInHoMgr(IFormCollection fc, string ReturnUrl)
         {
-            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == PasswordHashing.HashPassword(fc["password"])).ToList();
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
             if (employees.Count == 0) return NotFound();
             var HoManager = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
             if (HoManager is not null)
@@ -301,7 +300,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 if (ReturnUrl == null)
                 {
-                    FCMService.UpdateToken(fc["fcmToken"].ToString(), HoManager.Employee_Id, UserType.emp, Platform.Web);
+                    //FCMService.UpdateToken(fc["fcmToken"].ToString(), HoManager.Employee_Id, UserType.emp, Platform.Web);
                     return RedirectToAction("MasterHoMgr", "Employee", new { id = HoManager.Employee_Id });
                 }
                 return RedirectToAction(ReturnUrl);
@@ -337,6 +336,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Cities =await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.MgrId = MgrId;
+            TempData["national"] = "";
+            TempData["phone"] = "";
+            TempData["Area"] = "";
             return View(e);
         }
         [HttpPost]
@@ -347,6 +349,23 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!manager.Active)
             {
                 return RedirectToAction("LogOut");
+            }
+            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
+            ViewBag.Areas = new List<SelectListItem>();
+            TempData["national"] = "";
+            TempData["Area"] = "";
+            if (employee.Area_Id == 0)
+            {
+                TempData["Area"] = "true";
+                return View(employee);
+            }
+            for (int i = 0; i < employee.Employee_National_Number.Length; i++)
+            {
+                if (!Char.IsDigit(employee.Employee_National_Number[i]))
+                {
+                    TempData["national"] = "true";
+                    return View(employee);
+                }
             }
             if (ModelState.IsValid)
             {

@@ -31,12 +31,21 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             };
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
+            TempData["Area"] = "";
             return View(h);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Hospital hospital, string[] pn)
         {
+            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
+            ViewBag.Areas = new List<SelectListItem>();
+            TempData["Area"] = "";
+            if (hospital.Area_Id == 0)
+            {
+                TempData["Area"] = "true";
+                return View(hospital);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(hospital);

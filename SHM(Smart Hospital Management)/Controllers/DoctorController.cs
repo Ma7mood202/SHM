@@ -258,6 +258,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (doctor.Area_Id == null)
             {
                 TempData["Area"] = "true";
+                return View(doctor);
             }
             for (int i = 0; i < doctor.Doctor_National_Number.Length; i++)
             {
@@ -359,12 +360,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         public async Task<IActionResult> Create(Doctor doctor, int HoId, int DocId, string[] pn) // DocId = DeptManagerId
         {
             ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
-            TempData["national"] = "";
-            TempData["national"] = "";
             ViewBag.Areas = new List<SelectListItem>();
+            TempData["national"] = "";
+            TempData["Area"] = "";
             if(doctor.Area_Id == null)
             {
                 TempData["Area"] = "true";
+                return View(doctor);
             }
             for (int i = 0; i < doctor.Doctor_National_Number.Length; i++)
             {

@@ -17,13 +17,13 @@ namespace SHM_Smart_Hospital_Management_.Models
         public int Medical_Details_Id { get; set; }
 
         [StringLength(3)]
-        [Display(Name = "Blood Type")]
+        [Display(Name = "زمرة الدم")]
         public string MD_Patient_Blood_Type { get; set; }
-        [Display(Name = "Treatment Plans and Daily Supplements")]
+        [Display(Name = "الخطة العلاجية")]
         public string MD_Patient_Treatment_Plans_And_Daily_Supplements { get; set; }
 
 
-        [Display(Name = "Special Needs")]
+        [Display(Name = "الاحتياجات الخاصة")]
         public string MD_Patient_Special_Needs { get; set; }
 
         [ForeignKey("Patient_Id")] // cascade

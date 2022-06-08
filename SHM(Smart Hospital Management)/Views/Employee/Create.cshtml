@@ -41,8 +41,11 @@
             <input type="hidden" asp-for="Employee_X_Y" />
             <div class="All_div col-12">
                 <label asp-for="Employee_National_Number"></label>
-                <input asp-for="Employee_National_Number" /><br />
-                <span asp-validation-for="Employee_National_Number" class="text-danger"></span>
+                <input asp-for="Employee_National_Number" /><br>
+                @if (@TempData["national"].ToString() == "true")
+                {
+                    <span asp-validation-for="Employee_National_Number" class="text-danger">الرجاء ادخال رقم وطني صالح</span>
+                }
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Gender"></label>
@@ -78,36 +81,45 @@
                 <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
-                <label>City</label>
-                <select id="City" asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
+                <label asp-for="Employee_Birth_Place">مكان الولادة</label>
+                <select asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
+                </select>
+            </div>
+            <div class="All_div col-12">
+                <label>السكن</label>
+                <select id="City" asp-items="@ViewBag.Cities">
                 </select>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
-                </select>
+                </select><br>
+                @if (TempData["Area"].ToString() == "true")
+                {
+                    <span asp-validation-for="Area_Id" class="text-danger">الرجاء اختيار منطقة</span>
+                }
+            </div>
                 <table>
                     <tr id="tr0">
-                        <td><div class="col-12 All_div"><input type="text" name="pn" placeholder="Enter Phone Number" required /></div></td>
+                        <td><div class="col-12 All_div"><input type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required /></div></td>
                         <td>
                         </td>
-
 
                         <td>
                             <div class="col-12">
                                 <span id="span0"></span>
-                                <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                             </div>
                         </td>
                     </tr>
                 </table>
                 <input type="hidden" name="MgrId" value="@ViewBag.MgrId" />
                 <div class="All_div col-12">
-                    <input type="submit" value="Create" />
+                    <input type="submit" value="إضافة موظف" />
                 </div>
             </div>
-    </div>
-    <a asp-action="HoEmployees" asp-route-id="@ViewBag.MgrId">Back to List</a>
+        </div>
+    <a asp-action="HoEmployees" asp-route-id="@ViewBag.MgrId">العودة للخلف</a>
 </form>
 
 

@@ -32,7 +32,6 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [StringLength(11,MinimumLength = 11, ErrorMessage ="الرجاء ادخال رقم وطني صالح")]
         [Display(Name = "الرقم الوطني")]
-
         public string Doctor_National_Number { get; set; }
         [StringLength(6)]
         [Display(Name = "الجنس")]
@@ -73,6 +72,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Display(Name = "المنطقة")]
         public int? Area_Id { get; set; } // ForeignKey;
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Display(Name = "القسم")]
         public int? Department_Id { get; set; } // Foreign Key // set null 
 
         [ForeignKey("Doctor_Id")]
