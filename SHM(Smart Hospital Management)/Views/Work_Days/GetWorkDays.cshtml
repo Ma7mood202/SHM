@@ -19,45 +19,45 @@
 }
 <div class="All_form" style="width: 92%; position: relative; right: 22%; background-color: white">
     <h2>@ViewBag.DoctorName</h2>
-    <table class="table">
+    <table class="table" >
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Start_Hour)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.End_Hour)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Day)
-                </th>
                 @if (ViewBag.IsDeptManager)
                 {
                     <th></th>
                 }
+                <th>
+                    @Html.DisplayNameFor(model => model.End_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Day)
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Start_Hour)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.End_Hour)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Day)
-                    </td>
                     @if (ViewBag.IsDeptManager)
                     {
                         <td>
                             @{int day = (int)item.Day;}
-                            <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تعديل</a>
+                            <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تعديل</a> | 
                             <a asp-action="Delete" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">حذف</a>
                         </td>
                     }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End_Hour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start_Hour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
                 </tr>
             }
         </tbody>

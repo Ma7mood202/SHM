@@ -212,7 +212,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.ErrorMessage = ErrorMessage;
             ViewBag.Times = new List<SelectListItem>();
-            return View(_context.Work_Days.Where(s => s.Doctor_Id == DoctorId).Select(s =>
+            return View( await _context.Work_Days.Where(s => s.Doctor_Id == DoctorId).Select(s =>
             new ShowWorkDays
             {
                 Doctor_Id = s.Doctor_Id,
@@ -287,6 +287,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var data = await GetDepartments(patient.Ho_Id);
             ViewBag.PatientId = id;
             ViewBag.EmpId = EmpId;
+            ViewBag.HoId = patient.Ho_Id;
             return View(data);
         }
         [Authorize(Roles = "Resception")]

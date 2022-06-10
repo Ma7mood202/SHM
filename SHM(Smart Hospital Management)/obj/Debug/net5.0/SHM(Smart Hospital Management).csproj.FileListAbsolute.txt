@@ -1974,3 +1974,6 @@ C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\bin\Debug\net5.0\
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\bin\Debug\net5.0\Google.Apis.Auth.PlatformServices.dll
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\bin\Debug\net5.0\Google.Apis.Auth.dll
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\bin\Debug\net5.0\Google.Apis.Core.dll
+C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\Razor\Views\Doctor\EditPersonalDetails.cshtml.g.cs
+C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\Razor\Views\Employee\EditMgrPersonalDetails.cshtml.g.cs
+C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\Razor\Views\Employee\EditPersonalDetails.cshtml.g.cs

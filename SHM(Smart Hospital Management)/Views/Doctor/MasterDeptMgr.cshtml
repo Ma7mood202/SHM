@@ -11,6 +11,7 @@
             direction: rtl;
         }
     </style>
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/dashborde/vendor/fontawesome-free/css/all.css" rel="stylesheet" type="text/css"><!-- fontawsome icons-->
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font-->
@@ -22,7 +23,7 @@
 <div class="sidebar">
     <div class="logo-details">
         <img src="~/Medicio2/dashborde/img/doctor..jpg" class="doctor-img ">
-        <span class="logo_name">@ViewBag.DoctorName</span>
+        <span class="logo_name" style="font-size: x-large;">@ViewBag.DoctorName</span>
     </div>
     <hr class="sidebar-divider ">
     <div class="nav-links ">
@@ -195,7 +196,7 @@
             </a>
 
             <!--doctor Btn -->
-            <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt1 " style="display:flex;justify-content:center;align-items:center">
+            <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt1 " style="display:flex;justify-content:center;align-items:center; margin-top:13px">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none"> أطباء</button>
             </a>
 
@@ -216,16 +217,14 @@
     <!--table start -->
     <div class="container">
         <div class="row">
-            <table class="table">
+            <table class="table" style="width:75%; position:relative; right:10%">
                 <thead>
                     <tr>
                         <th>
-
-                            @Html.DisplayNameFor(model => model.PreviewDate)
+                            @Html.DisplayNameFor(model => model.PatientName)
                         </th>
                         <th>
-
-                            @Html.DisplayNameFor(model => model.PatientName)
+                            @Html.DisplayNameFor(model => model.PreviewDate)
                         </th>
                         <th>
 
@@ -238,45 +237,46 @@
                     @{int i = 0; }
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PreviewDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PatientName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PreviewHour)
-                            </td>
-                            <td>
-                                @{
-                                    string confirm = "confirm" + i;
-                                    string cancel = "cancel" + i;
-                                    string delete = "delete" + i;
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PatientName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreviewDate)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PreviewHour)
+                        </td>
+                        <td>
+                            @{
+                                string confirm = "confirm" + i;
+                                string cancel = "cancel" + i;
+                                string delete = "delete" + i;
+                            }
+                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                            <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
+                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>
+                            <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width:70px">التشخيص</button>
+                            @{ string form = "form" + i;}
+                            <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
+                                <input type="hidden" name="DocId" value="@ViewBag.DeptMgrId" />
+                                <input type="hidden" name="HoId" value="@ViewBag.HospitalId" />
+                                <input type="text" name="examinationRecord" value="@item.ExaminationRecord" />
+                                @if (string.IsNullOrEmpty(item.ExaminationRecord))
+                                {
+
+                                    <input type="submit" value="إضافة" />
                                 }
-                                <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
-                                <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
-                                <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
-                                <button type="button" onclick="ShowForm(@i)">التشخيص</button>
-                                @{ string form = "form" + i;}
-                                <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
-                                    <input type="hidden" name="DocId" value="@ViewBag.DeptMgrId" />
-                                    <input type="hidden" name="HoId" value="@ViewBag.HospitalId" />
-                                    <input type="text" name="examinationRecord" value="@item.ExaminationRecord" />
-                                    @if (string.IsNullOrEmpty(item.ExaminationRecord))
-                                    {
+                                else
+                                {
 
-                                        <input type="submit" value="إضافة" />
-                                    }
-                                    else
-                                    {
-
-                                        <input type="submit" value="تعديل" />
-                                    }
-                                </form>
-                                @{i++;}
-                            </td>
-                        </tr>
+                                    <input type="submit" value="تعديل" />
+                                }
+                            </form>
+                            @{i++;}
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -298,6 +298,7 @@
 
 
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

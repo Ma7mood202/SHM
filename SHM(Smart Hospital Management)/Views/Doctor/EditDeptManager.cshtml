@@ -22,8 +22,8 @@
 
                         <input type="hidden" name="DoctorId" value="@ViewBag.DoctorId" />
                         <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
-                        <input type="text" name="search" style="width:70%;" />
                         <input type="submit" value="بحث" />
+                        <input type="text" name="search" style="width:70%;" />
                     </div>
                 </p>
             </div>
@@ -77,7 +77,7 @@
         </tbody>
     </table>
 </div>
-<a asp-action="DeptManagers" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 47%;">رجوع للخلف</a>
+<a asp-action="DeptManagers" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 46%;">رجوع للخلف</a>
 @section Scripts{
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

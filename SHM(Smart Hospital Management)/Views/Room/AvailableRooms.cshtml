@@ -51,7 +51,7 @@
                     <td>
                         <form asp-controller="Reservation" asp-action="Create" asp-route-RoomId="@item.Room.Room_Id" asp-route-PatientId="@ViewBag.PatientId" asp-route-EmptyBedCount="@item.EmptyBedCount" asp-route-EmpId="@ViewBag.EmployeeId">
                             <input type="number" min="0" max="@item.EmptyBedCount" name="ReservationBedNumber" style="width: 40%;"/>
-                            <input type="submit" value="حجز موعد" style="width: 28%;"/>
+                            <input type="submit" value="حجز" style="width: 28%;"/>
                         </form>
                     </td>
 

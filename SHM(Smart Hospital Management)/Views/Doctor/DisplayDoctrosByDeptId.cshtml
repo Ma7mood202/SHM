@@ -6,6 +6,7 @@
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
     <style>
         html {
@@ -13,14 +14,14 @@
         }
     </style>
 }
-<a asp-action="Create" asp-route-id="@ViewBag.DeptId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 46%;">Create New</a>
-<div class="All_form" style=" direction: rtl; width: 92%; position: relative; right: 22%;">
+<a asp-action="Create" asp-route-id="@ViewBag.DeptId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 46%;">إضافة طبيب</a>
+<div class="All_form" style=" direction: rtl; width: 92%; position: relative; right: 22%; background-color:white">
     <form asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" method="get">
         <div class="container">
-            <div class="row" style="width: 200%; position: relative; right: 40%;">
+            <div class="row" style="width: 200%; position: relative; left: 40%;">
                 <p>
                     <div class="All_div col-12">
-                        <input type="hidden" name="HoId" value="@ViewBag.HoId" />   
+                        <input type="hidden" name="HoId" value="@ViewBag.HoId" />
                         <input type="text" name="search" style="width:70%;" />
                         <input type="submit" value="بحث" />
                     </div>
@@ -83,8 +84,8 @@
                         @Html.DisplayFor(modelItem => item.Doctor_Social_Status)
                     </td>
                     <td>
-                        <a asp-action="DetailsForDeptMgr" asp-route-id="@item.Doctor_Id" asp-route-HoId="@ViewBag.HoId" asp-route-DeptMgrId="@ViewBag.DeptMgrId">Details</a> |
-                        <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@item.Doctor_Id" asp-route-DeptMgrId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">Work Days</a> |
+                        <a asp-action="DetailsForDeptMgr" asp-route-id="@item.Doctor_Id" asp-route-HoId="@ViewBag.HoId" asp-route-DeptMgrId="@ViewBag.DeptMgrId">تفاصيل</a> |
+                        <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@item.Doctor_Id" asp-route-DeptMgrId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">جدول الدوام</a> |
                         @{
                             string confirm = "confirm" + i;
                             string cancel = "cancel" + i;
@@ -100,7 +101,7 @@
         </tbody>
     </table>
 </div>
-<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44%;">Back To Master Page</a>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

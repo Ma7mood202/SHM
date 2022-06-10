@@ -7,7 +7,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
-<form asp-action="Create" method="post" class="All_form">
+<form asp-action="Create" method="post" class="All_form" style="background-color:white">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -35,14 +35,14 @@
                     <input type="time" name="edate" style="width: 54%; height: 42px; border-radius: 18px; font-size: 16px; text-indent: 10px; color: #0000009e; font-weight: 500;" />
                 </div>
                 <span id="span0"></span>
-                <input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                <input type="button" onclick="Add(this,1,0)" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
             </div>
 
             <input type="hidden" name="DoctorId" value="@Model.Doctor_Id" />
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <input type="hidden" name="DeptMgrId" value="@ViewBag.DeptMgrId" />
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إضافة جدول الدوام" style="width:150px" />
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@
             count--;
             if (count == 1 || divNum == count) {
                 var span = document.getElementById('span' + (count - 1));
-                span.insertAdjacentHTML('afterend', '<input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />');
+                span.insertAdjacentHTML('afterend', '<input type="button" onclick="Add(this,1,0)" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />');
             }
             var div = document.getElementById("div" + divNum);
             div.parentNode.removeChild(div);
@@ -97,9 +97,9 @@
                     '<div class="All_div col-12">' +
                     ' <label for="End_Hour"></label>' +
                     '<input type="time" name="edate" style="width: 54%; height: 42px; border-radius: 18px; font-size: 16px; text-indent: 10px; color: #0000009e; font-weight: 500;"/>' +
-                    ' </div>' + '<input type="button" onclick="Delete(' + divNum + ')" value="Delete" style ="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
+                    ' </div>' + '<input type="button" onclick="Delete(' + divNum + ')" value="حذف" style ="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
                     '<span id="span' + divNum + '"></span>' +
-                    '<input type="button" onclick="Add(this,' + num + ',' + divNum + ')" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />' +
+                    '<input type="button" onclick="Add(this,' + num + ',' + divNum + ')" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />' +
                     '</div>';
 
                 div.insertAdjacentHTML('afterend', valueToAdd)

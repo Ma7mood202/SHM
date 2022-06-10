@@ -39,18 +39,19 @@
     </div>
 </form>
 
-<div class="All_form" style="direction: rtl; background-color: white;">
+<div class="All_form" style=" background-color: white;">
     <table class="table">
         <thead>
             <tr>
+
                 <th>
-                    اليوم
+                    نهاية الدوام
                 </th>
                 <th>
                     بداية الدوام
                 </th>
                 <th>
-                    نهاية الدوام
+                    اليوم
                 </th>
                 <th></th>
             </tr>
@@ -60,14 +61,14 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Day)
+                        @Html.DisplayFor(modelItem => item.End_Hour)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Start_Hour)
                     </td>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.End_Hour)
-                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
 
                 </tr>
             }

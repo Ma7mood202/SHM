@@ -14,7 +14,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!--font -->
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
-    <link href="~/Medicio2/Delete.css" rel="stylesheet"><!--style -->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/dashborde/doctordb/css/doctor.css" rel="stylesheet"><!--style -->
 }
 <div class="sidebar">
@@ -75,7 +75,7 @@
                         <h6 class="dropdown-header">
                             مركز التنبيهات
                         </h6>
-                        
+
                     </div>
                     <!--Alerts Dropdown end -->
                 </li>
@@ -166,16 +166,16 @@
     <!-- table start-->
     <div class="container">
         <div class="row">
-            <table class="table">
+            <table class="table" style="width:75%; position:relative; right:10%">
                 <thead>
                     <tr>
                         <th>
 
-                            @Html.DisplayNameFor(model => model.PreviewDate)
+                            @Html.DisplayNameFor(model => model.PatientName)
                         </th>
                         <th>
 
-                            @Html.DisplayNameFor(model => model.PatientName)
+                            @Html.DisplayNameFor(model => model.PreviewDate)
                         </th>
                         <th>
 
@@ -190,10 +190,10 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PreviewDate)
+                                @Html.DisplayFor(modelItem => item.PatientName)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PatientName)
+                                @Html.DisplayFor(modelItem => item.PreviewDate)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.PreviewHour)
@@ -204,10 +204,10 @@
                                     string cancel = "cancel" + i;
                                     string delete = "delete" + i;
                                 }
-                                <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
+                                <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>
                                 <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
                                 <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
-                                <button type="button" onclick="ShowForm(@i)">التشخيص</button>
+                                <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width:70px">التشخيص</button>
                                 @{ string form = "form" + i;}
                                 <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
                                     <input type="hidden" name="DocId" value="@ViewBag.DoctorId" />
@@ -245,6 +245,7 @@
 <!-- end -->
 
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

@@ -20,7 +20,7 @@
 <div class="All_form" style="width: 82%; position: relative; right: 9%; background-color: white">
     <form asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HospitalId" method="get">
         <div class="container">
-            <div class="row" style="width: 200%; position: relative; right: 40%;">
+            <div class="row" style="width: 200%; position: relative; left: 40%;">
                 <p>
                     <div class="All_div col-12">
                         <input type="hidden" name="DocId" value="@ViewBag.DocId" />
@@ -75,7 +75,7 @@
                         @Html.DisplayFor(modelItem => item.Patient_Birth_Date)
                     </td>
                     <td>
-                        <a asp-controller="Preview" asp-action="Create" asp-route-PatientId="@item.Patient_Id" asp-route-DoctorId="@ViewBag.DocId" asp-route-HoId="@item.Ho_Id">Add Preview</a>
+                        <a asp-controller="Preview" asp-action="Create" asp-route-PatientId="@item.Patient_Id" asp-route-DoctorId="@ViewBag.DocId" asp-route-HoId="@item.Ho_Id">إضافة معاينة</a>
                     </td>
                 </tr>
             }

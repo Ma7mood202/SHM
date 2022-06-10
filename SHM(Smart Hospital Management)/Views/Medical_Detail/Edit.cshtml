@@ -62,7 +62,7 @@
                     <span asp-validation-for="MD_Patient_Special_Needs" class="text-danger"></span>
                 </div>
                 <div class="All_div col-12">
-                    <label>Allergies</label>
+                    <label>الحساسيات</label>
                     <span id="span"></span>
                     @{ List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy> patientAllergis = ViewBag.PatientAllergies;}
                     <span id="AllergyCount" style="display:none">@patientAllergis.Count</span>
@@ -79,7 +79,7 @@
                         {
                             string divId = "AlergyDiv" + i;
                             <div id=@divId>
-                                <select name="Allergies" style="min-height: 75px; max-height: 100px;">
+                                <select name="Allergies" style="min-height: 75px; max-height: 100px; display: block; position: relative; left: 130px; margin: 10px 0px;">
                                     @foreach (var item in @ViewBag.Allergies as List<SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.Allergy>)
                                     {
                                         if (item.Allergy_Id == patientAllergis[i].Allergy_Id)
@@ -139,7 +139,7 @@
                         string FamilyNum = "Family" + i;
                         <div id="@divNum">
                             <div class="All_div col-12">
-                                <label for="Diseases_Type">Diseases Type</label>
+                                <label for="Diseases_Type">نوع المرض</label>
                                 <select id="@diseaseTypeNum" onchange="ChangeSelect(@i)" name="Diseases_Type">
                                     @foreach (var item in diseaseTypes)
                                     {
@@ -156,12 +156,12 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="Diseases">Diseases</label>
+                                <label for="Diseases">الأمراض</label>
                                 <select id="@diseaseNum" name="Diseases" asp-items="@ViewBag.Diseases">
                                     <option value="@patientDiseases[i].Disease.Disease_Id" selected>@patientDiseases[i].Disease.Disease_Name</option>
 
                                 </select>
-                                <label for="Chronic">Chronic Disease</label>
+                                <label for="Chronic">هل المرض مزمن ؟</label>
                                 @if (patientDiseases[i].IsChronic)
                                 {
                                     <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" checked />
@@ -172,7 +172,7 @@
                                     <input id="@chrNum" type="checkbox" onchange="changeChk(@i)" />
                                     <input id="@ChronicNum" type="hidden" name="Chronic" value="false" />
                                 }
-                                <label for="Family">Family Health History</label>
+                                <label for="Family">هل المرض وراثي ؟</label>
                                 @if (patientDiseases[i].IsFamily)
                                 {
                                     <input id="@famNum" type="checkbox" onchange="changeChk1(@i)" checked />
@@ -188,21 +188,21 @@
                             @if (i == patientDiseases.Count - 1)
                             {
                                 <span class="DiseaseAddSpans" id="@i"></span>
-                                <input type="button" onclick="Add(this,@i)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                <input type="button" onclick="Add(this,@i)" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                             }
                             else
                             {
                                 <span id="DiseaseSpan"></span>
                                 // <span class="DiseaseAddSpans" id="@i"></span>
-                                <input type="button" onclick="Add(this,0)" value="Add" style=" display:none;" />
+                                <input type="button" onclick="Add(this,0)" value="إضافة" style=" display:none;" />
 
                             }
-                            <input type="button" onclick="Delete(@i)" value="Delete" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Delete(@i)" value="حذف" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     }
                 }
                 <div class="All_div col-12">
-                    <input type="submit" value="Create" />
+                    <input type="submit" value="حفظ" />
                 </div>
             </div>
         </div>
@@ -250,7 +250,7 @@
                 console.log(span);
 
                 var value = '<div id="div0">' +
-                    '<input type="button" onclick="Add(this, 0)" value="Add" style=" margin: 10px 0px; width:20%; height:35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>' +
+                    '<input type="button" onclick="Add(this, 0)" value="إضافة" style=" margin: 10px 0px; width:20%; height:35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>' +
                     ' </div>';
                 console.log(value);
                 span.insertAdjacentHTML('afterend', value);
@@ -258,7 +258,7 @@
             else if (diseasesAddSpans[diseasesAddSpans.length - 1].id == i) {
                 console.log("last")
                 diseasesAddSpans[diseasesAddSpans.length - 2].insertAdjacentHTML('afterend',
-                    '<input type="button" onclick="Add(this,' + (i - 1) + ')" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />');
+                    '<input type="button" onclick="Add(this,' + (i - 1) + ')" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />');
                 var div = document.getElementById("div" + i);
                 console.log(div);
                 div.parentNode.removeChild(div);
@@ -291,24 +291,24 @@
             var valueToAdd =
                 '<div id="div' + i + '">' +
                 '<div class="All_div col-12"> ' +
-                ' <label for="Diseases_Type">Diseases_Type</label>' +
+                ' <label for="Diseases_Type">نوع المرض</label>' +
                 ' <select id="Diseases_Type' + i + '" onchange="ChangeSelect(' + i + ')" name="Diseases_Type">' +
                 string1 +
                 '</select > ' +
                 '</div > ' +
                 '<div class="All_div col-12">' +
-                ' <label for="Diseases">Diseases</label>' +
+                ' <label for="Diseases">الأمراض</label>' +
                     '<select id="Diseases' + i + '" name="Diseases">' +
                 '</select > ' +
-                '<label for="Chronic">Chronic</label>' +
+                '<label for="Chronic">هل المرض مزمن ؟</label>' +
                 '<input id="chr' + i + '" type="checkbox" onchange="changeChk(' + i + ')" />' +
                 '<input id="Chronic' + i + '" type="hidden" name="Chronic" value="false" />' +
-                ' <label for="Family">Family Health History</label>' +
+                ' <label for="Family">هل المرض وراثي ؟</label>' +
                 '<input id="fam' + i + '" type="checkbox" onchange="changeChk1(' + i + ')" />' +
                 '<input id="Family' + i + '" type="hidden" name="Family" value="false" />' +
-                '</div ><input type = "button" onclick = "Delete(' + i + ')" value = "Delete" style = "margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" /> ' +
+                '</div ><input type = "button" onclick = "Delete(' + i + ')" value = "حذف" style = "margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" /> ' +
                 '<span class="DiseaseAddSpans" id="'+i+'"></span>' +
-                '<input type="button" onclick="Add(this,'+i+')" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />' +
+                '<input type="button" onclick="Add(this,'+i+')" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />' +
                 '</div > ';
                 //*************************************
                 div.insertAdjacentHTML('afterend', valueToAdd);
@@ -357,7 +357,7 @@
                 }
                 var valueToAdd =
                     '<div id="AlergyDiv' + (i + 1) +'">' +
-                    ' <select name="Allergies" style="min-height: 75px; max-height: 100px;">' +
+                    ' <select name="Allergies" style="min-height: 75px; max-height: 100px; display: block; position: relative; left: 130px; margin: 10px 0px;">' +
                     string1 +
                     '</select>' +
                     '<span class="AddSpans" id="' + (i + 1)+'"></span>'+

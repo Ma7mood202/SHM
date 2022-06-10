@@ -115,11 +115,9 @@
             </div>
         </div>
     </div>
-    <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId">العودة إلى الصفحة الرئيسية</a>
-
 </form>
-
-
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style=" position: relative; left: 44%;">العودة إلى الصفحة الرئيسية</a>
+    
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/addPhoneNumbers3.js"></script>

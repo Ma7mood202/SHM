@@ -49,7 +49,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="margin:20px 0px">
-                    <label>City</label>
+                    <label>السكن</label>
                     <select id="City" asp-items="@ViewBag.Cities">
                     </select>
                 </div>
@@ -77,7 +77,7 @@
                         <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px; position: relative; left: 2%;">
                             @if (i == 0 && Model.Doctor_Phone_Numbers.Count == 1)
                             {
-                                
+
                                 <td>
                                     <div class="All_div col-12" style="width:500px">
                                         <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Doctor_Phone_Number" required />
@@ -166,7 +166,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbers55.js"></script>
+    <script src="~/EditPhoneNumbersDoctors.js"></script>
     <script src="~/Validations.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()

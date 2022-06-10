@@ -21,6 +21,7 @@
     <table class="table" style="direction:ltr">
         <thead>
             <tr>
+                <th></th>
                 <th>
                     @Html.DisplayNameFor(model => model.RoomNumber)
                 </th>
@@ -30,26 +31,26 @@
                 <th>
                     @Html.DisplayNameFor(model => model.PatientName)
                 </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RoomNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PatientName)
-                    </td>
-                    <td>
-                        <a asp-controller="Reservation" asp-action="Delete" asp-route-id="@item.Id" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">Delete</a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <a asp-controller="Reservation" asp-action="Delete" asp-route-id="@item.Id" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">إلغاء الحجز</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RoomNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PatientName)
+                </td>
+
+            </tr>
             }
         </tbody>
     </table>

@@ -72,13 +72,13 @@
                         string span = "span" + i;
                         string tr = "tr" + i;
                         string phoneValidateSpan = "phoneValidateSpan" + i;
-                        <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px;">
+                        <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px; position: relative; right: 14px;">
                             @if (i == 0 && Model.Patient_Phone_Numbers.Count == 1)
                             {
 
                                 <td>
                                     <div class="All_div col-12">
-                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required  />
                                         <span id="@phoneValidateSpan" class="text-danger"></span>
                                     </div>
                                 </td>
@@ -96,7 +96,7 @@
 
                                 <td>
                                     <div class="col-12 All_div">
-                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
                                         <span id="@phoneValidateSpan" class="text-danger"></span>
                                     </div>
                                 </td>
@@ -116,7 +116,7 @@
                                 {
                                     <td>
                                         <div class="col-12 All_div">
-                                            <input class="ValidateNumber" type="text" name="pn" placeholder="Enter Phone Numberأدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
                                             <span id="@phoneValidateSpan" class="text-danger"></span>
                                         </div>
                                     </td>
@@ -132,7 +132,7 @@
                                 {
                                     <td>
                                         <div class="col-12 All_div">
-                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
                                             <span id="@phoneValidateSpan" class="text-danger"></span>
                                         </div>
                                     </td>
@@ -160,12 +160,12 @@
     </div>
 </div>
 <div>
-    <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
+    <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbers55.js"></script>
+    <script src="~/EditPhoneNumbersPatients.js"></script>
     <script src="~/Validations.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()

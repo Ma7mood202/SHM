@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Work_Days>
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowWorkDays>
 
 @{
     ViewData["Title"] = "PickTime";
@@ -34,17 +34,17 @@
     </div>
 </form>
 <div class="All_form" style="direction: rtl; background-color: white;">
-    <table class="table">
+    <table class="table" style="direction:ltr">
         <thead>
             <tr>
                 <th>
-                    اليوم
+                    انتهاء الدوام
                 </th>
                 <th>
                     بداية الدوام
                 </th>
                 <th>
-                    انتهاء الدوام
+                    اليوم
                 </th>
             </tr>
         </thead>
@@ -53,13 +53,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Day)
+                        @Html.DisplayFor(modelItem => item.End_Hour)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Start_Hour)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.End_Hour)
+                        @Html.DisplayFor(modelItem => item.Day)
                     </td>
 
                 </tr>
@@ -68,7 +68,7 @@
     </table>
 </div>
 
-<a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HoId" asp-route-DocId="@ViewBag.DocId" style=" position: relative; left: 48%;">Back to List</a>
+<a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HoId" asp-route-DocId="@ViewBag.DocId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 
 @section Scripts{
 
