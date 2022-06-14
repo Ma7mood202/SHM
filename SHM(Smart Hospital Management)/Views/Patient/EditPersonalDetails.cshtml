@@ -11,13 +11,16 @@
         html {
             height: 100vh;
         }
+        input,select{
+            text-align:center
+        }
     </style>
 }
 
 
-<div class="container">
-    <div class="row">
-        <form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;" id="form" onsubmit="event.preventDefault(MyValidations());">
+<form asp-action="EditPersonalDetails" class="All_form" method="post" style="--white:white;" id="form" onsubmit="event.preventDefault(); ValidateEdit();">
+    <div class="container">
+        <div class="row">
             <div class="col-md-12">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Patient_Id" />
@@ -25,6 +28,7 @@
                 <input type="hidden" asp-for="Patient_Middle_Name" />
                 <input type="hidden" asp-for="Patient_Last_Name" />
                 <input type="hidden" asp-for="Patient_Email" />
+                <input type="hidden" asp-for="Patient_EmailName" />
                 <input type="hidden" asp-for="Patient_Password" />
                 <input type="hidden" asp-for="Patient_National_Number" />
                 <input type="hidden" asp-for="Patient_Gender" />
@@ -53,7 +57,7 @@
                     </select>
                 </div>
                 <div class="form-group" style="margin:20px 0px">
-                    <label>City</label>
+                    <label>السكن</label>
                     <select id="City" asp-items="@ViewBag.Cities">
                     </select>
                 </div>
@@ -61,25 +65,25 @@
                     <label asp-for="Area_Id"></label>
                     <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
                         <option value="@Model.Area_Id" selected>@ViewBag.PatientArea</option>
-                    </select>
-                    <span asp-validation-for="Area_Id" class="text-danger"></span>
+                    </select><br />
+                    <span id="areaValidateSpan" class="text-danger"></span>
                 </div>
                 <span id="PNCount" style="display:none;">@Model.Patient_Phone_Numbers.Count</span>
-                <table style="margin: 20px 0px; position: relative; left: 28%; ">
+                <table style="margin:20px 0px">
                     @{int i = 0; }
                     @foreach (var item in Model.Patient_Phone_Numbers)
                     {
                         string span = "span" + i;
                         string tr = "tr" + i;
                         string phoneValidateSpan = "phoneValidateSpan" + i;
-                        <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px; position: relative; right: 14px;">
+                        <tr id="@tr" style=" display: flex; flex-direction: column; padding: 10px; margin: 10px; border-width: 1px; border-color: lightgray; border-radius: 20px; position: relative; left: 2%;">
                             @if (i == 0 && Model.Patient_Phone_Numbers.Count == 1)
                             {
 
                                 <td>
-                                    <div class="All_div col-12">
-                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required  />
-                                        <span id="@phoneValidateSpan" class="text-danger"></span>
+                                    <div class="All_div col-12" style="width:500px">
+                                        <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number " required />
+                                        <br /> <span id="@phoneValidateSpan" class="text-danger"></span>
                                     </div>
                                 </td>
                                 <td>
@@ -87,17 +91,16 @@
                                 <td>
                                     <div class="col-12">
                                         <span id="@span"></span>
-                                        <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                        <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </div>
                                 </td>
                             }
                             else if (i + 1 == Model.Patient_Phone_Numbers.Count)
                             {
-
                                 <td>
                                     <div class="col-12 All_div">
-                                        <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
-                                        <span id="@phoneValidateSpan" class="text-danger"></span>
+                                        <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                        <br /><span id="@phoneValidateSpan" class="text-danger"></span>
                                     </div>
                                 </td>
                                 <td>
@@ -106,7 +109,7 @@
                                 <td>
                                     <div class="col-12">
                                         <span id="@span"></span>
-                                        <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                                        <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 150px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                                     </div>
                                 </td>
                             }
@@ -116,8 +119,8 @@
                                 {
                                     <td>
                                         <div class="col-12 All_div">
-                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
-                                            <span id="@phoneValidateSpan" class="text-danger"></span>
+                                            <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
+                                            <br /> <span id="@phoneValidateSpan" class="text-danger"></span>
                                         </div>
                                     </td>
                                     <td>
@@ -132,7 +135,7 @@
                                 {
                                     <td>
                                         <div class="col-12 All_div">
-                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم الموبايل" value="@item.Patient_Phone_Number" style="width:60%" required />
+                                            <input class="ValidateNumber" type="text" name="pn" placeholder="أدخل رقم هاتفك" value="@item.Patient_Phone_Number" required />
                                             <span id="@phoneValidateSpan" class="text-danger"></span>
                                         </div>
                                     </td>
@@ -156,17 +159,52 @@
                     <input type="submit" value="حفظ" style="width: 120px;" />
                 </div>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 <div>
     <a asp-action="Master" asp-route-id="@Model.Patient_Id" style=" position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
 </div>
 
 @section Scripts {
+
+    <script>
+        function ValidateEdit() {
+            var numberInput = document.getElementsByClassName('ValidateNumber');
+            var area = document.getElementById('Area');
+            var bool = true;
+            for (var i = 0; i < numberInput.length; i++) {
+
+
+                if (numberInput[i].value == '') {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = 'الرجاء إدخال رقم';
+                    bool = false;
+                }
+                else if (isNaN(numberInput[i].value) || numberInput[i].value.length < 10) {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = 'الرجاء إدخال رقم صالح';
+                    bool = false;
+                }
+                else {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = "";
+                }
+            }
+            if (area.value == 0 || area.value == 'اختر المنطقة') {
+                document.getElementById('areaValidateSpan').innerHTML = 'الرجاء اختيار منطقة';
+                bool = false;
+            }
+            else {
+                document.getElementById('areaValidateSpan').innerHTML = '';
+            }
+            if (bool == true) {
+                var form = document.getElementById('form');
+                form.submit()
+            }
+        }
+
+    </script>>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/EditPhoneNumbersPatients.js"></script>
-    <script src="~/Validations.js"></script>
+    <script src="~/EditPhoneNumbersDoctor.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

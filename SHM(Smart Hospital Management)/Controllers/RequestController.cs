@@ -141,8 +141,27 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 #endregion
                 return RedirectToAction("Master", "Patient", new { id });
             }
-            patient.Sent = true;
             var HeadNurse = await _context.Employees.FirstOrDefaultAsync(e => e.Ho_Id == patient.Ho_Id && e.Active && e.Employee_Job == "HeadNurse");
+            if(HeadNurse is null) 
+            {
+                #region send notification
+                //==============================================================================================
+                var message2 = new MulticastMessage()
+                {
+                    Data = new Dictionary<string, string>()
+                        {
+                            { "channelId","other" },
+                            { "title","لا يوجد رئيس ممرضين في هذه المشفى" },
+                            { "body"," " },
+                        }
+                };
+                await FCMService.SendNotificationToUserAsync((int)patient.Patient_Id, UserType.pat, message2);
+                //=========================================================================================
+                #endregion
+                return RedirectToAction("Master", "Patient", new { id });
+            }
+            patient.Sent = true;
+
             Request request = new Request
             {
                 Accept = false,
@@ -509,7 +528,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
-        [Authorize(Roles = "IT")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> AcceptRequest(int id, int mgrId)
         {
             var request = await _context.Requests.FindAsync(id);

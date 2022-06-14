@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"><!-- font-->
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet" /><!-- bootstrap min-->
     <link href="~/Medicio2/dashborde/doctor-mngdb/css/doctor-mng.css" rel="stylesheet"><!-- style -->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
 }
 
 <!--sidebar start-->
@@ -48,7 +49,7 @@
             </a>
         </div>
         <div class="f_div">
-            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
+            <a asp-controller="Work_Days" asp-action="GetMgrWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId">
 
                 <span class="side_name"> <i class="BI bi-calendar-week ic"></i> عرض جدول الدوام</span>
             </a>
@@ -58,7 +59,7 @@
 </div>
 <!--sidebar end -->
 <!-- start-->
-<section class="home-section">
+<section class="home-section" style="height:115vh">
 
     <!-- Topbar start -->
 
@@ -72,55 +73,14 @@
                         <div class="top_div">
                             <i class="fas fa-bell fa-fw"></i>
                             <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter">3+</span>
                         </div>
                     </a>
                     <!-- Alerts Dropdown start -->
                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc"
-                         aria-labelledby="alertsDropdown">
+                         aria-labelledby="alertsDropdown" id="notifications">
                         <h6 class="dropdown-header">
                             مركز التنبيهات
                         </h6>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-primary">
-                                    <i class="fas fa-file-alt text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">ديسمبر 12, 2019</div>
-                                <span class="font-weight-bold">
-                                    ! تقرير شهري جديد جاهز للتنزيل
-                                </span>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-success">
-                                    <i class="fas fa-donate text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">ديسمبر 7, 2019</div>
-                                <span class="font-weight-bold">
-                                    تم إيداع $290.29  في حسابك
-                                </span>
-                            </div>
-                        </a>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <div class="mr-3">
-                                <div class="icon-circle bg-warning">
-                                    <i class="fas fa-exclamation-triangle text-white"></i>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="small text-gray-500">ديسمبر 2, 2019</div>
-                                <span class="font-weight-bold">
-                                    تنبيه الإنفاق : لقد لاحظنا إنفاقا مرتفعا بشكل غير عادي لحسابك
-                                </span>
-                            </div>
-                        </a>
-                        <a class="dropdown-item text-center small text-gray-500" href="#">إظهار كل التنبيهات</a>
                     </div>
                     <!-- Alerts Dropdown end -->
                 </li>
@@ -208,7 +168,9 @@
             </a>
 
             <!--doctor Btn -->
-            <a asp-controller="Work_Days" asp-action="GetWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+
+
+            <a asp-controller="Work_Days" asp-action="GetMgrWorkDays" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none">عرض جدول الدوام</button>
             </a>
 
@@ -217,7 +179,7 @@
     <!--table start -->
     <div class="container">
         <div class="row">
-            <table class="table" style="width:75%; position:relative; right:10%">
+            <table class="table" style="width:76%; position:relative; right:10%">
                 <thead>
                     <tr>
                         <th>
@@ -237,60 +199,56 @@
                     @{int i = 0; }
                     @foreach (var item in Model)
                     {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PatientName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PreviewDate)
-                        </td>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PatientName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PreviewDate)
+                            </td>
 
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PreviewHour)
-                        </td>
-                        <td>
-                            @{
-                                string confirm = "confirm" + i;
-                                string cancel = "cancel" + i;
-                                string delete = "delete" + i;
-                            }
-                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
-                            <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
-                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>
-                            <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width:70px">التشخيص</button>
-                            @{ string form = "form" + i;}
-                            <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
-                                <input type="hidden" name="DocId" value="@ViewBag.DeptMgrId" />
-                                <input type="hidden" name="HoId" value="@ViewBag.HospitalId" />
-                                <input type="text" name="examinationRecord" value="@item.ExaminationRecord" />
-                                @if (string.IsNullOrEmpty(item.ExaminationRecord))
-                                {
-
-                                    <input type="submit" value="إضافة" />
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PreviewHour)
+                            </td>
+                            <td>
+                                @{
+                                    string confirm = "confirm" + i;
+                                    string cancel = "cancel" + i;
+                                    string delete = "delete" + i;
                                 }
-                                else
-                                {
+                                <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                                <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
+                                <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>
+                                <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width: 70px; margin: 0px 10px;">التشخيص</button>
+                                @{ string form = "form" + i;}
+                                <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
+                                    <input type="hidden" name="DocId" value="@ViewBag.DeptMgrId" />
+                                    <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+                                    <input type="text" name="examinationRecord" value="@item.ExaminationRecord" style="border-radius:10px; margin-bottom:2px"/>
+                                    @if (string.IsNullOrEmpty(item.ExaminationRecord))
+                                    {
 
-                                    <input type="submit" value="تعديل" />
-                                }
-                            </form>
-                            @{i++;}
-                        </td>
-                    </tr>
+                                        <input type="submit" value="إضافة" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none;"/>
+                                    }
+                                    else
+                                    {
+
+                                        <input type="submit" value="تعديل" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none;"/>
+                                    }
+                                    <button type="button" onclick="HideForm(@i)" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none; "> إخفاء</button>
+                                </form>
+                                @{i++;}
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
         </div>
     </div>
+    
     <!--table end -->
     <!--page end -->
-    <!--footer start -->
-    <footer>
-        <div class="footer">
-            <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
-        </div>
-    </footer>
-    <!--footer end -->
+
 
 </section>
 <!--end -->
@@ -298,6 +256,16 @@
 
 
 @section Scripts{
+    <script>
+        function ShowForm(i) {
+            var form = document.getElementById('form' + i);
+            form.style.display = 'block';
+        }
+        function HideForm(i) {
+            var form = document.getElementById('form' + i);
+            form.style.display = 'none';
+        }
+    </script>
     <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

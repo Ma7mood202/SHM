@@ -55,5 +55,17 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             #endregion
             return RedirectToAction("Master", "Employee", new { id = EmpId });
         }
+        [Authorize(Roles = "Resception")]
+        public async Task<IActionResult> Delete(int id , int EmpId)
+        {
+            var Resception = await _context.Employees.FindAsync(EmpId);
+            if (!Resception.Active)
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
+
+            var reservation = await _context.Reservations.FindAsync(id);
+            _context.Reservations.Remove(reservation);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("BusyRooms", "Room", new { id = Resception.Ho_Id, EmpId });
+        }
     }
 }

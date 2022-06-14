@@ -42,8 +42,30 @@
 <section class="home-section">
     <!-- Topbar start -->
     <div class=" container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
-        <div class="row">
+        <div class="row" style="position:relative; left: 140px">
             <ul class="navbar-nav ml-auto">
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div natif">
+                            <i class="fas fa-bell fa-fw" style="margin-left:30px"></i>
+                            <!-- Counter - Alerts -->
+                        </div>
+                    </a>
+                    <!--Alerts Dropdown start -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
+                         aria-labelledby="alertsDropdown" id="notifications">
+                        <h6 class="dropdown-header">
+                            مركز التنبيهات
+                        </h6>
+                    </div>
+                    <!--Alerts Dropdown end -->
+                </li>
+                <!--Alerts end -->
+
+
+                <div class="topbar-divider d-none d-sm-block"></div>
                 <li>
 
                     <!--imrg btn -->
@@ -126,7 +148,7 @@
         </div>
     </div>
     <!-- page end -->
-    <table class="table" style="position: absolute; top: 50%; right: 5%; width: auto; text-align:right;">
+    <table class="table" style="position: absolute; top: 50%; width: 97%; text-align:right;">
         <thead>
             <tr>
                 <th>
@@ -166,13 +188,7 @@
             }
         </tbody>
     </table>
-    <!-- footer start -->
-    <footer>
-        <div class="footer">
-            <span class="fo_span" style=" margin-left: 500px; ">حقوق الطباعة &copy; موقعنا 2022</span>
-        </div>
-    </footer>
-    <!-- footer end -->
+
 </section>
 <!-- end -->
 @section Scripts{

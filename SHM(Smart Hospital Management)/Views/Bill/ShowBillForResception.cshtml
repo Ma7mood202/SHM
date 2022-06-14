@@ -8,6 +8,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <style>
         html {
             height: 100vh;
@@ -36,10 +37,17 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Bill.Bill_Room_Service)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Medication)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Total)
+                </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
+            @{int i = 0; }
             @foreach (var item in Model)
             {
                 <tr>
@@ -62,11 +70,25 @@
                         @Html.DisplayFor(modelItem => item.Bill.Bill_Room_Service)
                     </td>
                     <td>
-                        <a asp-action="PayBill" asp-route-id="@item.Bill.Bill_Id" asp-route-PatId="@ViewBag.PatientId" asp-route-EmpId="@ViewBag.EmpId">دفع الفاتورة</a>
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Medication)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </th>
+                    <td>
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="PayBill" asp-route-id="@item.Bill.Bill_Id" asp-route-PatId="@ViewBag.PatientId" asp-route-EmpId="@ViewBag.EmpId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">دفع الفاتورة</a>
                         @*// today*@
                     </td>
                 </tr>
-            }
+                                i++;
+                            }
         </tbody>
     </table>
 </div>
@@ -74,6 +96,8 @@
 <br />
 <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
 @section Scripts{
+
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

@@ -71,7 +71,7 @@
 <a asp-controller="Patient" asp-action="HoPatientsForPreview" asp-route-id="@ViewBag.HoId" asp-route-DocId="@ViewBag.DocId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 
 @section Scripts{
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function ()
         {

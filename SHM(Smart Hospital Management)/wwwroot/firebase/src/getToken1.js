@@ -20,7 +20,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.getToken({ vapidKey: 'BFMuDs6t7j-N5sD4fbcJnbpnmKOgyoZLzwDGLAURhBPCD4ZmUfr6KG9dxY_gz4RP1lxh8gAXHJApEahLr8Mmmcw' }).then((currentToken) => {
+messaging.getToken({ vapidKey: 'BKqr3PDQDiIXmFl9wzbPeRE-ZoSgv0z5-zsMldvqeWUk2lx-l14VntjNwU9a-NEra4DY7MET0Sd5oxWOjHnFRpQ' }).then((currentToken) => {
     if (currentToken) {
         // Send the token to your server and update the UI if necessary
         // ...

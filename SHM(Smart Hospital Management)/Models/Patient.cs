@@ -12,20 +12,21 @@ namespace SHM_Smart_Hospital_Management_.Models
     {
       
         [NotMapped]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [Display(Name = "الاسم بالانكليزي ")]
         public string Patient_EmailName { get; set; }
         [Key]
         public int Patient_Id { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = "الاسم الأول")]
         public string Patient_First_Name { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = " اسم الأب")]
         public string Patient_Middle_Name { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = "الكنية")]
         public string Patient_Last_Name { get; set; }
         [Display(Name = "الاسم الكامل")]
@@ -38,7 +39,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Display(Name = "كلمة السر")]
         [StringLength(250, MinimumLength = 8)]
         public string Patient_Password { get; set; }
-        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
+        [Required(ErrorMessage = "الرجاء تحديد موقع منزل المريض")]
         [Display(Name = "(X,Y)")]
         [StringLength(61)]
         public string Patient_X_Y { get; set; }

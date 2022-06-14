@@ -33,7 +33,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 return NotFound();
             }
-            var bills = await _context.Bills.Where(b => b.Patient_Id == patient.Patient_Id).ToListAsync();
+            var bills = await _context.Bills.Where(b => b.Patient_Id == patient.Patient_Id).Select(s => new ShowBills
+            {
+                Bill = s,
+                Total = (double)(s.Bill_Examination + s.Bill_Medical_Test + s.Bill_Medication + s.Bill_Rays + s.Bill_Room_Service + s.Bill_Surgeries),
+                FullName = patient.Patient_Full_Name
+            }).ToListAsync();
             ViewBag.PatientId = id;
             return View(bills);
         }
@@ -50,6 +55,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 .Select(s => new ShowBills
                 {
                     Bill = s,
+                    Total=(double)( s.Bill_Examination + s.Bill_Medical_Test + s.Bill_Medication + s.Bill_Rays + s.Bill_Room_Service + s.Bill_Surgeries),
                     FullName = patient.Patient_Full_Name
                 }).ToListAsync();
             ViewBag.PatientId = id;
@@ -94,7 +100,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = _context.Patients.FirstOrDefault(m => m.Patient_Id == id);
             Bill b = new Bill()
             {
-                Patient_Id = id
+                Patient_Id = id,
+                Bill_Date = DateTime.Now
             };
             ViewBag.HospitalId = patient.Ho_Id;
             ViewBag.EmpId = EmpId;

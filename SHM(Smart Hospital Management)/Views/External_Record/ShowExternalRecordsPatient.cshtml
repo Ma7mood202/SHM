@@ -8,11 +8,13 @@
     <link href="~/Medicio2/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
     <link href="~/Medicio2/Cards/Card.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" /><!-- bootstrap icons-->
 }
-    <a asp-action="Create" asp-route-id="@ViewBag.Medical_Detail_Id" asp-route-PatId="@ViewBag.PatId" style=" position: relative; left: 46%;text-decoration:none; color:gray">اضافة ملف خارجي</a>
+<a asp-action="Create" asp-route-id="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" style=" position: relative; left: 46%;text-decoration:none; color:gray">اضافة ملف خارجي</a>
 <div class="container">
     <div class="row">
         @{ int i = 1;}
+        @{ int j = 0;}
         @foreach (var item in Model)
         {
             string exampleModal = "exampleModal" + i;
@@ -23,7 +25,16 @@
                     </a>
                     <div class="card-body">
                         <p class="card-text">@item.Date</p>
-                        <a asp-action="Delete" asp-route-id="@item.External_Records_Id" asp-route-medicalId="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" class="btn delete_btn">حذف</a>
+
+
+                        @{
+                            string confirm = "confirm" + j;
+                            string cancel = "cancel" + j;
+                            string delete = "delete" + j;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@j)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.External_Records_Id" asp-route-medicalId="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@j)" style="margin-right:15px ; width:90%">حذف</a>
                     </div>
                 </div>
             </div>
@@ -46,12 +57,14 @@
                 </div>
             </div>
             i++;
+            j++;
         }
 
     </div>
 </div>
 
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

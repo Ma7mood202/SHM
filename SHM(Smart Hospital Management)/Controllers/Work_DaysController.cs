@@ -54,6 +54,24 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
             }).ToListAsync());
         }
+        public async Task<IActionResult> GetMgrWorkDays(int id , int HoId)
+        {
+            var Deptmanager = await _context.Doctors.FindAsync(id);
+            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
+            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
+                return RedirectToAction("LogOut", "Doctor", new { id });
+
+            ViewBag.HoId = HoId;
+            ViewBag.DoctorId = id;
+            return View(await _context.Work_Days.Where(w => w.Doctor_Id == id).Select(s =>
+                       new ShowWorkDays
+                       {
+                           Doctor_Id = s.Doctor_Id,
+                           Day = s.Day,
+                           End_Hour = new DateTime(2000, 3, 3, s.End_Hour.Hours, s.End_Hour.Minutes, s.End_Hour.Seconds).ToString("hh : mm tt"),
+                           Start_Hour = new DateTime(2000, 3, 3, s.Start_Hour.Hours, s.Start_Hour.Minutes, s.Start_Hour.Seconds).ToString("hh : mm tt")
+                       }).ToListAsync());
+        }
         [Authorize(Roles = "Resception")]
         public async Task<IActionResult> ShowDoctorWorkDays(int id, int EmpId, int HoId)
         {
@@ -90,11 +108,23 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             bool valid = true;
             string ErrorMessage = "s";
 
+            for (int i = 0; i < Day.Length; i++)
+            {
+                if (sdate[i] >= edate[i])
+                {
+                    valid = false;
+                    ErrorMessage = "لا يمكن ان تكون بداية الدوام بعد نهاية الدوام ";
+                }
+            }
             for (int i = 0; i < Day.Length - 1; i++)
             {
                 for (int j = i + 1; j < Day.Length; j++)
                 {
-                    if (Day[i] == Day[j]) { valid = false; ErrorMessage = "you Cant repeat the day !!"; }
+                    if (Day[i] == Day[j]) 
+                    {
+                        valid = false;
+                        ErrorMessage = "لا يمكن تكرار اليوم"; 
+                    }
                 }
             }
             if (valid)
@@ -105,7 +135,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     for (int j = 0; j < DoctorWorkDays.Length; j++)
                     {
                         if (Day[i] == (int)DoctorWorkDays[j].Day)
-                        { valid = false; ErrorMessage = "This Day already exists in the data base !!"; }
+                        {
+                            valid = false; 
+                            ErrorMessage = $"يوم {DoctorWorkDays[j].Day} موجود مسبقا من أيام الدوام"; 
+                        }
                     }
                 }
             }
@@ -138,6 +171,11 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await FCMService.SendNotificationToUserAsync(DoctorId, UserType.doc, message);
                 //=========================================================================================
                 #endregion
+                if (DeptMgrId == DoctorId)
+                {
+                    return RedirectToAction("GetMgrWorkDays", new { id = DoctorId, HoId });
+
+                }
                 return RedirectToAction("GetWorkDays", new { id = DoctorId, HoId, DeptMgrId });
             }
             ViewBag.DeptMgrId = DeptMgrId;
@@ -162,6 +200,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (work_Days.Start_Hour>= work_Days.End_Hour)
+                {
+                    TempData["ErrorMessage"] = "لا يمكن ان تكون بداية الدوام بعد نهاية الدوام ";
+                    ViewBag.DeptMgrId = DeptMgrId;
+                    ViewBag.HoId = HoId;
+                    return View(work_Days);
+                }
                 _context.Update(work_Days);
                 await _context.SaveChangesAsync();
                 #region send notification
@@ -178,8 +223,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await FCMService.SendNotificationToUserAsync(work_Days.Doctor_Id, UserType.doc, message);
                 //=========================================================================================
                 #endregion
+                if(work_Days.Doctor_Id == DeptMgrId)
+                    return RedirectToAction("GetMgrWorkDays", new { id = DeptMgrId, HoId });
                 return RedirectToAction("GetWorkDays", new { id = work_Days.Doctor_Id, HoId, DeptMgrId });
             }
+            ViewBag.DeptMgrId = DeptMgrId;
+            ViewBag.HoId = HoId;
             return View(work_Days);
         }
         [Authorize(Roles = "DeptManager")]
@@ -191,6 +240,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var work_Day = await _context.Work_Days.FirstOrDefaultAsync(wd => wd.Doctor_Id == id && (int)wd.Day == Day);
             _context.Work_Days.Remove(work_Day);
             await _context.SaveChangesAsync();
+            if (id == DeptMgrId)
+                return RedirectToAction("GetMgrWorkDays", new { id = DeptMgrId, HoId });
             return RedirectToAction("GetWorkDays", new { id = work_Day.Doctor_Id, HoId, DeptMgrId });
         }
     }

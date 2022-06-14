@@ -15,8 +15,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class AdminController : Controller
     {
-        private readonly static string Email = "";
-        private readonly static string Password = "";
+        private readonly static string Email = "vikings";
+        private readonly static string Password = "vikings";
         private readonly ApplicationDbContext _context;
         public AdminController(ApplicationDbContext context)
         {
@@ -35,6 +35,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(IFormCollection fr, string ReturnUrl)
         {
+            TempData["LogInFailed"] = "";
             if (Email == fr["email"].ToString() && Password== fr["password"].ToString())
             {
                 //************* cookie Auth
@@ -53,7 +54,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return RedirectToAction(ReturnUrl);
             }
             //*************
-            return View();
+            TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة";
+            return RedirectToAction("LogIn");
         }
         
         public async Task<IActionResult> LogOut()

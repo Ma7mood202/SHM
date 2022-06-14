@@ -5,118 +5,125 @@
 }
 
 @section Styles{
-    <link href="~/Medicio2/Create.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateManager" method="post" id="form" onsubmit="event.preventDefault(MyValidations());">
+<form asp-action="CreateManager" method="post" class="All_form" style="background-color:white;" id="form" onsubmit="event.preventDefault(MyValidations());">
+    <div class="container">
+        <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Employee_First_Name" class="control-label"></label>
-                <input asp-for="Employee_First_Name" class="form-control" />
-                <span asp-validation-for="Employee_First_Name" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_First_Name"></label>
+                <input asp-for="Employee_First_Name" /><br />
+                <span asp-validation-for="Employee_First_Name" style="color:red"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee_Middle_Name" class="control-label"></label>
-                <input asp-for="Employee_Middle_Name" class="form-control" />
-                <span asp-validation-for="Employee_Middle_Name" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Middle_Name"></label>
+                <input asp-for="Employee_Middle_Name"/><br />
+                <span asp-validation-for="Employee_Middle_Name" style="color:red"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee_Last_Name" class="control-label"></label>
-                <input asp-for="Employee_Last_Name" class="form-control" />
-                <span asp-validation-for="Employee_Last_Name" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Last_Name"></label>
+                <input asp-for="Employee_Last_Name"  /><br />
+                <span asp-validation-for="Employee_Last_Name" style="color:red"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee_EmailName" class="control-label"></label>
-                <input required asp-for="Employee_EmailName" class="form-control" />
-                <span asp-validation-for="Employee_EmailName" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_EmailName"></label>
+                <input required asp-for="Employee_EmailName"  /><br />
+                <span asp-validation-for="Employee_EmailName" style="color:red"></span>
             </div>
             <input type="hidden" asp-for="Employee_Email" />
             <input type="hidden" asp-for="Employee_Password" />
             <input type="hidden" asp-for="Employee_Hire_Date" />
-            <div class="form-group">
-                <label asp-for="Employee_National_Number" class="control-label"></label>
-                <input id="NationalNumber" asp-for="Employee_National_Number" class="form-control" />
-                <span asp-validation-for="Employee_National_Number" class="text-danger" id="nationalValidateSpan"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_National_Number"></label>
+                <input id="NationalNumber" asp-for="Employee_National_Number" /><br />
+                <span id="nationalValidateSpan" class="text-danger"></span>
+                <span asp-validation-for="Employee_National_Number" style="color:red"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee_Gender" class="control-label"></label>
-                <select asp-for="Employee_Gender">
+            <div class="All_div col-12">
+                <label asp-for="Employee_Gender"></label>
+                <select asp-for="Employee_Gender" >
                     <option value="ذكر">ذكر</option>
                     <option value="أنثى">أنثى</option>
                 </select>
             </div>
             <input type="hidden" asp-for="Employee_X_Y" />
-            <div class="form-group">
-                <label asp-for="Employee_Family_Members" class="control-label"></label>
-                <input asp-for="Employee_Family_Members" class="form-control" />
-                <span asp-validation-for="Employee_Family_Members" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Family_Members"></label>
+                <input asp-for="Employee_Family_Members"  /><br />
+                <span asp-validation-for="Employee_Family_Members" style="color:red"></span>
             </div>
             <input type="hidden" asp-for="Employee_Job" />
-            <div class="form-group">
-                <label asp-for="Employee_Social_Status" class="control-label"></label>
-                <select asp-for="Employee_Social_Status">
+            <div class="All_div col-12">
+                <label asp-for="Employee_Social_Status"></label>
+                <select asp-for="Employee_Social_Status" >
                     <option value="عازب/ة">عازب/ة</option>
                     <option value="متزوج/ة">متزوج/ة</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label asp-for="Employee_Birth_Date" class="control-label"></label>
-                <input asp-for="Employee_Birth_Date" class="form-control" />
-                <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
+            <div class="All_div col-12">
+                <label asp-for="Employee_Birth_Date"></label>
+                <input id="birthDate" type="date" asp-for="Employee_Birth_Date"  /><br />
+                <span id="birthDateValidateSpan" class="text-danger"></span>
+                <span asp-validation-for="Employee_Birth_Date" style="color:red"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Birth_Place">مكان الولادة</label>
-                <select asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
+                <select asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities" >
                 </select>
             </div>
             <input type="hidden" asp-for="Active" />
 
             <div class="All_div col-12">
                 <label>السكن</label>
-                <select id="City" asp-items="@ViewBag.Cities">
+                <select id="City" asp-items="@ViewBag.Cities" >
                 </select>
             </div>
-            <div class="form-group">
-                <label asp-for="Area_Id" class="control-label"></label>
-                <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas" class="form-control">
-                </select>
+            <div class="All_div col-12">
+                <label asp-for="Area_Id"></label>
+                <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas" >
+                </select><br />
                 <span id="areaValidateSpan" class="text-danger"></span>
             </div>
             <table>
-                <tr id="tr0">
+                <tr id="tr0" style="display: flex; flex-direction: column; border-width: 1px; border-color: lightgray; border-radius: 20px; padding: 10px; margin: 10px; width: 75%; position: relative; left: 65px; ">
                     <td>
                         <div class="col-12 All_div">
-                            <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required />
+                            <input class="ValidateNumber" type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" /><br />
                             <span id="phoneValidateSpan0" class="text-danger"></span>
+
                         </div>
                     </td>
                     <td>
                     </td>
+
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 30%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
+
                 </tr>
             </table>
             <input type="hidden" asp-for="Ho_Id" />
-            <div class="form-group">
-                <input type="submit" value="إضافة مدير" class="btn btn-primary" />
+            <div class="All_div col-12">
+                <input type="submit" value="إضافة المدير" style="width:30%;" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="Index">العودة إلى الخلف</a>
+    <a asp-controller="Hospital" asp-action="Create" style="position: relative; left: 665px;">العودة إلى الخلف</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/Validations.js"></script>
-    <script src="~/addPhoneNumbers3.js"></script>
+    <script src="~/addPhoneNumbers4.js"></script>
+    <script src="~/Validations15.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {

@@ -10,13 +10,22 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/Medicio2/dashborde/nurse-mngdb/css/nursemng.css" rel="stylesheet">
+
+
+    @* *********************             Map              **************** *@
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css"
+          rel="stylesheet" />
+    <!-- Geocoding api .css -->
+    <link rel="stylesheet"
+          href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
+          type="text/css" />
 }
 
 
 <div class="sidebar">
     <div class="logo-details">
         <img src="~/Medicio2/dashborde/img/Nurse.jpg" class="nurse-img ">
-        <span class="logo_name">ممرض</span>
+        <span class="logo_name">@Model.Employee_First_Name @Model.Employee_Last_Name</span>
     </div>
     <hr class="sidebar-divider">
     <div class="nav-links ">
@@ -49,20 +58,42 @@
     </div>
     <hr class="sidebar-divider ">
 </div>
-<section class="home-section">
+<section class="home-section" style="height:115vh">
 
     <!-- Topbar -->
 
     <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
-        <div class="row">
+        <div class="row" style="position:relative; left:170px">
 
             <ul class="navbar-nav ml-auto">
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div natif">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                        </div>
+                    </a>
+                    <!--Alerts Dropdown start -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
+                         aria-labelledby="alertsDropdown" id="notifications">
+                        <h6 class="dropdown-header">
+                            مركز التنبيهات
+                        </h6>
+                    </div>
+                    <!--Alerts Dropdown end -->
+                </li>
+                <!--Alerts end -->
+
+
+                <div class="topbar-divider d-none d-sm-block"></div>
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow  ">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="top_div">
-                            <span class="mr-2 d-lg-inline text-gray-600 small">ممرض</span>
+                        <div class="top_div" style=" position: relative; left: 25px;">
+                            <span class="mr-2 d-lg-inline text-gray-600 small">رئيس الممرضين</span>
                             <img class="img-profile rounded-circle" src="~/Medicio2/dashborde/img/undraw_profile_3.svg">
                         </div>
                     </a>
@@ -226,16 +257,83 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer">
-            <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
-        </div>
-
-    </footer>
-
 </section>
 
 @section Scripts{
+
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <!-- Arabic Language Support -->
+    <script src="~/Map/index.js"></script>
+    <!-- Geocoding api .js -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
+    <script>
+        // public Token
+        mapboxgl.accessToken =
+            "pk.eyJ1IjoibWFobW9vZC1hcmFrc3VzeSIsImEiOiJjbDBvN3lhejExbXVzM2ltOW91MmZ1NXpjIn0.r69LwIlKBJZ2NT3RY5XJNQ";
+        // Right to left text support
+        mapboxgl.setRTLTextPlugin(
+            "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
+            null,
+            true // Lazy load the plugin
+        );
+        // map Definition
+        const map = new mapboxgl.Map({
+            container: "map", // container ID
+            style: "mapbox://styles/mapbox/streets-v11", // style URL
+            center: [37.98384, 34.9618], // starting position [lng, lat]
+            zoom: 7, // starting zoom
+        });
+
+        // Geocoding
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                language: "ar",
+                mapboxgl: mapboxgl,
+            })
+        );
+        // Setting Language
+        map.addControl(
+            new MapboxLanguage({
+                defaultLanguage: "ar",
+            })
+        );
+
+        var NursesXYs = document.getElementsByClassName('NursesXYs');
+        var PatientsXYs = document.getElementsByClassName('PatientsXYs');
+
+        for (var i = 0; i < NursesXYs.length; i++) {
+            var arr = NursesXYs[i].innerHTML.split(',');
+            const ll = new mapboxgl.LngLat(arr[0], arr[1]);
+            const popup = new mapboxgl.Popup({
+                offset: 25,
+                closeOnClick: false,
+                closeButton: false,
+            }).setText(arr[2]);
+            var marker = new mapboxgl.Marker()
+                .setPopup(popup)
+                .setLngLat(ll)
+                .addTo(map)
+                .togglePopup();
+        }
+        for (var i = 0; i < PatientsXYs.length; i++) {
+            var arr = PatientsXYs[i].innerHTML.split(',');
+            const ll = new mapboxgl.LngLat(arr[0], arr[1]);
+            const popup = new mapboxgl.Popup({
+                offset: 25,
+                closeOnClick: false,
+                closeButton: false,
+            }).setText(arr[2]);
+            var marker = new mapboxgl.Marker({ "color": "#b40219" })
+                .setPopup(popup)
+                .setLngLat(ll)
+                .addTo(map)
+                .togglePopup();
+        }
+    </script>
+
+
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 

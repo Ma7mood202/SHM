@@ -52,7 +52,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             PhoneNumbers = _context.Patient_Phone_Numbers.Where(pn => pn.Patient_Id == s.Patient_Id).ToList(),
                             RoomNumber = sr.Su_Room_Number,
                             SurguryDate = s.Surgery_Date.ToString("dd/MM/yyyy hh:mm tt"),
-                            SurgeryLength = s.Surgery_Time.ToString("c")
+                            SurgeryLength = s.Surgery_Time.ToString("c").Substring(0,5)
                         }).ToList();
             ViewBag.HoId = HoId;
             ViewBag.DocId = id;
@@ -70,7 +70,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(EmptySurgeryRooms);
         }
         [Authorize(Roles = "Doctor,DeptManager")]
-        public async Task<IActionResult> DisplayPatients(int id, int DocId, int HoId) //Surgery_Room(id)
+        public async Task<IActionResult> DisplayPatients(int id, int DocId, int HoId , string search="") //Surgery_Room(id)
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
@@ -79,11 +79,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.DocId = DocId;
             var patients = await _context.Patients.Where(p => p.Ho_Id == HoId && p.Active).ToListAsync();
+            if (string.IsNullOrEmpty(search))
+                return View(patients);
+            patients = patients.Where(p => p.Patient_Full_Name.Contains(search)).ToList();
             return View(patients);
         }
 
         [Authorize(Roles = "Doctor,DeptManager")]
-        public async Task<IActionResult> Create(int DocId, int SrId, int PatId, int HoId, string ErrorMessage = "")
+        public async Task<IActionResult> Create(int DocId, int SrId, int PatId, int HoId, string ErrorMessageDate = "", string ErrorMessageTime = "")
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
@@ -92,7 +95,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.HoId = HoId;
             ViewBag.DocId = DocId;
             ViewBag.PatId = PatId;
-            ViewBag.ErrorMessage = ErrorMessage;
+            ViewBag.ErrorMessage = ErrorMessageDate;
+            ViewBag.ErrorMessageTime = ErrorMessageTime;
             ViewBag.Times = new List<SelectListItem>();
             return View();
         }
@@ -108,8 +112,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.DocId = DocId;
             ViewBag.PatId = PatId;
 
-            if (date <= DateTime.Now)
-                return RedirectToAction("Create", new { DocId, SrId, PatId, HoId, ErrorMessage = "Past" });
+            if (date < DateTime.Now || date == default )
+                return RedirectToAction("Create", new { DocId, SrId, PatId, HoId, ErrorMessageDate = "الرجاء اختيار تاريخ صالح" });
+            else if (time.ToString() == "12:02:00")
+            {
+                return RedirectToAction("Create", new { DocId, SrId, PatId, HoId, ErrorMessageTime = "الرجاء اختيار الوقت " });
+            }
 
             DateTime d = date.Date.Add(time);
             TimeSpan t = TimeSpan.FromHours(hour) + TimeSpan.FromMinutes(minute);
@@ -187,7 +195,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         temp = TimeSpan.FromHours(i.Hours + hour) + TimeSpan.FromMinutes(i.Minutes + minute);
                         if (date.Date == DateTime.Now.Date)
                         {
-                            if (temp < TimeSpan.FromDays(1) && i.Hours >= DateTime.Now.Hour)
+                            if (temp < TimeSpan.FromDays(1) && i.Hours > DateTime.Now.Hour)
                                 d.Add(i.ToString("c"), i.Hours >= 12 ? i.Hours == 12 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours - 12 + ":" + (i.Minutes == 0 ? "00" : "30") + " PM" : i.Hours == 0 ? "12" + ":" + (i.Minutes == 0 ? "00" : "30") + " AM" : i.Hours + ":" + (i.Minutes == 0 ? "00" : "30") + "AM");
 
                         }

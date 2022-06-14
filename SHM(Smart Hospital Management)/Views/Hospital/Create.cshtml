@@ -8,7 +8,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
-<form asp-action="Create" method="post" class="All_form" style="background-color:white" id="form" onsubmit="event.preventDefault(MyValidations());">
+<form asp-action="Create" method="post" class="All_form" style="background-color:white" id="form" onsubmit="event.preventDefault(ValidateHospital());">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -27,14 +27,14 @@
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
-                </select><br>
+                </select><br>        
                 <span id="areaValidateSpan" class="text-danger"></span>
             </div>
             <table>
-                <tr id="tr0">
+                <tr id="tr0" style="display: flex; flex-direction: column; border-width: 1px; border-color: lightgray; border-radius: 20px; padding: 10px; margin: 10px; width: 75%; position: relative; left: 65px; ">
                     <td>
                         <div class="col-12 All_div">
-                            <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required />
+                            <input class="ValidateNumber" type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" /><br />
                             <span id="phoneValidateSpan0" class="text-danger"></span>
 
                         </div>
@@ -45,9 +45,10 @@
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 30%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
+
                 </tr>
             </table>
 
@@ -56,14 +57,49 @@
             </div>
         </div>
     </div>
-    <a asp-controller="Admin" asp-action="Master">العودةإلى الصفحة الرئيسية</a>
+    <a asp-controller="Admin" asp-action="Master">العودةإلى الصفحة الرئيسية</a> 
 </form>
 
 
 @section Scripts {
+
+    <script>
+        function ValidateHospital() {
+            var numberInput = document.getElementsByClassName('ValidateNumber');
+            var area = document.getElementById('Area');
+            var bool = true;
+            for (var i = 0; i < numberInput.length; i++) {
+
+                
+                if (numberInput[i].value == '') {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = 'الرجاء إدخال رقم';
+                    bool = false;
+                }
+                else if (isNaN(numberInput[i].value) || numberInput[i].value.length < 10) {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = 'الرجاء إدخال رقم صالح';
+                    bool = false;
+                }
+                else {
+                    document.getElementById('phoneValidateSpan' + i).innerHTML = "";
+                }
+            }
+
+            if (area.value == 0 || area.value == 'اختر المنطقة') {
+                document.getElementById('areaValidateSpan').innerHTML = 'الرجاء اختيار منطقة';
+                bool = false;
+            }
+            else {
+                document.getElementById('areaValidateSpan').innerHTML = '';
+            }
+            if (bool == true) {
+                var form = document.getElementById('form');
+                form.submit()
+            }
+        }
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers3.js"></script>
-    <script src="~/Validations.js"></script>
+    <script src="~/addPhoneNumbers4.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

@@ -34,7 +34,7 @@
 
 </div>
 
-<form asp-action="Create" method="post" class="All_form">
+<form asp-action="Create" method="post" class="All_form" style="background-color:white">
     <div class="container">
         <div class="row">
             <input type="hidden" asp-for="Pa_Id" />
@@ -66,37 +66,37 @@
             </div>
             <span id="span"></span>
             <div id="AlergyDiv0">
-                <button type="button" onclick="AddAllergy(this,0)"> إضافة حساسيات</button>
+                <button type="button" onclick="AddAllergy(this,0)" style="border-radius: 20px; background-color: #bac8d5e0; border: none; padding:5px 10px; margin-bottom:20px">إضافة حساسيات</button>
             </div>
 
             <div id="div0">
                 <div class="All_div col-12">
-                    <label for="Diseases_Type">Diseases Type</label>
+                    <label for="Diseases_Type">نوع المرض</label>
                     <select id="Diseases_Type0" onchange="ChangeSelect(0)" name="Diseases_Type" asp-items="@ViewBag.Diseases_Type">
                     </select>
                 </div>
                 <div>
-                    <label for="Diseases">Diseases</label>
+                    <label for="Diseases">المرض</label>
                     <select id="Diseases0" name="Diseases" asp-items="@ViewBag.Diseases">
                     </select>
-                    <label for="Chronic">Chronic Disease</label>
+                    <label for="Chronic">هل المرض مزمن ؟</label>
                     <input id="chr0" type="checkbox" onchange="changeChk(0)" />
                     <input id="Chronic0" type="hidden" name="Chronic" value="false" />
-                    <label for="Family">Family Health History</label>
+                    <label for="Family">هل المرض وراثي ؟</label>
                     <input id="fam0" type="checkbox" onchange="changeChk1(0)" />
                     <input id="Family0" type="hidden" name="Family" value="false" />
                 </div>
                 <span id="span0"></span>
-                <input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                <input type="button" onclick="Add(this,1,0)" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
             </div>
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إضافة الملف الطبي" style="width:30%"/>
             </div>
         </div>
     </div>
 </form>
 
-<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 46%;">Back To Master Page</a>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style=" position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
@@ -125,7 +125,7 @@
         count--;
         if (count == 1 || divNum == count) {
             var span = document.getElementById('span' + (count-1));
-            span.insertAdjacentHTML('afterend', '<input type="button" onclick="Add(this,1,0)" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>');
+            span.insertAdjacentHTML('afterend', '<input type="button" onclick="Add(this,1,0)" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>');
         }
         var div = document.getElementById("div"+ divNum);
         div.parentNode.removeChild(div);
@@ -148,24 +148,24 @@
                 }
                 var valueToAdd = '<div id="div'+ divNum +'">'+
                     '<div class="All_div col-12"> ' +
-                    ' <label for="Diseases_Type">Diseases_Type</label>' +
+                    ' <label for="Diseases_Type">نوع المرض</label>' +
                     ' <select id="Diseases_Type' + divNum + '" onchange="ChangeSelect(' + divNum + ')"  name="Diseases_Type">' +
                     string1 +
                     '</select>' +
                     ' </div>' +
                     '<div class="All_div col-12">' +
-                    ' <label for="Diseases">Diseases</label>' +
+                    ' <label for="Diseases">المرض</label>' +
                     '<select id="Diseases' + divNum + '" name="Diseases">' +
                     '</select> ' +
-                    '<label for="Chronic">Chronic</label>' +
+                    '<label for="Chronic">هل المرض مزمن ؟</label>' +
                     '<input id="chr' + divNum + '" type="checkbox" onchange="changeChk(' + divNum + ')"  />' +
                     '<input id="Chronic' + divNum + '" type="hidden" name="Chronic" value="false" />'+
-                    ' <label for="Family">Family Health History</label>' +
+                    ' <label for="Family">هل المرض وراثي ؟</label>' +
                     '<input id="fam' + divNum + '" type="checkbox" onchange="changeChk1(' + divNum + ')"  />' +
                     '<input id="Family' + divNum + '" type="hidden" name="Family" value="false" />'+
-                    '</div>' + '<input type="button" onclick="Delete(' + divNum + ')" value="Delete" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
+                    '</div>' + '<input type="button" onclick="Delete(' + divNum + ')" value="حذف" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/> ' +
                     '<span id="span' + divNum + '"></span>' +
-                    '<input type="button" onclick="Add(this,' + num + ',' + divNum + ')" value="Add" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>' +
+                    '<input type="button" onclick="Add(this,' + num + ',' + divNum + ')" value="إضافة" style="margin: 10px 0px; width: 20%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;"/>' +
                     '</div> ';
                 div.insertAdjacentHTML('afterend', valueToAdd);
 
@@ -213,12 +213,12 @@
             }
             var valueToAdd =
                 '<div id="AlergyDiv' + (i + 1) + '">' +
-                ' <select name="Allergies" style="min-height: 75px; max-height: 100px;">' +
+                ' <select name="Allergies" style="min-height: 75px; max-height: 100px; margin: 10px">' +
                 string1 +
                 '</select>' +
                 '<span class="AddSpans" id="' + (i + 1) + '"></span>' +
-                '<button type="button" onclick="AddAllergy(this,' + (i + 1) + ')">إضافة</button>' +
-                ' <button type="button" onclick="DeleteAllergy(' + (i + 1) + ')">حذف</button>' +
+                '<button type="button" onclick="AddAllergy(this,' + (i + 1) + ')" style="border-radius: 20px; background-color: #bac8d5e0; border: none; padding: 5px 10px;">إضافة</button>' +
+                ' <button type="button" onclick="DeleteAllergy(' + (i + 1) + ')" style="border-radius: 20px; background-color: #bac8d5e0; border: none; padding: 5px 10px;">حذف</button>' +
                 ' </div>';
             div.insertAdjacentHTML('afterend', valueToAdd);
             AllergiesCount++;
@@ -229,12 +229,12 @@
         if (AllergiesCount == 1) {
             var span = document.getElementById('span');
             var value = '<div id="AlergyDiv0">\
-                        <button type = "button" onclick = "AddAllergy(this,0)" > إضافة حساسيات</button>\
+                        <button type = "button" onclick = "AddAllergy(this,0)" style="border-radius: 20px; background-color: #bac8d5e0; border: none; padding:5px 10px; margin-bottom:20px"> إضافة حساسيات</button>\
                             </div >';
             span.insertAdjacentHTML('afterend', value);
         }
         else if (addSpans[addSpans.length - 1].id == i) {
-            addSpans[addSpans.length - 2].insertAdjacentHTML('afterend', '<button type="button" onclick="AddAllergy(this,' + (i - 1) + ')">إضافة</button>');
+            addSpans[addSpans.length - 2].insertAdjacentHTML('afterend', '<button type="button" onclick="AddAllergy(this,' + (i - 1) + ')" style="border-radius: 20px; background-color: #bac8d5e0; border: none; padding: 5px 10px;">إضافة</button>');
         }
         var div = document.getElementById("AlergyDiv" + i);
         div.parentNode.removeChild(div);

@@ -1,5 +1,4 @@
 ﻿@model SHM_Smart_Hospital_Management_.MedicalDetailsExtraTables.External_Records
-
 @{
     ViewData["Title"] = "Create";
 }
@@ -8,25 +7,25 @@
     <link href="~/Medicio2/Create.css" rel="stylesheet" />
 }
 
-        <form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white">
+        <form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white" id="form" onsubmit="event.preventDefault(); ValidateExternalRecord();">
             <div class="container">
                 <div class="row">
                         <div class="All_div col-12" id="div0">
                             <div class="All_div col-12">
                                 <label for="files"></label>
-                                <input type="file" name="files" />
+                                <input type="file" name="files" accept="image/*" required/>
                             </div>
                             <div class="All_div col-12">
                                 <label for="date" class="control-label"></label>
-                                <input type="date" name="date" style="width:100%" />
+                                <input type="date" class="ValidateDates" name="date" style="width:100%" required /><br />
+                                <span id="DatesSpan0" style="color:red"></span>
                             </div>
                             <span class="span" id="0"></span>
                             <button type="button" onclick="AddRay(this,0)" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px;"> إضافة اشعة</button>
                         </div>
 
                         <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
-                        <input type="hidden" name="DocId" value="@ViewBag.DocId" />
-                        <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+                        <input type="hidden" name="PatId" value="@ViewBag.PatId" />
                         <div class="All_div col-12">
                             <input type="submit" value="إضافة" />
                         </div>
@@ -35,12 +34,32 @@
         </form>
 
 <div>
-    <a asp-action="ShowExternalRecordsPatient" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.PatId" style="position: relative; left: 51%;">رجوع للخلف</a>
+    <a asp-action="ShowExternalRecordsPatient" asp-route-id="@Model.Medical_Detail_Id" asp-route-PatId="@ViewBag.PatId" style="position: relative; left: 51%;">رجوع للخلف</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
+    <script>
+        function ValidateExternalRecord() {
+            var dates = document.getElementsByClassName("ValidateDates");
+            var bool = true;
+            for (var i = 0; i < dates.length; i++) {          
+                if (dates[i].value.substring(0, 4) != new Date().getFullYear()) {
+                    document.getElementById('DatesSpan' + i).innerHTML = "لا يمكن إضافة ملف خارجي إلا في نفس العام";
+                    bool = false;
+                }
+                else {
+                    document.getElementById('DatesSpan' + i).innerHTML = "";
+                }
+
+            }
+            if (bool) {
+                document.getElementById('form').submit();
+            }
+        }
+    </script>
+        
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
         var RaysCount = 1;
@@ -56,11 +75,12 @@
                         '<div class="All_div col-12" id="div' + (i + 1) + '">' +
                         '<div class="All_div col-12">' +
                         '<label for= "files"></label> ' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*" required/>' +
                         '</div >' +
                         '<div class="All_div col-12">' +
                         '<label for="date"></label>' +
-                        '<input type="date" name="date" style="width:100%" />' +
+                        '<input type="date" name="date" style="width:100%" class="ValidateDates" required /> <br />' +
+                    '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
                         '<span class="span" id="'+(i+1)+'"></span>' +
                     '<button type="button" onclick="AddRay(this,' + (i + 1) + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة اشعة </button>' +
@@ -71,11 +91,12 @@
                     valueToAdd = '<div class="All_div col-12" id="div' + (i + 1) + '">' +
                         '<div class="All_div col-12">' +
                         '<label for= "files"></label> ' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*" required/>' +
                         '</div >' +
                         '<div class="All_div col-12">' +
                         '<label for="date"></label>' +
-                        '<input type="date" name="date" style="width:100%" />' +
+                        '<input type="date" name="date" style="width:100%" class="ValidateDates" required /> <br />' +
+                        '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
                         '<span class="span" id="'+(i+1)+'"></span>' +
                         '<button type="button" onclick="DeleteRay(' + (i + 1) + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> حذف </button>' +

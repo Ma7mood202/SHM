@@ -44,4 +44,10 @@
     <None Include="wwwroot\Medicio2\assets\bootstrap-5.1.3\bootstrap-5.1.3\.github\workflows\release-notes.yml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Medical_Test_Result\" />
+    <Folder Include="wwwroot\Death_Causes\" />
+    <Folder Include="wwwroot\Ray_Result\" />
+  </ItemGroup>
+
 </Project>

@@ -7,6 +7,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <style>
         html {
             height: 100vh;
@@ -14,7 +15,6 @@
     </style>
 }
 <div class="All_form" style="direction: rtl; background-color: white">
-
     <table class="table">
         <thead>
             <tr>
@@ -34,31 +34,45 @@
             </tr>
         </thead>
         <tbody>
+            @{ int j = 0;}
             @foreach (var item in Model)
             {
-            <tr>
+                <tr>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.PreviewDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PreviewHour)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DocName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Speclization)
-                </td>
-                <td>
-                    @if (item.IsToday)
-                    {
-                        <a asp-action="CancelPreview" asp-route-id="@item.PreviewId" asp-route-PatId="@ViewBag.PatientId">إلغاء الموعد</a>
-                    }
-                </td>
-            </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviewDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PreviewHour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DocName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Speclization)
+                    </td>
+                    <td>
+                        @if (item.IsToday)
+                        {
+                            string confirm = "confirm" + j;
+                            string cancel = "cancel" + j;
+                            string delete = "delete" + j;
+                            <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@j)">إلغاء</a>
+                            <a class="btn Confirm_btn" asp-action="CancelPreview" asp-route-id="@item.PreviewId" asp-route-PatId="@ViewBag.PatientId" id="@confirm">تأكيد</a>
+                            <a id="@delete" class="btn delete_btn" onclick="Confirm(@j)" style="margin-right:15px ; width:90%">إلغاء الموعد</a>
+                        }
+                    </td>
+                </tr>
+                j++;
             }
         </tbody>
     </table>
+    <span style="color:red">@ViewBag.errorMessage</span>
+
 </div>
 <a asp-controller="Patient" asp-action="Master" asp-route-id="@ViewBag.PatientId" style=" position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
+
+@section Scripts{
+
+    <script src="~/ConfirmDelete.js"></script>
+}

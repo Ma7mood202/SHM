@@ -10,7 +10,7 @@
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
 
-<form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white;">
+<form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white;" id="form" onsubmit="event.preventDefault(); MyValidate()">
     <div class="container">
         <div class="row">
             <input type="hidden" asp-for="PatientId" />
@@ -22,13 +22,13 @@
 
             <div class="All_div col-12">
                 <label asp-for="Image">سبب الوفاة</label>
-                <input type="file" asp-for="Image" />
+                <input type="file" asp-for="Image" /><br />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Death_Date"></label>
-                <input type="date" asp-for="Death_Date"/>
-                <span asp-validation-for="Death_Date" class="text-danger"></span>
+                <input id="date" type="date" asp-for="Death_Date" value="@DateTime.Now" /><br />
+                <span id="spanDate" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <input type="submit" value="تسجيل الوفية" />
@@ -43,7 +43,32 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
-        <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <script>
+        function MyValidate() {
+            var bool = true;
+            var date = document.getElementById('date');
+            var span = document.getElementById('spanDate');
+
+            if (date.value == '') {
+                span.innerHTML = "الرجاء عدم ترك الحقل فارغ";
+                bool = false;
+            }
+            else if (date.value.substring(0, 4) != new Date().getFullYear()) {
+                span.innerHTML = "يجب ان يكون التاريخ في هذا العام ";
+                bool = false;
+            }
+            else {
+                span.innerHTML = "";
+            }
+
+            if (bool == true) {
+                var form = document.getElementById('form');
+                form.submit()
+            }
+        }
+    </script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
 }

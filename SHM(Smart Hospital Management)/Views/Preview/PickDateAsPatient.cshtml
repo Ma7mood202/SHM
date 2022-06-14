@@ -37,6 +37,8 @@
             </div>
         </div>
     </div>
+    <span style="color:red">@ViewBag.checkIfPicked</span>
+
 </form>
 
 <div class="All_form" style=" background-color: white;">
@@ -74,6 +76,7 @@
             }
         </tbody>
     </table>
+
 </div>
 <a asp-action="DeptDoctorsForPatient" asp-route-id="@ViewBag.PatientId" asp-route-DeptId="@ViewBag.DeptId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 

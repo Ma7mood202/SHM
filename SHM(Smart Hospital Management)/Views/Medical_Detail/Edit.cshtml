@@ -35,8 +35,8 @@
     <div class="container">
         <div class="row">
             <div class="All_div col-12">
-                <input type="hidden" name="HoId" value="@ViewBag.DocId" />
-                <input type="hidden" name="DocId" value="@ViewBag.HoId" />
+                <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+                <input type="hidden" name="HoId" value="@ViewBag.HoId" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="All_div col-12">
                     <label asp-for="MD_Patient_Blood_Type"></label>
@@ -70,7 +70,7 @@
                     {
                         <span id="span"></span>
                         <div id="AlergyDiv0">
-                            <button type="button" onclick="AddAllergy(this,0)"> إضافة اشعة</button>
+                            <button type="button" onclick="AddAllergy(this,0)" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 135px; padding:4px 10px"> إضافة حساسيات</button>
                         </div>
                     }
                     else
@@ -96,14 +96,14 @@
                                 {
                                     <span class="AddSpans" id="@i"></span>
 
-                                    <button type="button" onclick="AddAllergy(this,@i)">إضافة</button>
+                                    <button type="button" onclick="AddAllergy(this,@i)" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding:4px 10px">إضافة</button>
                                 }
                                 else
                                 {
                                     <span id="span"></span>
-                                    <button type="button" onclick="AddAllergy(this,@i)" style="display:none">إضافة</button>
+                                    <button type="button" onclick="AddAllergy(this,@i)" style="display: none; border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding: 4px 10px">إضافة</button>
                                 }
-                                <button type="button" onclick="DeleteAllergy(@i)">حذف</button>
+                                <button type="button" onclick="DeleteAllergy(@i)" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding:4px 10px">حذف</button>
                             </div>
 
                         }
@@ -209,6 +209,7 @@
     </div>
 </form>
 
+<a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForDoctor" asp-route-id="@ViewBag.PatientId" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 47.5%;">الرجوع للخلف</a>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -361,8 +362,8 @@
                     string1 +
                     '</select>' +
                     '<span class="AddSpans" id="' + (i + 1)+'"></span>'+
-                    '<button type="button" onclick="AddAllergy(this,'+ (i + 1) +')">إضافة</button>' +
-                    ' <button type="button" onclick="DeleteAllergy('+ (i + 1) +')">حذف</button>' +
+                    '<button type="button" onclick="AddAllergy(this,' + (i + 1) +')" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding:4px 10px">إضافة</button>' +
+                    ' <button type="button" onclick="DeleteAllergy(' + (i + 1) +')" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding:4px 10px">حذف</button>' +
                     ' </div>';
                 div.insertAdjacentHTML('afterend', valueToAdd);
                 AllergiesCount++;
@@ -376,12 +377,12 @@
                 div.parentNode.removeChild(div);
                 var span = document.getElementById('span');
                 var value = '<div id="AlergyDiv0">\
-                            <button type = "button" onclick = "AddAllergy(this,0)" > إضافة حساسيات</button>\
+                            <button type = "button" onclick = "AddAllergy(this,0)" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 150px; padding:4px 10px"> إضافة حساسيات</button>\
                              </div >';
                 span.insertAdjacentHTML('afterend', value);
             }
             else if (addSpans[addSpans.length - 1].id == i) {
-                addSpans[addSpans.length - 2].insertAdjacentHTML('afterend', '<button type="button" onclick="AddAllergy(this,' + (i - 1) + ')">إضافة</button>');
+                addSpans[addSpans.length - 2].insertAdjacentHTML('afterend', '<button type="button" onclick="AddAllergy(this,' + (i - 1) + ')" style="border: none; border-radius: 10px; background-color: #c2cfda; width: 120px; padding:4px 10px">إضافة</button>');
                 var div = document.getElementById("AlergyDiv" + i);
                 div.parentNode.removeChild(div);
             }

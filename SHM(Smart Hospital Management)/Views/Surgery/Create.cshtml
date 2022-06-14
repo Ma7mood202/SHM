@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Create";
 }
 @section Styles{
@@ -10,41 +9,45 @@
 <form asp-action="CreatePost" method="post" class="All_form" style="background-color: white;">
     <div class="container">
         <div class="row">
-            <span class="text-danger">@ViewBag.ErrorMessage</span>
             <input type="hidden" name="DocId" value="@ViewBag.DocId" />
             <input id="SrId" type="hidden" name="SrId" value="@ViewBag.SrId" />
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <input type="hidden" name="PatId" value="@ViewBag.PatId" />
             <div class="All_div col-12">
                 <label for="name">اسم العملية</label>
-                <input type="text" name="name" value="" required/> <br />
+                <input type="text" name="name" value="" required /> <br />
             </div>
             <div class="All_div col-12">
                 <label for="length"> مدة العملية (ساعات)</label>
-                <input id="hour" type="number" name="hour" value="" />    <br />
+                <input id="hour" type="number" name="hour" value="" /><br />
+                <span id="HourSpan" style="color:red"></span>
             </div>
-            <span id="HourSpan" style="color:red"></span>
+
             <div class="All_div col-12">
                 <label for="length">مدة العملية (دقائق)</label>
-                <input id="minute" type="number" name="minute" value="" /><br />
+                <select id="minute" name="minute">
+                    <option value="0">0</option>
+                    <option value="30">30</option>
+                </select><br />
+                <span id="MinuteSpan" style="color:red"></span>
             </div>
-            <span id="MinuteSpan" style="color:red"></span> <br />
             <div class="All_div col-12">
                 <label for="length">تاريخ العملية</label>
-                <input id="date" min="@DateTime.Now" type="date" name="date" /> <br />
+                <input id="date" min="@DateTime.Now" type="date" name="date" required /> <br />
+                <span id="message" style="color:red">@ViewBag.ErrorMessage</span>
             </div>
-                <span id="message" style="color:red"></span>
-                <div class="All_div col-12">
-                    <label for="length">الأوقات المتاحة</label>
-                    <select id="time" name="time" asp-items="@ViewBag.Times">
-                    </select>
-                </div>
+            <div class="All_div col-12">
+                <label for="length">الأوقات المتاحة</label>
+                <select id="time" name="time" asp-items="@ViewBag.Times" required>
+                </select> <br />
+                <span style="color:red">@ViewBag.ErrorMessageTime</span>
+            </div>
 
-                <div class="All_div col-12">
-                    <input type="submit" value="إنشاء العملية"/>
-                </div>
+            <div class="All_div col-12">
+                <input type="submit" value="إنشاء العملية" />
             </div>
         </div>
+    </div>
 </form>
 
 
@@ -53,32 +56,36 @@
 </div>
 
 @section Scripts {
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script type="text/javascript">
         $(document).ready(function ()
         {
-
             $("#date").blur(function () {
                 var selectedDate = $("#date").val();
                 var SrId = $("#SrId").val();
                 var hour = $("#hour").val();
                 var minute = $("#minute").val();
+                console.log(selectedDate.substring(0, 4));
                 if (hour == "") {
                     $("#HourSpan").html("الرجاء عدم ترك الحقل فارغ");
                 }
-                else if (minute == "") {
-                    $("#MinuteSpan").html("الرجاء عدم ترك الحقل فارغ");
+                else if (hour == 0 && minute == 0) {
+                    $("#HourSpan").html("الرجاء إدخال وقت صالح");
+                    $("#MinuteSpan").html("الرجاء إدخال وقت صالح");
                 }
+                
                 else {
                     $("#HourSpan").html("");
                     $("#MinuteSpan").html("");
+                    $("#message").html("");
                     var TimesSelect = $("#time");
                     TimesSelect.empty();
                     if (selectedDate != null) {
                         $.getJSON('@Url.Action("GetTimes")', { date: selectedDate, Sr_Id: SrId , hour:hour,minute:minute }, function (Times) {
                             if (Times.timeSelect != null && !jQuery.isEmptyObject(Times.timeSelect)) {
-                                TimesSelect.append($('<option/>', { value: null, text: "اختر الوقت" }));
+                                TimesSelect.append($('<option/>', { value: "12:02:00", text: "اختر الوقت" }));
                                 $.each(Times.timeSelect, function (index, time) {
                                     TimesSelect.append($('<option/>', { value: time.value, text: time.text }));
                                 });

@@ -51,7 +51,7 @@
 <!-- sidebar end-->
 <!-- start-->
 
-<div class="home-section">
+<div class="home-section" style="height:115vh">
 
     <!-- Topbar start -->
 
@@ -66,7 +66,6 @@
                         <div class="top_div natif">
                             <i class="fas fa-bell fa-fw"></i>
                             <!-- Counter - Alerts -->
-                            <span class="badge badge-danger badge-counter" id="counter">0</span>
                         </div>
                     </a>
                     <!--Alerts Dropdown start -->
@@ -75,7 +74,6 @@
                         <h6 class="dropdown-header">
                             مركز التنبيهات
                         </h6>
-
                     </div>
                     <!--Alerts Dropdown end -->
                 </li>
@@ -207,22 +205,24 @@
                                 <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>
                                 <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
                                 <a class="btn Confirm_btn" asp-controller="Preview" asp-action="Delete" asp-route-id="@item.PreviewId" asp-route-DocId="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HospitalId" id="@confirm">تأكيد</a>
-                                <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width:70px">التشخيص</button>
+                                <button type="button" onclick="ShowForm(@i)" class="btn delete_btn" style="width: 70px; margin: 0px 10px;">التشخيص</button>
                                 @{ string form = "form" + i;}
                                 <form id="@form" asp-controller="Preview" asp-action="AddExaminationRecord" asp-route-id="@item.PreviewId" style="display:none">
                                     <input type="hidden" name="DocId" value="@ViewBag.DoctorId" />
                                     <input type="hidden" name="HoId" value="@ViewBag.HospitalId" />
-                                    <input type="text" name="examinationRecord" value="@item.ExaminationRecord" />
+                                    <input type="text" name="examinationRecord" value="@item.ExaminationRecord" style="border-radius: 10px; margin-bottom: 2px"/>
                                     @if (string.IsNullOrEmpty(item.ExaminationRecord))
                                     {
 
-                                        <input type="submit" value="إضافة" />
+                                        <input type="submit" value="إضافة" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none;"/>
                                     }
                                     else
                                     {
 
-                                        <input type="submit" value="تعديل" />
+                                        <input type="submit" value="تعديل" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none;"/>
                                     }
+                                    <button type="button" onclick="HideForm(@i)" style="border-radius: 20px; padding: 1px 5px; background-color: #cacccf; border: none;"> إخفاء</button>
+
                                 </form>
                                 @{i++;}
                             </td>
@@ -234,17 +234,21 @@
     </div>
     <!-- table end -->
     <!-- end page -->
-    <!-- footer start -->
-    <footer>
-        <div class="footer" style=" position: relative; top: 107px;">
-            <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
-        </div>
-    </footer>
-    <!-- footer end -->
+
 </div>
 <!-- end -->
 
 @section Scripts{
+    <script>
+        function ShowForm(i) {
+            var form = document.getElementById('form' + i);
+            form.style.display = 'block';
+        }
+        function HideForm(i) {
+            var form = document.getElementById('form' + i);
+            form.style.display = 'none';
+        }
+    </script>
     <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

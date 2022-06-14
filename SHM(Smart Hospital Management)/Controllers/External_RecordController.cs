@@ -30,10 +30,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.PatientId = PatId;
             return View(externalRecords);
         }
-        [Authorize(Roles ="Doctor,DeptManger")]
+        [Authorize(Roles ="Doctor,DeptManager")]
         public async Task<IActionResult> ShowExternalRecordsForDoctor(int id, int DocId, int HoId)//medical id
         {
             var externalRecords =await _context.External_Records.Where(e => e.Medical_Detail_Id == id).ToListAsync();
+            var medical = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(md => md.Medical_Details_Id == id);
+            ViewBag.PatientId = medical.Patient.Patient_Id;
             ViewBag.Medical_Detail_Id = id;
             ViewBag.DocId = DocId;
             ViewBag.HoId = HoId;
@@ -88,7 +90,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(ShowExternalRecordsPatient), new { id = medicalDetailId,PatId });
             }
-            return View();
+            ViewBag.PatId = PatId;
+            return View(new External_Records { Medical_Detail_Id = medicalDetailId });
         }
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Delete(int id ,int medicalId, int PatId)

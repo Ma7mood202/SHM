@@ -102,7 +102,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return View(doctors);
             else
             {
-                doctors = await _context.Doctors.Where(d => d.Department_Id == Deptmanager.Department_Id && d.Doctor_Id != Deptmanager.Doctor_Id && d.Active && (d.Doctor_First_Name.Contains(search)|| d.Doctor_Last_Name.Contains(search)|| d.Doctor_Middle_Name.Contains(search))).ToListAsync();
+                doctors = doctors.Where(d => d.Doctor_Full_Name.Contains(search)).ToList();
                 return View(doctors);
             }
         }
@@ -128,21 +128,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.EmpId = EmpId;
             if (string.IsNullOrEmpty(search))
                 return View(doctors);
-            else
-            {
-                doctors = (from d in _context.Doctors.ToList()
-                           join dept in departments
-                           on d.Department_Id equals dept.Department_Id
-                           where d.Active == true && (d.Doctor_First_Name.Contains(search) || d.Doctor_Last_Name.Contains(search) || d.Doctor_Middle_Name.Contains(search))
-                           select new HoDoctors
-                           {
-                               DoctorId = d.Doctor_Id,
-                               DoctorFullName = d.Doctor_Full_Name,
-                               Specialization = _context.Specializations.Find(dept.Department_Name).Specialization_Name,
-                               PhoneNumbers = _context.Doctor_Phone_Numbers.Where(pn => pn.Doctor_Id == d.Doctor_Id).Select(s => s.Doctor_Phone_Number).ToList()
-                           }).ToList();
+       
+                doctors = doctors.Where(d => d.DoctorFullName.Contains(search)).ToList();
                 return View(doctors);
-            }
+            
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> DeptManagers(int id, int EmpId, string search = "") // Hospital (id)
@@ -172,27 +161,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.EmpId = EmpId;
             if (string.IsNullOrEmpty(search))
                 return View(deptmanagers);
-            else
-            {
-                deptmanagers = (from doc in _context.Doctors.ToList()
-                                join d in dept
-                                on doc.Doctor_Id equals d.Dept_Manager.Doctor_Id
-                                into groupDept
-                                from c in groupDept.DefaultIfEmpty()
-                                where c is not null && (doc.Doctor_First_Name.Contains(search) || doc.Doctor_Last_Name.Contains(search) || doc.Doctor_Middle_Name.Contains(search))
-                                select new { c, doc }
-                                into a
-                                join spec in _context.Specializations.ToList()
-                                on a.c.Department_Name equals spec.Specialization_Id
-                                select new DeptManagers
-                                {
-                                    MgrName = a.doc.Doctor_Full_Name,
-                                    DeptName = spec.Specialization_Name,
-                                    Id = a.c.Department_Id,
-                                    DoctorManagerId = a.doc.Doctor_Id
-                                }).ToList();
+
+                deptmanagers = deptmanagers.Where(d => d.MgrName.Contains(search)).ToList();
                 return View(deptmanagers);
-            }
+            
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> EditDeptManager(int id, int DoctorId, int EmpId, string search = "") // Department (id)
@@ -224,9 +196,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl)
         {
-            // TempData["LoginFailed"] = "Login Failed";
+            TempData["LogInFailed"] = "";
             var doctors = _context.Doctors.Where(d => d.Doctor_Email == fc["email"].ToString() && d.Doctor_Password == (fc["password"].ToString())).ToList();
-            if (doctors.Count == 0) return NotFound();
+            if (doctors.Count == 0)
+            {
+                TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة";
+                return RedirectToAction("LogIn");
+            }
             var hospital = _context.Hospitals.FirstOrDefault(h => h.Ho_Id == int.Parse(fc["hospital"]));
             var data = (from doc in doctors
                         join dept in _context.Departments.ToList()
@@ -301,6 +277,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 doctor.Doctor_Email = doctor.Doctor_EmailName.Replace(" ", "_");
                 doctor.Doctor_Password = PasswordHashing.HashPassword(doctor.Doctor_National_Number);
+                if (string.IsNullOrEmpty(doctor.Doctor_Qualifications))
+                {
+                    doctor.Doctor_Qualifications = "لا يوجد";
+                }
 
                 List<Doctor_Phone_Numbers> pns = new();
                 for (int i = 0; i < pn.Length; i++)
@@ -398,6 +378,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 doctor.Doctor_Email = doctor.Doctor_EmailName.Replace(" ", "_");
                 doctor.Doctor_Password = PasswordHashing.HashPassword(doctor.Doctor_National_Number);
+                if (string.IsNullOrEmpty(doctor.Doctor_Qualifications))
+                {
+                    doctor.Doctor_Qualifications = "لا يوجد";
+                }
                 _context.Add(doctor);
                 await _context.SaveChangesAsync();
                 List<Doctor_Phone_Numbers> pns = new();
@@ -417,6 +401,11 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 FCMService.AddToken(doctor.Doctor_Id, UserType.doc);
                 return RedirectToAction("Master", new { id = DocId, HoId = HoId });
             }
+            ViewBag.Cities = _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToList();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.HoId = HoId;
+            ViewBag.DocId = DocId;
+            ViewBag.DeptId = doctor.Department_Id;
             return View(doctor);
         }
 
@@ -457,6 +446,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = doctor.Doctor_Id });
             }
+            //ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == doctorCityId ? true : false }).ToListAsync();
+            //ViewBag.Areas = new List<SelectListItem>();
+            //ViewBag.DoctorArea = _context.Areas.Find(doctor.Area_Id).Area_Name;
             return View();
         }
         [Authorize(Roles = "DeptManager")]
@@ -483,16 +475,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                               select doc).ToListAsync();
             if (string.IsNullOrEmpty(search))
                 return View(data);
-            else
-            {
-                 data = await (from doc in _context.Doctors
-                                 join dept in _context.Departments
-                                 on doc.Department_Id equals dept.Department_Id
-                                 where dept.Ho_Id == IT.Ho_Id && (doc.Doctor_First_Name.Contains(search) || doc.Doctor_Last_Name.Contains(search) || doc.Doctor_Middle_Name.Contains(search))
-                                 && doc.Active
-                                 select doc).ToListAsync();
-                return View(data);
-            }
+
+            data = data.Where(d => d.Doctor_Full_Name.Contains(search)).ToList();
+                 return View(data);
+            
         }
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActiveDoctorsForIT(int id) //IT(id)

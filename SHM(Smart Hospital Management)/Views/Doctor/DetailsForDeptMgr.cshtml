@@ -22,13 +22,6 @@
         <dd class="col-3" style=" margin: 20px 0px; ">
             @Html.DisplayFor(model => model.Doctor_Full_Name)
         </dd>
-
-        <dt class="col-6" style=" margin: 20px 0px; ">
-            @Html.DisplayNameFor(model => model.Doctor_National_Number)
-        </dt>
-        <dd class="col-3" style=" margin: 20px 0px; ">
-            @Html.DisplayFor(model => model.Doctor_National_Number)
-        </dd>
         <dt class="col-6" style=" margin: 20px 0px; ">
             @Html.DisplayNameFor(model => model.Doctor_Gender)
         </dt>
@@ -57,8 +50,8 @@
     </dl>
 </div>
 <div>
-    <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 48%;">Back to List</a><br />
-    <a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 45.5%;">Back to Master Page</a>
+    <a asp-controller="Doctor" asp-action="DisplayDoctrosByDeptId" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 48%;">رجوع للخلف</a><br />
+    <a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DeptMgrId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 45.5%;">رجوع للصفحة الرئيسية</a>
 </div>
 @section Scripts{
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>

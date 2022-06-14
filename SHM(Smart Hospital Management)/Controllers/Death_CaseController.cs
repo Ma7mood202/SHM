@@ -79,6 +79,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                 return RedirectToAction("HoPatientsForResception", "Patient", new { id = HoId, EmpId });
             }
+            ViewBag.HoId = HoId;
+            ViewBag.EmpId = EmpId;
             return View(death_Case);
         }
     }

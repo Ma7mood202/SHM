@@ -20,7 +20,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-var count=0;
+var count = 0;
 
 messaging.onMessage((payload) => {
     console.log('Message received. ', payload);

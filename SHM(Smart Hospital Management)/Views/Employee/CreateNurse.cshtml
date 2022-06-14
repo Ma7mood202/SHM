@@ -19,7 +19,10 @@
 <form asp-action="CreateNurse" method="post" class="All_form" style="background-color: white" id="form" onsubmit="event.preventDefault(MyValidations());">
     <div class="container">
         <div class="row">
+            <h5 style="color : gray">آخر دبوس سيتم وضعه هو من سيمثل إحداثيات الممرض</h5>
             <div id="map" style="width:100%;height:250px"></div>
+            <input id="XY" type="hidden" asp-for="Employee_X_Y" />
+            <span id="ValidateXY" class="text-danger"></span>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="All_div col-12">
                 <label asp-for="Employee_First_Name"></label>
@@ -43,11 +46,11 @@
             </div>
             <input type="hidden" asp-for="Employee_Email" />
             <input type="hidden" asp-for="Employee_Password" />
-            <input id="XY" type="hidden" asp-for="Employee_X_Y" />
             <div class="All_div col-12">
                 <label asp-for="Employee_National_Number"></label>
-                <input asp-for="Employee_National_Number" /><br />
-                <span asp-validation-for="Employee_National_Number" class="text-danger" id="nationalValidateSpan"></span>
+                <input id="NationalNumber" asp-for="Employee_National_Number" /><br />
+                <span id="nationalValidateSpan" class="text-danger"></span>
+                <span asp-validation-for="Employee_National_Number" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Gender"></label>
@@ -72,58 +75,56 @@
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Birth_Date"></label>
-                <input type="date" asp-for="Employee_Birth_Date" /><br />
+                <input id="birthDateForXY" type="date" asp-for="Employee_Birth_Date" /><br />
+                <span id="birthDateValidateSpanForXY" class="text-danger"></span>
                 <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Employee_Hire_Date" />
             <input type="hidden" asp-for="Active" />
             <input type="hidden" asp-for="Ho_Id" />
             <div class="All_div col-12">
-                <label>City</label>
+                <label>السكن</label>
                 <select id="City" asp-for="Employee_Birth_Place" asp-items="@ViewBag.Cities">
                 </select>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
                 <select id="Area" asp-for="Area_Id" asp-items="@ViewBag.Areas">
-                </select>       
+                </select><br />
                 <span id="areaValidateSpan" class="text-danger"></span>
             </div>
             <table>
-                <tr id="tr0">
+                <tr id="tr0" style="display: flex; flex-direction: column; border-width: 1px; border-color: lightgray; border-radius: 20px; padding: 10px; margin: 10px; width: 75%; position: relative; left: 65px; ">
                     <td>
                         <div class="col-12 All_div">
-                            <input class="ValidateNumber" type="text" name="pn" placeholder="Enter Phone Number" required />
+                            <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" /><br />
                             <span id="phoneValidateSpan0" class="text-danger"></span>
-
                         </div>
                     </td>
                     <td>
                     </td>
-
-
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="Add" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 30%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
                 </tr>
             </table>
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
-                <input type="submit" value="Create" />
+                <input type="submit" value="إضافة الممرض" style="width:140px" />
             </div>
         </div>
     </div>
-    <a asp-action="DisplayNurses" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id">Back to List</a>
+    <a asp-action="DisplayNurses" asp-route-id="@ViewBag.EmpId" asp-route-HoId="@Model.Ho_Id">رجوع للخلف</a>
 </form>
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/Validations.js"></script>
-    <script src="~/addPhoneNumbers3.js"></script>
+    <script src="~/Validations15.js"></script>
+    <script src="~/addPhoneNumbers4.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
     <!-- Arabic Language Support -->
     <script src="~/Map/index.js"></script>
@@ -153,7 +154,7 @@
                 offset: 25,
                 closeOnClick: false,
                 closeButton: false,
-            }).setText("New Nurse Coordinates ...");
+            }).setText("إحداثيات الممرض الجديد");
             var marker = new mapboxgl.Marker()
                 .setPopup(popup)
                 .setLngLat(e.lngLat)

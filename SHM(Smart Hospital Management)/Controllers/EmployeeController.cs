@@ -92,7 +92,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return View(employees);
             else
             {
-                employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                employees = employees.Where(e => e.Employee_Full_Name.Contains(search)).ToList();
                 return View(employees);
             }
         }
@@ -175,6 +175,53 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(employee);
         }
         [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> ShowReports(int id) // Manager (id)
+        {
+            var manager = await _context.Employees.FindAsync(id);
+            if (!manager.Active)
+                return RedirectToAction("LogOut", new { id });
+
+
+            var surgeriesAndDoctors = await (from s in _context.Surgeries
+                                             join d in _context.Doctors
+                                             on s.Doctor_Id equals d.Doctor_Id
+                                             where s.Surgery_Date.Date.Month == DateTime.Now.Date.Month
+                                             select new { Surgery = s, Doctor = d }).ToListAsync();
+            var depts = (from dept in _context.Departments.ToList()
+                         join sd in surgeriesAndDoctors
+                         on dept.Department_Id equals sd.Doctor.Department_Id
+                         where dept.Ho_Id == manager.Ho_Id
+                         group dept by dept into GroupedDepts
+                         select new
+                         {
+                             DepartmentName = _context.Specializations.Find(GroupedDepts.Key.Department_Name).Specialization_Name,
+                             Count = surgeriesAndDoctors.Count(sd => sd.Doctor.Department_Id == GroupedDepts.Key.Department_Id)
+                         }).ToList();
+            var totalSurgeries = depts.Sum(d => d.Count);
+            ViewBag.TotalSurgeries = totalSurgeries;
+
+
+            var previewsAndDoctors = await (from pre in _context.Previews
+                                            join doc in _context.Doctors
+                                            on pre.Doctor_Id equals doc.Doctor_Id
+                                            where pre.Preview_Date.Date.Month == DateTime.Now.Date.Month
+                                            select new { Preview = pre, Doctor = doc }).ToListAsync();
+            var depts1 = (from dept in _context.Departments.ToList()
+                          join pd in previewsAndDoctors
+                          on dept.Department_Id equals pd.Doctor.Department_Id
+                          where dept.Ho_Id == manager.Ho_Id
+                          group dept by dept into GroupedDepts
+                          select new
+                          {
+                              DepartmentName = _context.Specializations.Find(GroupedDepts.Key.Department_Name).Specialization_Name,
+                              Count = previewsAndDoctors.Count(pd => pd.Doctor.Department_Id == GroupedDepts.Key.Department_Id)
+                          }).ToList();
+
+            var totalPreviews = depts1.Sum(d => d.Count);
+            ViewBag.TotalPreviews = totalPreviews;
+            return View();
+        }
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> HoEmployees(int id, string search = "")
         {
             var manager =await _context.Employees.FindAsync(id);
@@ -190,7 +237,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return View(Employees);
             else
             {
-                Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                Employees = Employees.Where(e => e.Employee_Full_Name.Contains(search)).ToList();
                 return View(Employees);
             }
         }
@@ -239,6 +286,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("Master", "Admin");
             }
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
             return View(employee);
         }
         public async Task<IActionResult> LogInIT()
@@ -258,10 +307,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl)
+        public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl ,string baseURL)
         {
             var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
-            if (employees.Count == 0) return NotFound();
+            if (employees.Count == 0)
+            {
+                TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة ";
+                return RedirectToAction(baseURL);
+            }
 
             var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
             if (employee is not null)
@@ -279,7 +332,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 if (ReturnUrl == null)
                 {
                     FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
-                    return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id, HoId = int.Parse(fc["hospital"]) });
+                    return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id });
                 }
                 return RedirectToAction(ReturnUrl);
             }
@@ -296,8 +349,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogInHoMgr(IFormCollection fc, string ReturnUrl)
         {
+            TempData["LogInFailed"] = "";
             var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
-            if (employees.Count == 0) return NotFound();
+            if (employees.Count == 0)
+            {
+                TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة";
+                return RedirectToAction("LogInHoMgr");
+            }
             var HoManager = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
             if (HoManager is not null)
             {
@@ -381,6 +439,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 FCMService.AddToken(employee.Employee_Id, UserType.emp);
                 return RedirectToAction("MasterHoMgr", new { id = MgrId });
             }
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.MgrId = MgrId;
             return View(employee);
         }
         [Authorize(Roles = "Manager")]
@@ -439,7 +500,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = employee.Employee_Id });
             }
-            return View();
+            return View(employee);
         }
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EditMgrPersonalDetails(int id) // EMployee (id)
@@ -492,7 +553,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return View(Nurses);
             else
             {
-                Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse" &&(e.Employee_First_Name.Contains(search) || e.Employee_Last_Name.Contains(search) || e.Employee_Middle_Name.Contains(search))).ToListAsync();
+                Nurses = Nurses.Where(e => e.Employee_Full_Name.Contains(search)).ToList();
                 return View(Nurses);
             }
         }

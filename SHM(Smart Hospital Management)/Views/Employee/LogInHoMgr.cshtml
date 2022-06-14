@@ -35,18 +35,18 @@
 
                 <img src="~/Medicio2/dashborde/img/mng.jpg" class="text-centr" />
 
-                <span class="login100-form-title p-b-34 p-t-27">
+                <span class="login100-form-title p-b-34 p-t-27" style="padding:10px;">
                     تسجيل دخول
                 </span>
-
+                <p style="color: brown; text-align: center; font-size: large; text-shadow: -6px 0px 7px grey;">@TempData["LogInFailed"]</p>
                 <div class="wrap-input100">
-                    <input class="input100" type="text" name="email" placeholder="إسم المستخدم">
+                    <input class="input100" type="text" name="email" placeholder="إسم المستخدم" required>
                     <span class="focus-input100" data-placeholder="&#xf207;"></span><span class="input-group-text" id="basic-addon2">&#64;Manger.com</span>
                 </div>
 
                 <div class="wrap-input100">
                     <i class="bi bi-eye-slash" id="togglePassword"></i>
-                    <input class="input100" type="password" name="password" autocomplete="current-password" id="id_password" placeholder="كلمة السر">
+                    <input class="input100" type="password" name="password" autocomplete="current-password" id="id_password" placeholder="كلمة السر" required>
                     <span class="focus-input100" data-placeholder="&#xf191;">	</span>
                 </div>
 
@@ -67,7 +67,7 @@
                         تسجيل دخول
                     </button>
                 </div>
-                <a asp-controller="Home" asp-action="Index" class="back" style=" margin: 0px 10px; "><i class="bi bi-arrow-left-short"></i> العودة إلى الصفحة الرئيسية </a>
+                <a asp-controller="Home" asp-action="Index" class="back" style="margin:0px 10px; bottom:30px;"><i class="bi bi-arrow-left-short"></i> العودة إلى الصفحة الرئيسية </a>
             </form>
         </div>
     </div>
@@ -76,6 +76,9 @@
 
 <div id="dropDownSelect1"></div>
 @section Scripts{
+    <script>
+        window.history.forward();
+    </script>
     <!--===============================================================================================-->
     <script src="~/Medicio2/login/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->

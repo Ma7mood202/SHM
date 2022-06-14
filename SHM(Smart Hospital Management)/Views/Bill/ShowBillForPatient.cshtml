@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Bill>
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowBills>
 
 @{
     ViewData["Title"] = "ShowBillForPatient";
@@ -19,22 +19,27 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Bill_Examination)
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Examination)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Bill_Surgeries)
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Surgeries)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Bill_Rays)
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Rays)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Bill_Medical_Test)
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Medical_Test)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Bill_Room_Service)
+                    @Html.DisplayNameFor(model => model.Bill.Bill_Room_Service)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Paid)
+                    @Html.DisplayNameFor(model => model.Total)
+                </th>
+                   
+                
+                <th>
+                    @Html.DisplayNameFor(model => model.Bill.Paid)
                 </th>
                 <th></th>
             </tr>
@@ -44,22 +49,25 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Bill_Examination)
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Examination)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Bill_Surgeries)
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Surgeries)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Bill_Rays)
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Rays)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Bill_Medical_Test)
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Medical_Test)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Bill_Room_Service)
+                        @Html.DisplayFor(modelItem => item.Bill.Bill_Room_Service)
                     </td>
                     <td>
-                        @if (item.Paid)
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td>
+                        @if (item.Bill.Paid)
                         {
                             <span>مدفوعة</span>
                         }

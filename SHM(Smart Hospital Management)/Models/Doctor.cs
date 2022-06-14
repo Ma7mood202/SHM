@@ -10,6 +10,7 @@ namespace SHM_Smart_Hospital_Management_.Models
 {
     public class Doctor
     {
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [NotMapped]
         [Display(Name = "الاسم بالانكليزي")]
         public string Doctor_EmailName { get; set; }
@@ -48,7 +49,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Range(0, 25)]
         [Display(Name = "عدد افراد العائلة")]
 
-        public int? Doctor_Family_Members { get; set; }
+        public int? Doctor_Family_Members { get; set; } = 0;
         [Display(Name = "المؤهلات")]
         // max
         public string Doctor_Qualifications { get; set; }

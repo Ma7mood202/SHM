@@ -19,43 +19,66 @@
         }
     </ul>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
 
-            <div id="div0">
-                <div class="form-group">
+<form asp-action="Create" enctype="multipart/form-data" id="form" style="background-color: white" class="All_form" onsubmit="event.preventDefault(); ValidateTest();">
+    <div class="container">
+        <div class="row">
+            <div class="All_div col-12" id="div0">
+                <div class="All_div col-12">
                     <label for="files" class="control-label"></label>
-                    <input type="file" name="files" />
+                    <input type="file" name="files" accept="image/*" required />
                 </div>
-                <div class="form-group">
+                <div class="All_div col-12">
                     <label for="ray" class="control-label"></label>
-                    <select name="ray" class="form-control" asp-items="ViewBag.Ray_Type_Id">
+                    <select name="ray" class="form-control" asp-items="ViewBag.Ray_Type_Id" style="width:100%">
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="All_div col-12">
                     <label for="date" class="control-label"></label>
-                    <input type="date" name="date" class="form-control" />
+                    <input type="date" name="date" class="ValidateDates" style="width:100%" /><br />
+                    <span id="DatesSpan0" style="color:red"></span>
                 </div>
                 <span class="span" id="0"></span>
-                <button type="button" onclick="AddRay(this,0)"> إضافة اشعة</button>
+                <button type="button" onclick="AddRay(this,0)" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> إضافة أشعة</button>
             </div>
 
             <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
             <input type="hidden" name="DocId" value="@ViewBag.DocId" />
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="All_div col-12">
+                <input type="submit" value="إضافة الأشعة" style="width:100px" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="ShowRaysForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Back to List</a>
+    <a asp-action="ShowRaysForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 51%;">رجوع للخلف</a>
 </div>
 
 @section Scripts {
+
+    <script>
+        function ValidateTest() {
+            var dates = document.getElementsByClassName("ValidateDates");
+            var bool = true;
+            for (var i = 0; i < dates.length; i++) {
+
+                if (dates[i].value.substring(0, 4) != new Date().getFullYear()) {
+                    document.getElementById('DatesSpan' + i).innerHTML = "لا يمكن إضافة أشعة إلا في نفس العام";
+                    bool = false;
+                }
+                else {
+                    document.getElementById('DatesSpan' + i).innerHTML = "";
+                }
+
+            }
+            if (bool) {
+                document.getElementById('form').submit();
+            }
+        }
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
 
@@ -76,44 +99,46 @@
 
                 var valueToAdd = "";
                 if (RaysCount != 2) {
-                    valueToAdd = '<div id="div' + (i + 1) + '">' +
-                        '<div class="form-group">' +
+                    valueToAdd = '<div class="All_div col-12" id="div' + (i + 1) + '">' +
+                        '<div class="All_div col-12">' +
                         '<label for= "files" class= "control-label" ></label> ' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*" required />' +
                         '</div >' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="ray" class="control-label"></label>' +
                         '<select name="ray" class="form-control">' +
                         string1 +
                         '</select>' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="date" class="control-label"></label>' +
-                        '<input type="date" name="date" class="form-control" />' +
+                        '<input type="date" name="date" class="ValidateDates" required /> <br />' +
+                        '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
-                        '<span class="span" id="'+(i+1)+'"></span>' +
-                        '<button type="button" onclick="AddRay(this,' + (i + 1) + ')"> إضافة </button>' +
-                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')"> حذف </button>' +
+                        '<span class="span" id="' + (i + 1) + '"></span>' +
+                        '<button type="button" onclick="AddRay(this,' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> إضافة </button>' +
+                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> حذف </button>' +
                         '</div>';
                 }
                 else {
-                    valueToAdd = '<div id="div' + (i + 1) + '">' +
-                        '<div class="form-group">' +
+                    valueToAdd = '<div class="All_div col-12" id="div' + (i + 1) + '">' +
+                        '<div class="All_div col-12">' +
                         '<label for= "files" class= "control-label" ></label> ' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*" required />' +
                         '</div >' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="ray" class="control-label"></label>' +
                         '<select name="ray" class="form-control">' +
                         string1 +
                         '</select>' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="date" class="control-label"></label>' +
-                        '<input type="date" name="date" class="form-control" />' +
+                        '<input type="date" name="date" class="ValidateDates" required /> <br />' +
+                        '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
-                        '<span class="span" id="'+(i+1)+'"></span>' +
-                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')"> حذف </button>' +
+                        '<span class="span" id="' + (i + 1) + '"></span>' +
+                        '<button type="button" onclick="DeleteRay(' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> حذف </button>' +
                         '</div>';
                 }
                 div.insertAdjacentHTML('afterend', valueToAdd);
@@ -127,12 +152,12 @@
             var spans = document.getElementsByClassName('span');
             if (RaysCount == 1) {
                 var span = document.getElementById('0');
-                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,0)"> إضافة </button>');
+                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,0)" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> إضافة أشعة </button>');
             }
             else {
-                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,' + spans[spans.length - 1].id + ')"> إضافة </button>');
+                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,' + spans[spans.length - 1].id + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> إضافة </button>');
             }
-           
+
 
 
         }

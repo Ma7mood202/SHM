@@ -36,10 +36,14 @@
                 </div>
                 <div class="ex_div col-12">
                     <label for="">التشخيصات: </label>
-                    @*@foreach (var item in ViewBag.Examination)
+                    <div style="display:flex;flex-direction:column">
+                        @foreach (var item in ViewBag.Examination as List<SHM_Smart_Hospital_Management_.ViewModels.ShowExaminationRecords>)
                         {
-                            <p>@item.Details</p>
-                        }*@
+                            <div style="margin-right: 10px ; width:max-content">
+                                <span style="margin:0 10px">@item.DoctorName </span> <span style="margin:0 10px">@item.Date </span> <span style="margin:0 10px">@item.Examination </span>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

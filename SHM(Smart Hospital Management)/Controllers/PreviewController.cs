@@ -23,7 +23,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             _context = context;
         }
         [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> DisplayPatientsPreviews(int id) // Patient (id)
+        public async Task<IActionResult> DisplayPatientsPreviews(int id , string errorMessage="") // Patient (id)
         {
             var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
@@ -41,8 +41,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var previews =  (from pre in _context.Previews.ToList()
                             join doc in _context.Doctors.ToList()
                             on pre.Doctor_Id equals doc.Doctor_Id
-                            where pre.Patient_Id == id && pre.Preview_Date.Date >= DateTime.Now.Date
-                            && pre.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay
+                            where pre.Patient_Id == id &&( pre.Preview_Date.Date == DateTime.Now.Date
+                            && pre.Preview_Date.TimeOfDay >= DateTime.Now.TimeOfDay || pre.Preview_Date.Date >DateTime.Now.Date)
                             orderby pre.Preview_Date
                             select new CancelPreview
                             {
@@ -56,6 +56,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                             }).ToList();
             ViewBag.PatientId = id;
+            ViewBag.errorMessage = errorMessage;
             return View(previews);
         }
 
@@ -66,7 +67,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!patient.Active)
                 return RedirectToAction("LogOut", "Patient");
             if (patient.Canceled)
-                return RedirectToAction("DisplayPatientsPreviews", new { id = PatId });
+                return RedirectToAction("DisplayPatientsPreviews", new { id = PatId , errorMessage = "لا يمكن إلغاء سوى موعد واحد في اليوم" });
             var preview = await _context.Previews.FindAsync(id);
             patient.Canceled = true;
             _context.Previews.Remove(_context.Previews.Find(id));
@@ -105,7 +106,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(data);
         }
         [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> PickDateAsPatient(int id, int DeptId, int DocId, string ErrorMessage = "") // Patient (id) // Create
+        public async Task<IActionResult> PickDateAsPatient(int id, int DeptId, int DocId, string ErrorMessage = "" , string checkIfPicked="") // Patient (id) // Create
         {
             var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
@@ -122,6 +123,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.DeptId = DeptId;
             ViewBag.DocId = DocId;
             ViewBag.ErrorMessage = ErrorMessage;
+            ViewBag.checkIfPicked = checkIfPicked;
             ViewBag.Times = new List<SelectListItem>();
             return View(workDays);
         }
@@ -131,7 +133,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
                 return RedirectToAction("Logout", "Patient");
-            if (date < DateTime.Now || date == default || PreviewTime.ToString() == "12:02:00")
+            if (date.Date < DateTime.Now.Date || date == default || PreviewTime.ToString() == "12:02:00")
                 return RedirectToAction("PickDateAsPatient", new { id = id, DocId = DocId, DeptId = DeptId, ErrorMessage = "الرجاء اختيار وقت متاح" });
             bool success = false;
             var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
@@ -146,13 +148,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!success)
                 return RedirectToAction("PickDateAsPatient", new { id = id, DocId = DocId, DeptId = DeptId, ErrorMessage = "الرجاء اختيار وقت متاح" });
             DateTime d = date.Date.Add(PreviewTime);
-            var pre = await _context.Previews.Where(p => p.Patient_Id == id && p.Preview_Date == d).ToListAsync();
+            var pre = await _context.Previews.Where(p => p.Patient_Id == id && p.Preview_Date.Date == d.Date && p.Preview_Date.Hour == d.Hour).ToListAsync();
             if (!pre.Any())
             {
                 if (patient.PreviewCount == 3)
                 {
-                    TempData["PreviewCount"] = "لقد تجاوزت الحد الأقصى لعدد الحجوزات في اليوم";
-                    return RedirectToAction("Master", "Patient", new { id });
+                    return RedirectToAction("PickDateAsPatient", new { id = id, DocId = DocId, DeptId = DeptId, checkIfPicked = "لقد تجاوزت عدد الحجوزات المتاح في اليوم" });
                 }
                 var previews = (from preview in _context.Previews.ToList()
                                 join doc in _context.Doctors.ToList()
@@ -164,8 +165,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                 select preview).ToList();
                 if (previews.Count != 0)
                 {
-                    TempData["PreviewCount"] = "لقد تجاوزت الحد الأقصى لعدد الحجوزات اليومية في هذا القسم";
-                    return RedirectToAction("Master", "Patient", new { id });
+                    return RedirectToAction("PickDateAsPatient", new { id = id, DocId = DocId, DeptId = DeptId, checkIfPicked = "لا بمكن حجز سوى موعد واحد  في اليوم لنفس القسم" });
                 }
 
                 Preview p = new Preview
@@ -196,8 +196,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 #endregion
                 return RedirectToAction("Master", "Patient", new { id = id });
             }
-            TempData["TImePatient"] = "لدى المريض موعد آخر في نفس التوقيت يرجى اختيار توقيت آخر";
-            return RedirectToAction("PickTimeAsPatient", new { id = id, DeptId = DeptId, DocId = DocId, date = date });
+           return RedirectToAction("PickDateAsPatient", new { id = id, DeptId = DeptId, DocId = DocId, date = date , ErrorMessage = "لديك موعد آخر في نفس التوقيت يرجى اختيار توقيت آخر" });
         }
         #endregion
         #region Create Preview For Doctor
@@ -227,7 +226,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
                 return RedirectToAction("Logout", "Doctor");
-            if (date < DateTime.Now || date == default || PreviewTime.ToString() == "12:02:00")
+            if (date.Date < DateTime.Now.Date || date == default || PreviewTime.ToString() == "12:02:00")
                 return RedirectToAction("Create", new { DoctorId = DocId, PatientId = PatientId, HoId = HoId, ErrorMessage = "الرجاء اختيار وقت متاح" });
             bool success = false;
             var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
@@ -242,7 +241,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!success)
                 return RedirectToAction("Create", new { DoctorId = DocId, PatientId = PatientId, HoId = HoId, ErrorMessage = "الرجاء إختيار احد ايام دوامك" });
             DateTime d = date.Date.Add(PreviewTime);
-            var pre = await _context.Previews.Where(p => p.Patient_Id == PatientId && p.Preview_Date == d).ToListAsync();
+            var pre = await _context.Previews.Where(p => p.Patient_Id == PatientId && p.Preview_Date.Date == d.Date && p.Preview_Date.Hour == d.Hour).ToListAsync();
             if (pre.Count == 0)
             {
                 Preview p = new Preview
@@ -330,7 +329,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
                 return RedirectToAction("Logout", "Employee");
-            if (date < DateTime.Now || date == default || PreviewTime.ToString() == "12:02:00")
+            if (date.Date < DateTime.Now.Date || date == default || PreviewTime.ToString() == "12:02:00")
                 return RedirectToAction("PickDate", new { id = id, EmpId = EmpId, DocId = DocId, PatientId = PatientId, ErrorMessage = "الرجاء اختيار وقت متاح" });
             bool success = false;
             var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
@@ -345,7 +344,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             if (!success)
                 return RedirectToAction("PickDate", new { id = id, EmpId = EmpId, DocId = DocId, PatientId = PatientId, ErrorMessage = "الرجاء اختيار وقت متاح" });
             DateTime d = date.Date.Add(PreviewTime);
-            var pre = await _context.Previews.Where(p => p.Patient_Id == PatientId && p.Preview_Date == d).ToListAsync();
+            var pre = await _context.Previews.Where(p => p.Patient_Id == PatientId && p.Preview_Date.Date.Date == d.Date && p.Preview_Date.TimeOfDay == d.TimeOfDay).ToListAsync();
             if (pre.Count == 0)
             {
                 Preview p = new Preview
@@ -453,22 +452,24 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
             if (date != default)
             {
+                List<SelectListItem> TimeSelect = null;
+                string message = string.Empty;
+                if (date.Date < DateTime.Now.Date)
+                {
+                    message = "الرجاء اختيار تاريخ صالح";
+                    return Json(new { TimeSelect, message });
+                }
                 bool success = false;
                 var workDays = await _context.Work_Days.Where(w => w.Doctor_Id == DocId).ToListAsync();
                 foreach (var item in workDays)
                 {
                     if (date.DayOfWeek.CompareTo((DayOfWeek)((int)item.Day)) == 0)
                     {
-                        if (true)
-                        {
-
-                        }
                         success = true;
                         break;
                     }
                 }
-                List<SelectListItem> TimeSelect = null;
-                string message = string.Empty;
+                
                 if (!success)
                 {
                     message = "الرجاء إختيار احد ايام دوامك";
@@ -481,7 +482,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 List<TimeSpan> data = new List<TimeSpan>();
                 for (TimeSpan i = DayHours.Start_Hour; i < DayHours.End_Hour; i += HalfHour)
                 {
-                    if (date.DayOfWeek.CompareTo(DateTime.Now.DayOfWeek) == 0)
+                    if (date.Date == DateTime.Now.Date)
                     {
                         if (i.Hours <= DateTime.Now.Hour)
                         {
@@ -493,7 +494,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 }
                 if (data.Count == 0)
                 {
-                    message = "لا يوجد اوقات متاحة في هذا اليوم !";
+                    message = "لا يوجد اوقات متاحة في هذا اليوم ";
                     return Json(new { TimeSelect, message });
                 }
                 TimeSelect = data

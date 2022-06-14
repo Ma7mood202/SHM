@@ -38,7 +38,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                         where mt.Medical_Detail_Id == id
                         select new ShowMedicalTest
                         {
-                            Test_Id = mt.Test_Id,
+                            Test_Id = mt.Medical_Test_Id,
                             Date = mt.Test_Date.ToString("dd/MM/yyyy hh:mm tt"),
                             Test_Name = t.Test_Name,
                             Result = mt.Test_Result
@@ -64,6 +64,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             Test_Id = mt.Test_Id,
                             Result = mt.Test_Result
                         }).ToListAsync();
+            var medical = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(md => md.Medical_Details_Id == id);
+            ViewBag.PatientId = medical.Patient.Patient_Id;
             ViewBag.Medical_Detail_Id = id;
             ViewBag.DocId = DocId;
             ViewBag.HoId = HoId;
@@ -81,14 +83,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Value = s.Test_Type_Id.ToString(),
                 Text = s.Test_Type_Name
             }).ToListAsync();
-            ViewBag.Tests = new SelectListItem();
+            ViewBag.Tests = new List<SelectListItem>();
             ViewBag.HoId = HoId;
             ViewBag.DocId = DocId;
             return View(mt);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DateTime[] date, int[] type, IFormFile[] files, int medicalDetailId, int DocId, int HoId)
+        public async Task<IActionResult> Create(DateTime[] date, int[] test, IFormFile[] files, int medicalDetailId, int DocId, int HoId)
         {
             if (ModelState.IsValid)
             {
@@ -111,7 +113,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                             {
                                 Test_Result = fileName,
                                 Test_Date = date[i],
-                                Test_Id = type[i],
+                                Test_Id = test[i],
                                 Medical_Detail_Id = medicalDetailId
                             });
                             i++;
@@ -149,7 +151,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         public async Task<IActionResult> Delete(int id, int medicalId, int PatId)
         {
             var test = await _context.Medical_Tests.FindAsync(id);
-
             _context.Medical_Tests.Remove(test);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(ShowMedicalTestForPatient), new { id = medicalId, PatId });

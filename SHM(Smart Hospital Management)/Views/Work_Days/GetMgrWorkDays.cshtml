@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowWorkDays>
+
+@{
+    ViewData["Title"] = "GetWorkDays";
+}
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <style>
+        html {
+            height: 100vh;
+        }
+    </style>
+}
+
+<a asp-action="Create" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HoId" asp-route-DeptMgrId="@ViewBag.DoctorId" style=" position: relative; left: 45%;">إضافة جدول دوام</a>
+
+<div class="All_form" style="width: 92%; position: relative; right: 22%; background-color: white">
+    <h2>@ViewBag.DoctorName</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.End_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Start_Hour)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Day)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int i = 0; }
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @{int day = (int)item.Day;}
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HoId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a> |
+                        <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HoId">تعديل</a>
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End_Hour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start_Hour)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Day)
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
+<a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DoctorId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
+@section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

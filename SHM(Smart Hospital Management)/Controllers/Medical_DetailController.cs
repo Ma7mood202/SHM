@@ -44,6 +44,20 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                     join md in _context.Medical_Diseases on d.Disease_Id equals md.Disease_Id
                                     where (md.Medical_Detail_Id == details.Medical_Details_Id && md.Chronic_Diseases == true)
                                     select d).ToListAsync();
+            var examination = await (from d in _context.Doctors
+                                     join p in _context.Previews
+                                     on d.Doctor_Id equals p.Doctor_Id
+                                     where p.Patient_Id == id
+                                     && p.ExaminationRecord != null
+                                     && p.Preview_Date.Month >= DateTime.Now.Month - 1
+                                     select new ShowExaminationRecords
+                                     {
+                                         DoctorName = "د." + d.Doctor_First_Name + " " + d.Doctor_Last_Name,
+                                         Date = p.Preview_Date.ToString("dd-MM-yyyy"),
+                                         Examination = p.ExaminationRecord
+                                     }).ToListAsync();
+
+            ViewBag.Examination = examination;
             ViewBag.allergies = allergies;
             ViewBag.PatientId = id;
             ViewBag.family_diseases = family_diseases;
@@ -168,10 +182,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                     }
                 };
 
-                await FCMService.SendNotificationToUserAsync(medical_Detail.Pa_Id, UserType.pat, message);
+                await FCMService.SendNotificationToUserAsync(medical_Detail.Patient.Patient_Id, UserType.pat, message);
 
                 #endregion
-                return RedirectToAction("ShowMedicalDetailsForDoctor", new { id = medical_Detail.Pa_Id, DocId = DocId, HoId = HoId });
+                return RedirectToAction("ShowMedicalDetailsForDoctor", new { id = medical_Detail.Patient.Patient_Id, DocId = DocId, HoId = HoId });
             }
             return View(medical_Detail);
         }
@@ -181,7 +195,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var doctor = await _context.Doctors.FindAsync(DocId);
             if(!doctor.Active)
                 return RedirectToAction("LogOut" , "Doctor");
-            var medical = _context.Medical_Details.FirstOrDefault(m => m.Medical_Details_Id == id);
+            var medical = await _context.Medical_Details.Include(md=>md.Patient).FirstOrDefaultAsync(m => m.Medical_Details_Id == id);
 
             var allergies = await (from a in _context.Medical_Allergies
                                    join all in _context.Allergies
@@ -210,7 +224,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             data.AddRange(dis.Select(s => new PatientDiseases { Disease = s, Disease_Type = _context.Diseases_Types.Find(s.Disease_Type_Id), IsChronic = true, IsFamily = true }));
             data.AddRange(family.Select(s => new PatientDiseases { Disease = s, Disease_Type = _context.Diseases_Types.Find(s.Disease_Type_Id), IsChronic = false, IsFamily = true }));
             data.AddRange(chronic.Select(s => new PatientDiseases { Disease = s, Disease_Type = _context.Diseases_Types.Find(s.Disease_Type_Id), IsChronic = true, IsFamily = false }));
-
+            ViewBag.PatientId = medical.Patient.Patient_Id;
             ViewBag.Allergies = _context.Allergies.ToList();
             ViewBag.PatientAllergies = allergies;
             ViewBag.PatientDiseases = data;
@@ -258,7 +272,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 Medical_Disease temp = new Medical_Disease()
                 {
                     Medical_Detail_Id = medical_Detail.Medical_Details_Id,
-                    Disease_Id = int.Parse(Family[i]),
+                    Disease_Id = Diseases[i],
                     Family_Health_History = Family[i] == "true",
                     Chronic_Diseases = Chronic[i]== "true"
                 };

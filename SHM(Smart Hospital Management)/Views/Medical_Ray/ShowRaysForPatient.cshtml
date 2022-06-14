@@ -8,22 +8,31 @@
     <link href="~/Medicio2/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" /><!-- bootstrap icons-->
     <link href="~/Medicio2/assets/css/bootstrap.min.css" rel="stylesheet"><!--bootstrap min -->
     <link href="~/Medicio2/Cards/Card.css" rel="stylesheet" /><!-- bootstrap icons-->
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
 }
 <div class="container">
     <div class="row">
         @{ int i = 1;}
+        @{int j = 0; }
         @foreach (var item in Model)
         {
             string exampleModal = "exampleModal" + i;
             <div class="col-4">
                 <div class="card ">
                     <a data-toggle="modal" data-target="#@exampleModal">
-                        <img class="bd-placeholder-img card-img-top" src="~/External_Records_Details/@item.RayResult" />
+                        <img class="bd-placeholder-img card-img-top" src="~/Ray_Result/@item.RayResult" />
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">@item.RayType</h5>
                         <p class="card-text">@item.RayDate</p>
-                        <a asp-action="Delete" asp-route-id="@item.RayId" asp-route-medicalId="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" class="btn delete_btn">حذف</a>
+                        @{
+                            string confirm = "confirm" + j;
+                            string cancel = "cancel" + j;
+                            string delete = "delete" + j;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@j)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.RayId" asp-route-medicalId="@ViewBag.MedicalDetailId" asp-route-PatId="@ViewBag.PatientId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@j)" style="margin-right:15px ; width:90%">حذف</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +46,7 @@
                             </button>
                         </div>
                         <div class="modal-body Center ">
-                            <img class="bd-placeholder-img card-img-top" src="~/External_Records_Details/@item.RayResult" />
+                            <img class="bd-placeholder-img card-img-top" src="~/Ray_Result/@item.RayResult" />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn delete_btn " data-dismiss="modal">إغلاق</button>
@@ -46,15 +55,16 @@
                 </div>
             </div>
             i++;
+            j++;
         }
 
     </div>
 </div>
-
+<a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@ViewBag.PatientId" style="position: relative; left: 44%; text-decoration: none; color: gray;">رجوع للخلف</a>
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <!-- Core plugin JavaScript-->
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
 }

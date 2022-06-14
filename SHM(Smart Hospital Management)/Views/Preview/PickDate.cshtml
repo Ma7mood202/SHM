@@ -34,10 +34,11 @@
             </div>
             <div class="All_div col-12">
                 <label>هل يحتاج المريض لأكثر من معاينة</label>
-                <input type="checkbox"  id="chk" onchange="changeChk()" />
+                <input type="checkbox" id="chk" onchange="changeChk()" />
                 <input type="hidden" id="isCaring" name="isCaring" value="false" />
             </div>
             <div class="All_div col-12">
+                <span style="color:red">@TempData["TimePatient"]</span><br />
                 <input type="submit" value="حجز الموعد" />
             </div>
         </div>
@@ -81,7 +82,7 @@
 <a asp-controller="Preview" asp-action="DeptDoctorsForResception" asp-route-id="@ViewBag.DeptId" asp-route-EmpId="@ViewBag.EmpId" asp-route-PatientId="@ViewBag.PatientId" style=" position: relative; left: 48%;">رجوع للخلف</a>
 
 @section Scripts{
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         function changeChk() {
             var chk = document.getElementById('chk');

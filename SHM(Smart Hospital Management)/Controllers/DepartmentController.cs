@@ -38,26 +38,15 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                          Active = d.Active
                                      }).ToListAsync();
 
-            if (departments.Count == 0)
-                return Ok("No Departments in this Hospital yet");
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
             if (string.IsNullOrEmpty(search))
                 return View(departments);
-            else 
-            {
-                departments = await (from d in _context.Departments
-                                     join s in _context.Specializations
-                                     on d.Department_Name equals s.Specialization_Id
-                                     where d.Ho_Id == id && d.Active && s.Specialization_Name.Contains(search)
-                                     select new Specialization_Dept
-                                     {
-                                         Dept_Id = d.Department_Id,
-                                         Spec_Name = s.Specialization_Name
-                                     }).ToListAsync();
+ 
+                departments = departments.Where(d => d.Spec_Name.Contains(search)).ToList();
 
                 return View(departments);
-            }
+            
         }
         //***********************************************************
         // GET: Department/Create

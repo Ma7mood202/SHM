@@ -11,6 +11,8 @@ namespace SHM_Smart_Hospital_Management_.ViewModels
     {
         [Display(Name ="الإسم")]
         public string FullName { get; set; }
+        [Display(Name = "الإجمالي")]
+        public double Total { get; set; }
         public Bill Bill { get; set; }
     }
 }

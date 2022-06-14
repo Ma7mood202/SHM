@@ -20,51 +20,82 @@
     </ul>
 
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
+<form asp-action="Create" enctype="multipart/form-data" class="All_form" style="background-color: white" id="form" onsubmit="event.preventDefault(); ValidateTest();">
+    <div class="container">
+        <div class="row">
 
 
-            <div id="div0">
-                <div class="form-group">
+            <div class="All_div col-12" id="div0">
+                <div class="All_div col-12">
                     <label for="files" class="control-label"></label>
-                    <input type="file" name="files" />
+                    <input type="file" name="files" accept="image/*" required />
                 </div>
-                <div class="form-group">
+                <div class="All_div col-12">
                     <label for="type" class="control-label"></label>
-                    <select id="type0" onchange="ChangeSelect(0)" class="form-control" asp-items="ViewBag.Test_Type_Id">
+                    <select id="type0" onchange="ChangeSelect(0)" style="width:100%" asp-items="ViewBag.Test_Type_Id">
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="All_div col-12">
                     <label for="type" class="control-label"></label>
-                    <select id="test0" name="test" class="form-control" asp-items="ViewBag.Tests">
-                    </select>
+                    <select class="ValidateTests" style="width:100%" id="test0" name="test" asp-items="ViewBag.Tests">
+                    </select><br />
+                    <span id="TestsSpan0" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="All_div col-12">
                     <label for="date" class="control-label"></label>
-                    <input type="date" name="date" class="form-control" />
+                    <input type="date" name="date" style="width:100%" class="ValidateDates" /><br />
+                    <span id="DatesSpan0" style="color:red"></span>
                 </div>
                 <span class="span" id="0"></span>
-                <button type="button" onclick="AddMedicalTest(this,0)"> إضافة تحليل</button>
+                <button type="button" onclick="AddMedicalTest(this,0)" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; "> إضافة تحليل</button>
             </div>
 
-
+            
 
             <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
             <input type="hidden" name="DocId" value="@ViewBag.DocId" />
             <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="إضافة التحاليل" style="width:100px" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
-    <a asp-action="ShowMedicalTestForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">Back to List</a>
+    <a asp-action="ShowMedicalTestForDoctor" asp-route-id="@Model.Medical_Detail_Id" asp-route-DocId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 51%;">رجوع للخلف</a>
 </div>
 
 @section Scripts {
+
+    <script>
+        function ValidateTest() {
+            var tests = document.getElementsByClassName("ValidateTests");
+            var dates = document.getElementsByClassName("ValidateDates");
+            var bool = true;
+            for (var i = 0; i < tests.length; i++) {
+                if (tests[i].value == '' || tests[i].value == 'اختر نوع المرض') {
+                    document.getElementById('TestsSpan' + i).innerHTML = "يرجى اختيار التحليل";
+                    bool = false;
+                }
+                else {
+                    document.getElementById('TestsSpan' + i).innerHTML = "";
+                }
+                if (dates[i].value.substring(0, 4) != new Date().getFullYear()) {
+                    document.getElementById('DatesSpan' + i).innerHTML = "لا يمكن إضافة تحليل إلا في نفس العام";
+                    bool = false;
+                }
+                else {
+                    document.getElementById('DatesSpan' + i).innerHTML = "";
+                }
+
+            }
+            if (bool) {
+                document.getElementById('form').submit();
+            }
+        }
+    </script>
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         var TestsCount = 1;
@@ -84,55 +115,59 @@
                 var valueToAdd = "";
                 if (TestsCount != 2) {
                     valueToAdd =
-                        '<div id="div' + (i + 1) + '">' +
-                        '<div class="form-group" >' +
+                        '<div class="All_div col-12" id="div' + (i + 1) + '">' +
+                        '<div class="All_div col-12" >' +
                         '<label for="files" class="control-label"></label>' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*"  required />' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="type" class="control-label"></label>' +
-                        '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control"' +
+                    '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control" style="width:100%" >' +
                         string1 +
                         '</select>' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="type" class="control-label"></label>' +
-                        '<select id="test' + (i + 1) + '" name="test" class="form-control">' +
-                        '</select>' +
+                    '<select id="test' + (i + 1) + '" class="ValidateTests"  name="test" class="form-control" style="width:100%">' +
+                        '</select> <br />' +
+                        '<span id="TestsSpan' + (i + 1) +'" class="text-danger"></span>'+
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="date" class="control-label"></label>' +
-                        '<input type="date" name="date" class="form-control" />' +
+                         '<input type="date" name="date" style="width:100%" class="ValidateDates" required /> <br />' +
+                        '<span id="DatesSpan' + (i + 1) +'"  style="color:red"></span>'+
                         '</div>' +
                         '<span class="span" id="' + (i + 1) + '"></span>' +
-                        '<button type="button" onclick="AddMedicalTest(this,' + (i + 1) + ')"> إضافة تحليل</button>' +
-                        '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')"> حذف </button>' +
+                    '<button type="button" onclick="AddMedicalTest(this,' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; margin: 2px"> إضافة تحليل</button>' +
+                    '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; margin: 2px"> حذف </button>' +
                         '</div>'
                 }
                 else {
                     valueToAdd =
-                        '<div id="div' + (i + 1) + '">' +
-                        '<div class="form-group" >' +
+                        '<div class="All_div col-12" id="div' + (i + 1) + '">' +
+                        '<div class="All_div col-12" >' +
                         '<label for="files" class="control-label"></label>' +
-                        '<input type="file" name="files" />' +
+                        '<input type="file" name="files" accept="image/*"  required />' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="type" class="control-label"></label>' +
-                        '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control"' +
+                    '<select id="type' + (i + 1) + '" onchange="ChangeSelect(' + (i + 1) + ')" class="form-control" style="width:100%">' +
                         string1 +
                         '</select>' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="type" class="control-label"></label>' +
-                        '<select id="test' + (i + 1) + '" name="test" class="form-control">' +
-                        '</select>' +
+                    '<select id="test' + (i + 1) + '" class="ValidateTests"  name="test" class="form-control" style="width:100%">' +
+                        '</select> <br />' +
+                        '<span id="TestsSpan' + (i + 1) + '" class="text-danger"></span>' +
                         '</div>' +
-                        '<div class="form-group">' +
+                        '<div class="All_div col-12">' +
                         '<label for="date" class="control-label"></label>' +
-                        '<input type="date" name="date" class="form-control" />' +
+                         '<input type="date" name="date" style="width:100%" class="ValidateDates" required /> <br />' +
+                        '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
                         '<span class="span" id="' + (i + 1) + '"></span>' +
-                        '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')"> حذف </button>' +
+                    '<button type="button" onclick="DeleteMedicalTest(' + (i + 1) + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; margin: 2px"> حذف </button>' +
                         '</div >'
                 }
                 div.insertAdjacentHTML('afterend', valueToAdd);
@@ -146,10 +181,10 @@
             var spans = document.getElementsByClassName('span');
             if (TestsCount == 1) {
                 var span = document.getElementById('0');
-                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,0)"> إضافة </button>');
+                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,0)" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;margin: 2px">إضافة تحليل</button>');
             }
             else {
-                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,' + spans[spans.length - 1].id + ')"> إضافة </button>');
+                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddMedicalTest(this,' + spans[spans.length - 1].id + ')" style="width: 100px; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600; margin: 2px"> إضافة </button>');
             }
         }
         function ChangeSelect(num) {

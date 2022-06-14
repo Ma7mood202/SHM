@@ -16,6 +16,20 @@
 
 }
 <div class="All_form" style="direction: rtl; width: 82%; position: relative; right: 17%; background-color: white;">
+    <form asp-action="DisplayPatients" asp-route-id="@ViewBag.SrId" method="get">
+        <div class="container">
+            <div class="row" style="width: 200%; position: relative; left: 40%;">
+                <p>
+                    <div class="All_div col-12">
+                        <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+                        <input type="hidden" name="HoId" value="@ViewBag.HoId" />
+                        <input type="text" name="search" style="width:70%;" />
+                        <input type="submit" value="بحث" />
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>

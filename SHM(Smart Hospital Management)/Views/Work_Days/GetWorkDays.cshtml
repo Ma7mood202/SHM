@@ -6,6 +6,7 @@
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
     <style>
         html {
@@ -19,7 +20,7 @@
 }
 <div class="All_form" style="width: 92%; position: relative; right: 22%; background-color: white">
     <h2>@ViewBag.DoctorName</h2>
-    <table class="table" >
+    <table class="table">
         <thead>
             <tr>
                 @if (ViewBag.IsDeptManager)
@@ -38,16 +39,27 @@
             </tr>
         </thead>
         <tbody>
+            @{int i = 0; }
             @foreach (var item in Model)
             {
                 <tr>
                     @if (ViewBag.IsDeptManager)
                     {
-                        <td>
-                            @{int day = (int)item.Day;}
-                            <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تعديل</a> | 
-                            <a asp-action="Delete" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">حذف</a>
-                        </td>
+                    <td>
+                        @{int day = (int)item.Day;}
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="Delete" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حذف</a>|
+
+                        <a asp-action="Edit" asp-route-id="@item.Doctor_Id" asp-route-Day="@day" asp-route-DeptMgrId="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId">تعديل</a>
+
+
+                    </td>
                     }
                     <td>
                         @Html.DisplayFor(modelItem => item.End_Hour)
@@ -59,12 +71,14 @@
                         @Html.DisplayFor(modelItem => item.Day)
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>
 </div>
 <a asp-controller="Doctor" asp-action="Master" asp-route-id="@ViewBag.DocId" asp-route-HoId="@ViewBag.HoId" style="position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

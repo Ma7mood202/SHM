@@ -11,45 +11,41 @@
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
 
-<form asp-action="Create" method="post" class="All_form" style="background-color: white;">
+<form asp-action="Create" method="post" class="All_form" style="background-color: white;" id="form" onsubmit="event.preventDefault(); ValidateBill();">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Examination"></label>
-                <input type="number" min="0" asp-for="Bill_Examination" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Examination" /><br />
                 <span asp-validation-for="Bill_Examination" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Surgeries"></label>
-                <input type="number" min="0" asp-for="Bill_Surgeries" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Surgeries" /><br />
                 <span asp-validation-for="Bill_Surgeries" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Rays"></label>
-                <input type="number" min="0" asp-for="Bill_Rays" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Rays" /><br />
                 <span asp-validation-for="Bill_Rays" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Medical_Test"></label>
-                <input type="number" min="0" asp-for="Bill_Medical_Test" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Medical_Test" /><br />
                 <span asp-validation-for="Bill_Medical_Test" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Room_Service"></label>
-                <input type="number" min="0" asp-for="Bill_Room_Service" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Room_Service" /><br />
                 <span asp-validation-for="Bill_Room_Service" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Bill_Medication"></label>
-                <input type="number" min="0" asp-for="Bill_Medication" /><br />
+                <input class="input" type="number" min="0" asp-for="Bill_Medication" /><br />
                 <span asp-validation-for="Bill_Medication" class="text-danger"></span>
             </div>
-            <div class="All_div col-12">
-                <label asp-for="Bill_Date"></label>
-                <input asp-for="Bill_Date" type="date" /><br />
-                <span asp-validation-for="Bill_Date" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="Bill_Date" />
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" type="hidden" asp-for="Paid" />
@@ -59,6 +55,7 @@
             <input type="hidden" name="id" value="@ViewBag.HospitalId" />
             <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
+                <span id="span" class="text-danger"></span> <br /><br />
                 <input type="submit" value="إنشاء الفاتورة" />
             </div>
         </div>
@@ -68,6 +65,30 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        function ValidateBill() {
+            var inputs = document.getElementsByClassName('input');
+            var bool = false;
+            var span = document.getElementById('span');
+
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value != 0) {
+                    bool = true;
+                    break;
+                }
+            }
+            if (!bool) {
+                span.innerHTML = "يجب ملئ حقل على الاقل "
+            }
+            else {
+                span.innerHTML = "";
+                document.getElementById('form').submit();
+            }
+
+
+        }
+    </script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

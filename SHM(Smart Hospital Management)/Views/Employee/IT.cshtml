@@ -62,13 +62,35 @@
 </div>
 <!-- sidebar end -->
 <!-- start -->
-<section class="home-section">
+<section class="home-section" style="height:115vh">
 
     <!-- Topbar start -->
 
     <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
-        <div class="row">
+        <div class="row" style="position:relative; left:170px">
             <ul class="navbar-nav ml-auto">
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div natif">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                        </div>
+                    </a>
+                    <!--Alerts Dropdown start -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
+                         aria-labelledby="alertsDropdown" id="notifications">
+                        <h6 class="dropdown-header">
+                            مركز التنبيهات
+                        </h6>
+                    </div>
+                    <!--Alerts Dropdown end -->
+                </li>
+                <!--Alerts end -->
+
+
+                <div class="topbar-divider d-none d-sm-block"></div>
                 <!-- it Info start -->
                 <li class="nav-item dropdown no-arrow ">
                     <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button"
@@ -304,14 +326,7 @@
             </div>
         </div>
         <!-- end page -->
-        <!-- footer start -->
-        <footer>
-            <div class="footer">
-                <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
-            </div>
 
-        </footer>
-        <!-- footer end -->
 </section>
 
 @section Scripts{

@@ -40,6 +40,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                                   RayResult = r.Ray_Result,
                                   RayType = ry.Ray_Type_Name,
                               }).ToListAsync();
+            var medical = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(md => md.Medical_Details_Id == id);
+            ViewBag.PatientId = medical.Patient.Patient_Id;
             ViewBag.Medical_Detail_Id = id;
             ViewBag.DocId = DocId;
             ViewBag.HoId = HoId;
@@ -73,11 +75,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             {
                 Medical_Detail_Id = id
             };
-            ViewBag.Ray_Type_Id = _context.Ray_Types.Select(s => new SelectListItem
+           var types = _context.Ray_Types.Select(s => new SelectListItem
             {
                 Value = s.Ray_Type_Id.ToString(),
                 Text = s.Ray_Type_Name
             }).ToList();
+            ViewBag.Ray_Type_Id = types;
             ViewBag.DocId = DocId;
             ViewBag.HoId = HoId;
             return View(ray);

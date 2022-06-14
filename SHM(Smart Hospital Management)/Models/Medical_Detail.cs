@@ -12,7 +12,7 @@ namespace SHM_Smart_Hospital_Management_.Models
     public class Medical_Detail
     {
         [NotMapped]
-        public int Pa_Id { get; set; }
+        public int Pa_Id { get; set; } // For Create Medical Details
         [Key]
         public int Medical_Details_Id { get; set; }
 

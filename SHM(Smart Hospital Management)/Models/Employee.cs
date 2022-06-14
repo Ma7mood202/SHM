@@ -11,20 +11,21 @@ namespace SHM_Smart_Hospital_Management_.Models
     public class Employee
     {
         [NotMapped]
+        [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [Display(Name = "الاسم بالانكليزي ")]
         public string Employee_EmailName { get; set; }
         [Key]
         public int Employee_Id { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = " الاسم الأول")]
         public string Employee_First_Name { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = " اسم الأب")]
         public string Employee_Middle_Name { get; set; }
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
-        [StringLength(30, MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "الرجاء ادخال اسم صالح")]
         [Display(Name = "الكنية")]
         public string Employee_Last_Name { get; set; }
         [Display(Name = " الاسم الكامل")]
@@ -51,7 +52,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         public string Employee_X_Y { get; set; }
         [Display(Name = "عدد أفراد الأسرة")]
         [Range(0, 25, ErrorMessage = "يجب أن يكون بين 0 و 25")]
-        public int? Employee_Family_Members { get; set; }
+        public int? Employee_Family_Members { get; set; } = 0;
         [Required(ErrorMessage = "الرجاء عدم ترك الحقل فارغ")]
         [StringLength(30)]
         [Display(Name = "المهنة")]

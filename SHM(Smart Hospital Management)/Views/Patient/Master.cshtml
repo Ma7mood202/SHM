@@ -16,7 +16,7 @@
 <div class="sidebar">
     <div class="logo-details">
         <img src="~/Medicio2/dashborde/img/man.png" class="pait-img ">
-        <span class="logo_name">مريض</span>
+        <span class="logo_name">@Model.Patient_First_Name @Model.Patient_Last_Name</span>
     </div>
     <hr class="sidebar-divider">
     <div class="nav-links ">
@@ -36,16 +36,27 @@
                 </li>
             </ul>
         </div>
+
         <div class="s_div">
             <a asp-controller="Request" asp-action="SendNurse" asp-route-id="@Model.Patient_Id" data-toggle="modal" data-target="#ٍSendNurseModal">
                 <span class="side_name"><i class="bi bi-people-fill"></i>   طلب إرسال ممرض</span>
             </a>
         </div>
-        <div class="s_div">
-            <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id">
-                <span class="side_name"> <i class="bi bi-clipboard-plus"></i> الملف الطبي</span>
-            </a>
-        </div>
+        @if (ViewBag.HahMedicalDetails)
+        {
+            <div class="s_div">
+                <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id">
+                    <span class="side_name"> <i class="bi bi-clipboard-plus"></i> الملف الطبي</span>
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="s_div">
+                    <span class="side_name"> <i class="bi bi-clipboard-plus"></i>  ليس لديك ملف طبي </span>
+            </div>
+        }
+
         <div class="s_div">
             <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id">
                 <span class="side_name"><i class="bi bi-receipt"></i> الفاتورة</span>
@@ -58,8 +69,30 @@
 
     <!-- Topbar -->
     <div class="container navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow topbar-ps ">
-        <div class="row">
+        <div class="row" style="position:relative; left:170px">
             <ul class="navbar-nav ml-auto">
+                <!-- Nav Item - Alerts -->
+                <li class="nav-item dropdown no-arrow mx-1">
+                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="top_div natif">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                        </div>
+                    </a>
+                    <!--Alerts Dropdown start -->
+                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in alert-doc "
+                         aria-labelledby="alertsDropdown" id="notifications">
+                        <h6 class="dropdown-header">
+                            مركز التنبيهات
+                        </h6>
+                    </div>
+                    <!--Alerts Dropdown end -->
+                </li>
+                <!--Alerts end -->
+
+
+                <div class="topbar-divider d-none d-sm-block"></div>
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow ">
                     <a class="nav-link dropdown-toggle do_div" href="#" id="userDropdown" role="button"
@@ -162,16 +195,30 @@
                         </div>
                         <div class="modal-body "> هل أنت متأكد</div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary close_btn" type="button" data-dismiss="modal">تأكيد</button>
+                            <a asp-controller="Request" asp-action="SendNurse" asp-route-id="@Model.Patient_Id" class="btn   modal-bt2 " style="display: flex; justify-content: center; align-items: center; margin: 0; height: 36px; width: 45px; border:none">
+                                <button class="btn btn-secondary close_btn" type="button"  style="background-color: #3fbbc0;">تأكيد</button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-            <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
-                <button type="button" style="background:transparent;color:white;outline:none;border:none">
-                    الملف الطبي
-                </button>
-            </a>
+            @if (ViewBag.HahMedicalDetails)
+            {
+                <a asp-controller="Medical_Detail" asp-action="ShowMedicalDetailsForPatient" asp-route-id="@Model.Patient_Id" class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+                    <button type="button" style="background:transparent;color:white;outline:none;border:none">
+                        الملف الطبي
+                    </button>
+                </a>
+            }
+            else
+            {
+                <a class="btn   modal-bt2 " style="display:flex;justify-content:center;align-items:center">
+                    <button type="button" style="background:transparent;color:white;outline:none;border:none" disabled>
+                            ليس لديك ملف طبي
+                    </button>
+                </a>
+            }
+
             <a asp-controller="Bill" asp-action="ShowBillForPatient" asp-route-id="@Model.Patient_Id" style="display:flex;justify-content:center;align-items:center" class="btn  modal-bt2 ">
                 <button type="button" style="background:transparent;color:white;outline:none;border:none">
                     الفاتورة
@@ -180,11 +227,7 @@
         </div>
     </div>
 
-    <footer>
-        <div class="footer">
-            <span class="fo_span center">حقوق الطباعة &copy; موقعنا 2022</span>
-        </div>
-    </footer>
+
 
 </section>
 

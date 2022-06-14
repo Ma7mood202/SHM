@@ -7,6 +7,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <style>
         html {
             height: 100vh;
@@ -34,25 +35,38 @@
             </tr>
         </thead>
         <tbody>
+            @{int i = 0; }
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    <a asp-controller="Reservation" asp-action="Delete" asp-route-id="@item.Id" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId">إلغاء الحجز</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RoomNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PatientName)
-                </td>
+                <tr>
+                    <td>
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">إلغاء الحجز</a>
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-controller="Reservation" asp-action="Delete" asp-route-id="@item.Id" asp-route-EmpId="@ViewBag.EmpId" asp-route-HoId="@ViewBag.HoId" id="@confirm">تأكيد</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PatientName)
+                    </td>
 
-            </tr>
+                </tr>
+                i++;
             }
         </tbody>
     </table>
 </div>
-    <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
+
+@section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
+}

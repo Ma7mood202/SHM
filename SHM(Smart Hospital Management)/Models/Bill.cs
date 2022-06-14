@@ -12,22 +12,22 @@ namespace SHM_Smart_Hospital_Management_.Models
         [Key]
         public int Bill_Id { get; set; }
         [Display(Name = "التشخيص")]
-        public double? Bill_Examination { get; set; } // Currency
+        public double? Bill_Examination { get; set; } = 0; // Currency
 
         [Display(Name = "العمليات")]
-        public double? Bill_Surgeries { get; set; }
+        public double? Bill_Surgeries { get; set; } = 0;
 
         [Display(Name = "الأشعة")]
-        public double? Bill_Rays { get; set; }
+        public double? Bill_Rays { get; set; } = 0;
 
         [Display(Name = "التحاليل الطبية")]
-        public double? Bill_Medical_Test { get; set; }
+        public double? Bill_Medical_Test { get; set; } = 0;
 
         [Display(Name = "خدمة الغرفة")]
-        public double? Bill_Room_Service { get; set; }
+        public double? Bill_Room_Service { get; set; } = 0;
 
         [Display(Name = "الأدوية")]
-        public double? Bill_Medication { get; set; }
+        public double? Bill_Medication { get; set; } = 0;
 
         [Display(Name = "تاريخ الفاتورة")]
         public DateTime Bill_Date { get; set; }

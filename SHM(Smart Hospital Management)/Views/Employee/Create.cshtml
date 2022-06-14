@@ -41,8 +41,9 @@
             <input type="hidden" asp-for="Employee_X_Y" />
             <div class="All_div col-12">
                 <label asp-for="Employee_National_Number"></label>
-                <input asp-for="Employee_National_Number" /><br>
-                <span asp-validation-for="Employee_National_Number" class="text-danger" id="nationalValidateSpan"></span>
+                <input id="NationalNumber" asp-for="Employee_National_Number" /><br>
+                <span id="nationalValidateSpan" class="text-danger"></span>
+                <span asp-validation-for="Employee_National_Number" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Gender"></label>
@@ -74,7 +75,8 @@
             </div>
             <div class="All_div col-12">
                 <label asp-for="Employee_Birth_Date"></label>
-                <input type="date" asp-for="Employee_Birth_Date" /><br />
+                <input id="birthDate" type="date" asp-for="Employee_Birth_Date" /><br />
+                <span id="birthDateValidateSpan" class="text-danger"></span>
                 <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
@@ -93,26 +95,27 @@
                 </select><br>
                 <span id="areaValidateSpan" class="text-danger"></span>
             </div>
-                <table>
-                    <tr id="tr0">
-                        <td>
-                            <div class="col-12 All_div">
-                                <input class="ValidateNumber" type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required />
-                                <span id="phoneValidateSpan0" class="text-danger"></span>
+            <table>
+                <tr id="tr0" style="display: flex; flex-direction: column; border-width: 1px; border-color: lightgray; border-radius: 20px; padding: 10px; margin: 10px; width: 75%; position: relative; left: 65px; ">
+                    <td>
+                        <div class="col-12 All_div">
+                            <input class="ValidateNumber" type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" /><br />
+                            <span id="phoneValidateSpan0" class="text-danger"></span>
 
-                            </div>
-                        </td>
-                        <td>
-                        </td>
+                        </div>
+                    </td>
+                    <td>
+                    </td>
 
-                        <td>
-                            <div class="col-12">
-                                <span id="span0"></span>
-                                <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                    <td>
+                        <div class="col-12">
+                            <span id="span0"></span>
+                            <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 30%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
                 <input type="hidden" name="MgrId" value="@ViewBag.MgrId" />
                 <div class="All_div col-12">
                     <input type="submit" value="إضافة موظف" />
@@ -125,8 +128,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/addPhoneNumbers3.js"></script>
-    <script src="~/Validations.js"></script>
+    <script src="~/addPhoneNumbers4.js"></script>
+    <script src="~/Validations15.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
