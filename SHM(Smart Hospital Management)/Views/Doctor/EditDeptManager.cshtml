@@ -7,6 +7,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/Edit.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <style>
         html {
             height: 100vh;
@@ -36,49 +37,55 @@
                     @Html.DisplayNameFor(model => model.Doctor_Full_Name)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Doctor_National_Number)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Doctor_Gender)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Doctor_Birth_Date)
+                    @Html.DisplayNameFor(model => model.Doctor_Phone_Numbers)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Doctor_Hire_Date)
-                </th>
+
 
             </tr>
         </thead>
         <tbody>
+            @{int i = 0; }
             @foreach (var item in Model)
             {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Doctor_Full_Name)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Doctor_National_Number)
-                    </td>
+
                     <td>
                         @Html.DisplayFor(modelItem => item.Doctor_Gender)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Doctor_Birth_Date)
+                        @foreach (var pn in item.Doctor_Phone_Numbers)
+                        {
+                            @Html.DisplayFor(model => pn.Doctor_Phone_Number)
+                            <br />
+                        }
                     </td>
+
                     <td>
-                        @Html.DisplayFor(modelItem => item.Doctor_Hire_Date)
-                    </td>
-                    <td>
-                        <a asp-controller="Request" asp-action="UpdateDeptManager" asp-route-id="@item.Doctor_Id" asp-route-EmpId="@ViewBag.EmpId">تعيين</a>
+
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-controller="Request" asp-action="UpdateDeptManager" asp-route-id="@item.Doctor_Id" asp-route-EmpId="@ViewBag.EmpId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">إرسال طلب للتعيين</a>
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>
 </div>
 <a asp-action="DeptManagers" asp-route-id="@ViewBag.Ho_Id" asp-route-EmpId="@ViewBag.EmpId" style=" position: relative; left: 46%;">رجوع للخلف</a>
 @section Scripts{
+    <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>

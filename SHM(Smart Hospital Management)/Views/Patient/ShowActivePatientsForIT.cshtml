@@ -8,6 +8,7 @@
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
+    <link href="~/Medicio2/Delete.css" rel="stylesheet" />
     <style>
         html {
             height: 100vh;
@@ -37,12 +38,13 @@
                     @Html.DisplayNameFor(model => model.Patient_Gender)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_Birth_Date)
+                    @Html.DisplayNameFor(model => model.Patient_Age)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
+            @{ int i = 0;}
             @foreach (var item in Model)
             {
                 <tr>
@@ -53,14 +55,28 @@
                         @Html.DisplayFor(modelItem => item.Patient_Gender)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_Birth_Date)
+                        @Html.DisplayFor(modelItem => item.Patient_Age)
                     </td>
                     <td>
-                        <a asp-action="DeActivate" asp-route-id="@item.Patient_Id" asp-route-EmpId="@ViewBag.EmpId">حظر</a>
+                        @{
+                            string confirm = "confirm" + i;
+                            string cancel = "cancel" + i;
+                            string delete = "delete" + i;
+                        }
+                        <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="DeActivate" asp-route-id="@item.Patient_Id" asp-route-EmpId="@ViewBag.EmpId" id="@confirm">تأكيد</a>
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)" style="margin-right:15px">حظر</a>
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>
 </div>
 <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style="position: relative; left: 44%;">رجوع للصفحة الرئيسية</a>
+
+@section Scripts{
+
+
+    <script src="~/ConfirmDelete.js"></script>
+}

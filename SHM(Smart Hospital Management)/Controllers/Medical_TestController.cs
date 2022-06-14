@@ -31,7 +31,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var patient = await _context.Patients.FindAsync(PatId);
             if (!patient.Active)
-                return RedirectToAction("LogOut", "Patient");
+                return RedirectToAction("LogOut", "Patient" , new { id = PatId});
             var test = (from mt in _context.Medical_Tests.ToList()
                         join t in _context.Tests
                         on mt.Test_Id equals t.Test_Id
@@ -52,7 +52,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
-                return RedirectToAction("LogOut", "Doctor");
+                return RedirectToAction("LogOut", "Doctor" , new { id = DocId});
             var test = await (from mt in _context.Medical_Tests
                         join t in _context.Tests
                         on mt.Test_Id equals t.Test_Id
@@ -74,6 +74,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> Create(int id, int DocId, int HoId)
         {
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             Medical_Test mt = new Medical_Test()
             {
                 Medical_Detail_Id = id
@@ -150,6 +153,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Delete(int id, int medicalId, int PatId)
         {
+            var patient = await _context.Patients.FindAsync(PatId);
+            if (!patient.Active)
+                return RedirectToAction("LogOut", "Patient", new { id = PatId });
             var test = await _context.Medical_Tests.FindAsync(id);
             _context.Medical_Tests.Remove(test);
             await _context.SaveChangesAsync();

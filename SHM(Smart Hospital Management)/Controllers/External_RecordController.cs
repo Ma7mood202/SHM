@@ -25,6 +25,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles ="Patient")]
         public async Task<IActionResult> ShowExternalRecordsPatient(int id , int PatId)//medical id
         {
+            var patient = await _context.Patients.FindAsync(PatId);
+            if (!patient.Active)
+                return RedirectToAction("LogOut" , "Patient" , new { id = PatId});
             var externalRecords =await _context.External_Records.Where(e => e.Medical_Detail_Id == id).ToListAsync();
             ViewBag.MedicalDetailId = id;
             ViewBag.PatientId = PatId;
@@ -33,6 +36,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles ="Doctor,DeptManager")]
         public async Task<IActionResult> ShowExternalRecordsForDoctor(int id, int DocId, int HoId)//medical id
         {
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             var externalRecords =await _context.External_Records.Where(e => e.Medical_Detail_Id == id).ToListAsync();
             var medical = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(md => md.Medical_Details_Id == id);
             ViewBag.PatientId = medical.Patient.Patient_Id;
@@ -42,8 +48,11 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(externalRecords);
         }
         [Authorize(Roles = "Patient")]
-        public IActionResult Create(int id, int PatId)
+        public async Task<IActionResult> Create(int id, int PatId)
         {
+            var patient = await _context.Patients.FindAsync(PatId);
+            if (!patient.Active)
+                return RedirectToAction("LogOut", "Patient", new { id = PatId });
             var externalRecord = new External_Records
             {
                 Medical_Detail_Id = id
@@ -96,6 +105,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Delete(int id ,int medicalId, int PatId)
         {
+            var patient = await _context.Patients.FindAsync(PatId);
+            if (!patient.Active)
+                return RedirectToAction("LogOut", "Patient", new { id = PatId });
             var externalRecord = await _context.External_Records.FindAsync(id);
             _context.External_Records.Remove(externalRecord);
             await _context.SaveChangesAsync();

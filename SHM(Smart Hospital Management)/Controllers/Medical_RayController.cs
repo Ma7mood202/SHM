@@ -29,6 +29,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> ShowRaysForDoctor(int id, int DocId, int HoId)
         {
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             var rays = await (from r in _context.Medical_Rays
                               join ry in _context.Ray_Types
                               on r.Ray_Type_Id equals ry.Ray_Type_Id
@@ -52,7 +55,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var patient = await _context.Patients.FindAsync(PatId);
             if (!patient.Active)
-                return RedirectToAction("LogOut", "Patient");
+                return RedirectToAction("LogOut", "Patient" , new { id = PatId});
             var rays = await (from r in _context.Medical_Rays
                               join ry in _context.Ray_Types
                               on r.Ray_Type_Id equals ry.Ray_Type_Id
@@ -69,8 +72,11 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             return View(rays);
         }
         [Authorize(Roles = "Doctor,DeptManager")]
-        public IActionResult Create(int id, int DocId, int HoId)
+        public async Task<IActionResult> Create(int id, int DocId, int HoId)
         {
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             Medical_Ray ray = new Medical_Ray
             {
                 Medical_Detail_Id = id
@@ -145,6 +151,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Delete(int id,int medicalId, int PatId)
         {
+            var patient = await _context.Patients.FindAsync(PatId);
+            if (!patient.Active)
+                return RedirectToAction("LogOut", "Patient", new { id = PatId });
             var ray = await _context.Medical_Rays.FindAsync(id);
 
             _context.Medical_Rays.Remove(ray);

@@ -195,7 +195,7 @@
                                 </button>
                             </div>
                             <div class="modal-body Center">
-                                <input type="text" name="patientName" />
+                                <input type="text" name="patientName" required/>
                                 <input type="hidden" name="EmpId" value="@Model.Employee_Id" />
                                 <input type="hidden" name="id" value="@Model.Ho_Id" />
                                 <input type="submit" value="بحث" class="btn btn-info  modal-bt4" />
@@ -221,7 +221,7 @@
                                 </button>
                             </div>
                             <div class="modal-body Center">
-                                <select name="roomNumber" id="">
+                                <select name="roomNumber" id="" required>
                                     @foreach (var item in ViewBag.Rooms as List<SHM_Smart_Hospital_Management_.Models.Room>)
                                     {
                                         <option value="@item.Room_Id">@item.Room_Number</option>

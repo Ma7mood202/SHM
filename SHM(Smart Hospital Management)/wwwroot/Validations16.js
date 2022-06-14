@@ -28,11 +28,17 @@ function MyValidations() {
     else if ((currentYear - checkDate) < 20 && checkDate!=0) {
         span.innerHTML = "يجب ان يكون العمر 20 عام على الأقل";
     }
+    else if ((currentYear - checkDate) < 0 && checkDate != 0) {
+        span.innerHTML = "الرجاء إدخال تاريخ صالح";
+    }
     else if (checkDate!=0) {
         span.innerHTML = '';
     }
     if ((currentYear - checkDateForPatient) > 120 && checkDateForPatient!=0) {
         spanForPatient.innerHTML = "لا يمكن ان يكون العمر اكبر من 120 عام";
+    }
+    else if ((currentYear - checkDateForPatient) < 0 && checkDateForPatient != 0) {
+        spanForPatient.innerHTML = "الرجاء إدخال تاريخ صالح";
     }
     else if (checkDateForPatient!=0) {
         spanForPatient.innerHTML = "";

@@ -25,7 +25,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id = EmpId });
             if (id == null) return NotFound();
             var departments = await (from d in _context.Departments
                                      join s in _context.Specializations
@@ -55,7 +55,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id = EmpId });
             Department d = new Department
             {
                 Ho_Id = id,
@@ -66,7 +66,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var specs = await (from spec in _context.Specializations
                                join dept in _context.Departments
                                on spec.Specialization_Id equals dept.Department_Name
-                               where dept.Ho_Id == id
+                               where dept.Ho_Id == id && dept.Active
                                select spec).ToListAsync();
             var AllSpecs = await _context.Specializations.ToListAsync();
 

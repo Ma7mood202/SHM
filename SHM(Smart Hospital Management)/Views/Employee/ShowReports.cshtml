@@ -1,0 +1,80 @@
+﻿@model SHM_Smart_Hospital_Management_.ViewModels.ShowReports
+
+
+@section Styles{
+    <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #c4e5e5;
+            direction:rtl
+        }
+    </style>
+    <link href="~/Medicio2/create.css" rel="stylesheet" />
+}
+
+
+
+<div class="container">
+    <div class="Row" style="display:flex; ">
+
+        @* first table (surgeries) *@
+
+        <div class="All_form col-6" style="text-align: center; background-color: white; text-align: center; background-color: white; margin: 10px 0 0 5px; ">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            اسم القسم
+                        </th>
+                        <th>
+                            عدد العمليات
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Surgeries)
+                    {
+                        <tr>
+                            <td>@item.DepartmentName</td>
+                            <td>@item.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p>الإجمالي :  <span>@Model.TotalSurgeries</span></p>
+        </div>
+
+        @* *********** *@
+        @* first table (Previews) *@
+
+        <div class="All_form col-6" style="text-align: center; background-color: white; text-align: center; background-color: white; margin: 10px 5px 0 0; ">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            اسم القسم
+                        </th>
+                        <th>
+                            عدد المعاينات
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Previews)
+                    {
+                        <tr>
+                            <td>@item.DepartmentName</td>
+                            <td>@item.Count</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p>الإجمالي :  <span>@Model.TotalPreviews</span></p>
+        </div>
+
+        @* *********** *@
+    </div>
+</div>
+
+<a asp-action="MasterHoMgr" asp-route-id="@ViewBag.EmpId" style="position:relative; right: 46.5%; top: 20px">رجوع للخلف</a>

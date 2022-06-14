@@ -85,6 +85,8 @@ namespace SHM_Smart_Hospital_Management_
             //RecurringJob.AddOrUpdate(() => TimingOperations.AlterSentColumn()
             //, Cron.Daily);
             //RecurringJob.AddOrUpdate(() => TimingOperations.DeleteAcceptedRequests()
+            //, Cron.Monthly);  
+            //RecurringJob.AddOrUpdate(() => TimingOperations.DeletePaidBills()
             //, Cron.Monthly);
             app.UseHttpsRedirection();
             app.UseStaticFiles();

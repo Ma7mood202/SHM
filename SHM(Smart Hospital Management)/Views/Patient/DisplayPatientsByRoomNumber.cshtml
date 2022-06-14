@@ -1,9 +1,8 @@
-﻿@model IEnumerable<SHM_Smart_Hospital_Management_.Models.Patient>
+﻿@model IEnumerable<SHM_Smart_Hospital_Management_.ViewModels.ShowPatientForNurse>
 
 @{
     ViewData["Title"] = "HoPatientsForPreview";
 }
-
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -14,24 +13,24 @@
         }
     </style>
 }
-<div class="All_form" style="direction: rtl; width: 82%; position: relative; right: 17%; background-color: white">
+<div class="All_form" style="direction: rtl; width: 82%; position: relative; right: 17%; background-color:white">
     <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_Full_Name)
+                    اسم المريض
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_National_Number)
+                    العمر
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_Gender)
+                    خطط العلاجية
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_Social_Status)
+                    زمرة الدم
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Patient_Birth_Date)
+                    احتياجات خاصة
                 </th>
 
                 <th></th>
@@ -43,22 +42,22 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_Full_Name)
+                        @Html.DisplayFor(modelItem => item.PatinntName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_National_Number)
+                        @Html.DisplayFor(modelItem => item.Age)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_Gender)
+                        @Html.DisplayFor(modelItem => item.Plans)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_Social_Status)
+                        @Html.DisplayFor(modelItem => item.BloodType)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Patient_Birth_Date)
+                        @Html.DisplayFor(modelItem => item.SpecialNeeds)
                     </td>
                     <td>
-                        @* الملف الطبي ... *@
+                        @* الملف الطبي ...  *@
                     </td>
                 </tr>
             }
@@ -66,3 +65,8 @@
     </table>
 </div>
 <a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style=" position: relative; left: 45%;">رجوع للصفحة الرئيسية</a>
+@section Scripts{
+    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
+}

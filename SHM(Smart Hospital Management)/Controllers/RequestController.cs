@@ -29,6 +29,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var HeadNurse = await _context.Employees.FindAsync(id);
             if (!HeadNurse.Active)
                 return RedirectToAction("LogOut", "Employee");
+            ViewBag.EmpId = id;
             return View(await _context.Requests.Where(r => r.Employee_Id == id && r.Accept == false).ToListAsync());
         }
         [Authorize(Roles = "HeadNurse")]
@@ -750,7 +751,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
 
                 return Ok();
         }
-        [Authorize(Roles = "IT")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DenyRequest(int id, int mgrId)
         {
             var request = _context.Requests.Find(id);
@@ -761,9 +762,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> EmergencyAlert(int id)
         {
-            var hoId = _context.Employees.Find(id).Ho_Id;
-            var dept = _context.Departments.FirstOrDefault(d => d.Ho_Id == hoId).Department_Id;
-            var DocIds = await _context.Doctors.Where(e => e.Department_Id == dept).Select(e => e.Doctor_Id).ToListAsync();
+            var Manager = await _context.Employees.FindAsync(id);
+            if (!Manager.Active)
+                return RedirectToAction("LogOut", "Employee", new { id });
+            var hoId = Manager.Ho_Id;
+            var deptId = _context.Departments.FirstOrDefault(d => d.Ho_Id == hoId).Department_Id;
+            var DocIds = await _context.Doctors.Where(e => e.Department_Id == deptId).Select(e => e.Doctor_Id).ToListAsync();
             await FCMService.SendEmergencyNotificationsToDoctorsAsync(DocIds);
             return RedirectToAction("MasterHoMgr", "Employee", new { id = id });
         }

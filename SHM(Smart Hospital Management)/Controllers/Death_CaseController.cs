@@ -28,7 +28,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = _context.Employees.Find(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Employee", new { id = EmpId });
 
             Death_Case d = new Death_Case
             {

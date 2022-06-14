@@ -20,12 +20,12 @@
 <div class="sidebar">
     <div class="logo-details">
         <img src="~/Medicio2/assets/img/avatar/mng.jpg " class="doctor-img" />
-        <span class="logo_name"> مدير المشفى </span>
+        <span class="logo_name">  @Model.Employee_First_Name @Model.Employee_Last_Name </span>
     </div>
     <hr class="sidebar-divider" />
     <div class="nav-links">
         <div class="s_div">
-            <a href="#">
+            <a asp-action="ShowReports" asp-route-id="@Model.Employee_Id">
                 <span class="side_name"><i class="bi bi-clipboard icon"></i>إستعراض التقارير</span>
             </a>
         </div>
@@ -69,9 +69,11 @@
                 <li>
 
                     <!--imrg btn -->
-                    <button class="btn btn-danger modal-btn-danger">
-                        حالة طوارئ
-                    </button>
+                    <a asp-controller="Request" asp-action="EmergencyAlert" asp-route-id="@Model.Employee_Id">
+                        <buttoan class="btn btn-danger modal-btn-danger">
+                            حالة طوارئ
+                        </buttoan>
+                    </a>
 
                 </li>
                 <div class="topbar-divider  d-sm-block"></div>
@@ -132,10 +134,13 @@
         <div class="row ">
             <div class="col-4 ">
                 <!-- show-rep btn -->
-                <button type="button" class="btn modal-bt1" style=" position: relative; right: 75px;">
-                    إستعراض التقارير
-                </button>
+                <a asp-action="ShowReports" asp-route-id="@Model.Employee_Id">
+                    <button type="button" class="btn modal-bt1" style=" position: relative; right: 75px;">
+                        إستعراض التقارير
+                    </button>
+                </a>
             </div>
+
 
             <!-- show-emp btn -->
             <div class="col-4 ">
@@ -172,7 +177,16 @@
                         @Html.DisplayFor(modelItem => item.Request_Date)
                     </td>
                     <td>
-                        <a asp-controller="Request" asp-action="AcceptRequest" asp-route-id="@item.Request_Id" asp-route-mgrId="@Model.Employee_Id">قبول</a> |
+                        @{
+                            string confirm1 = "confirm1" + i;
+                            string cancel1 = "cancel1" + i;
+                            string delete1 = "delete1" + i;
+                        }
+                        <a id="@delete1" class="btn delete_btn" onclick="Confirm1(@i)">قبول</a>
+                        <a id="@cancel1" class="btn Cancel_btn" onclick="Cancel1(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-controller="Request" asp-action="AcceptRequest" asp-route-id="@item.Request_Id" asp-route-mgrId="@Model.Employee_Id" id="@confirm1">تأكيد</a>
+
+
                         @{
                             string confirm = "confirm" + i;
                             string cancel = "cancel" + i;
@@ -192,6 +206,33 @@
 </section>
 <!-- end -->
 @section Scripts{
+    <script>
+
+        function Confirm1(i) {
+            console.log(i);
+            var confirm = document.getElementById('confirm1' + i);
+            var cancel = document.getElementById('cancel1' + i);
+            var btn = document.getElementById('delete1' + i);
+            console.log(confirm);
+            console.log(cancel);
+            console.log(btn);
+            btn.style.display = "none";
+            confirm.style.display = "block";
+            cancel.style.display = "block";
+
+        }
+        function Cancel1(i) {
+            console.log(i);
+            var confirm = document.getElementById('confirm1' + i);
+            var cancel = document.getElementById('cancel1' + i);
+            var btn = document.getElementById('delete1' + i);
+
+            btn.style.display = "block";
+            confirm.style.display = "none";
+            cancel.style.display = "none";
+
+        }
+    </script>
     <script src="~/ConfirmDelete.js"></script>
     <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
     <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

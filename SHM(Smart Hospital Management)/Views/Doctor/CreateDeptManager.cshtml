@@ -1,14 +1,15 @@
 ﻿@model SHM_Smart_Hospital_Management_.Models.Doctor
 
 @{
-    ViewData["Title"] = "CreateDeptManager";
+    ViewData["Title"] = "Create";
 }
 @section Styles{
     <link href="~/Medicio2/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
     <link href="~/Medicio2/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Medicio2/create.css" rel="stylesheet" />
 }
-<form asp-action="CreateDeptManager" method="post" class="All_form" style="background-color: white" id="form" onsubmit="event.preventDefault(MyValidations());">
+
+<form asp-action="CreateDeptManager" method="post" class="All_form" style="background-color:white" id="form" onsubmit="event.preventDefault(MyValidations());">
     <div class="container">
         <div class="row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -34,10 +35,10 @@
             </div>
             <div class="All_div col-12">
                 <label asp-for="Doctor_National_Number"></label>
-                <input asp-for="Doctor_National_Number" /><br>
-                <span asp-validation-for="Doctor_National_Number" class="text-danger" id="nationalValidateSpan"></span>
+                <input id="NationalNumber" asp-for="Doctor_National_Number" /><br>
+                <span id="nationalValidateSpan" class="text-danger"></span>
+                <span asp-validation-for="Doctor_National_Number" class="text-danger"></span>
             </div>
-
             <div class="All_div col-12">
                 <label asp-for="Doctor_Gender"></label>
                 <select asp-for="Doctor_Gender">
@@ -51,7 +52,7 @@
             <input type="hidden" asp-for="Doctor_Password" />
             <div class="All_div col-12">
                 <label asp-for="Doctor_Family_Members"></label>
-                <input asp-for="Doctor_Family_Members" /><br />
+                <input asp-for="Doctor_Family_Members" min="0" /><br />
                 <span asp-validation-for="Doctor_Family_Members" class="text-danger"></span>
             </div>
 
@@ -65,19 +66,19 @@
                 <select asp-for="Doctor_Social_Status">
                     <option>أعزب</option>
                     <option>متزوج</option>
-                </select>
+                </select><br />
             </div>
             <div class="All_div col-12">
                 <label asp-for="Doctor_Birth_Date"></label>
-                <input type="date" asp-for="Doctor_Birth_Date" /><br />
+                <input id="birthDate" type="date" asp-for="Doctor_Birth_Date" /><br />
+                <span id="birthDateValidateSpan" class="text-danger"></span>
                 <span asp-validation-for="Doctor_Birth_Date" class="text-danger"></span>
             </div>
             <div class="All_div col-12">
-                <label asp-for="Doctor_Birth_Place"></label>
+                <label asp-for="Doctor_Birth_Place">مكان الولادة</label>
                 <select asp-for="Doctor_Birth_Place" asp-items="@ViewBag.Cities">
                 </select>
             </div>
-            <input type="hidden" asp-for="Doctor_Hire_Date" />
             <div class="All_div col-12">
                 <label asp-for="Department_Id"></label>
                 <select asp-for="Department_Id">
@@ -88,11 +89,11 @@
                 </select>
 
             </div>
+            <input type="hidden" asp-for="Doctor_Hire_Date" />
             <div class="All_div col-12">
                 <label>السكن</label>
                 <select id="City" asp-items="@ViewBag.Cities">
                 </select>
-
             </div>
             <div class="All_div col-12">
                 <label asp-for="Area_Id"></label>
@@ -100,29 +101,31 @@
                 </select><br>
                 <span id="areaValidateSpan" class="text-danger"></span>
             </div>
+            <input type="hidden" name="DocId" value="@ViewBag.DocId" />
+            <input type="hidden" name="HoId" value="@ViewBag.HoId" />
             <table>
-                <tr id="tr0">
+                <tr id="tr0" style="display: flex; flex-direction: column; border-width: 1px; border-color: lightgray; border-radius: 20px; padding: 10px; margin: 10px; width: 75%; position: relative; left: 65px; ">
                     <td>
                         <div class="col-12 All_div">
-                            <input type="text" name="pn" min="10" maxlength="10" placeholder="ادخل رقم الموبايل" required />
+                            <input class="ValidateNumber" type="text" min="10" maxlength="10" name="pn" placeholder="ادخل رقم الموبايل" /><br />
                             <span id="phoneValidateSpan0" class="text-danger"></span>
+
                         </div>
                     </td>
                     <td>
                     </td>
-
 
                     <td>
                         <div class="col-12">
                             <span id="span0"></span>
-                            <input type="button" onclick="Add(this)" value="إضافة رقم الموبايل" style="margin: 10px 0px; width: 63%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
+                            <input type="button" onclick="Add(this)" value="إضافة رقم موبايل" style="margin: 10px 0px; width: 30%; height: 35px; border-radius: 16px; border: none; background-color: #bac8d5e0; color: #5e5c5c; font-weight: 600;" />
                         </div>
                     </td>
+
                 </tr>
             </table>
-            <input type="hidden" name="EmpId" value="@ViewBag.EmpId" />
             <div class="All_div col-12">
-                <input type="submit" value="إضافة رئيس القسم" style="width:145px;" />
+                <input type="submit" value="إضافة طبيب" />
             </div>
         </div>
     </div>
@@ -131,8 +134,8 @@
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/Validations.js"></script>
-    <script src="~/addPhoneNumbers3.js"></script>
+    <script src="~/addPhoneNumbers4.js"></script>
+    <script src="~/Validations16.js"></script>
     <script type="text/javascript">
         $(document).ready(function ()
         {
@@ -156,7 +159,4 @@
         });
     });
     </script>
-    <script src="~/Medicio2/dashborde/vendor/jquery/jquery.min.js"></script>
-    <script src="~/Medicio2/dashborde/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/Medicio2/dashborde/vendor/jquery-easing/jquery.easing.min.js"></script>
 }

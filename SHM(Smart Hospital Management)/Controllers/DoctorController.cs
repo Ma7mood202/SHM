@@ -38,7 +38,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return NotFound();
             }
             if (!doctor.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Doctor",new {id = id });
             var Department =await _context.Departments.FirstOrDefaultAsync(m => m.Dept_Manager.Doctor_Id == doctor.Doctor_Id);
 
             if (Department != null)
@@ -92,7 +92,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == id);
             var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
             if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id =id });
             var doctors = await _context.Doctors.Where(d => d.Department_Id == Deptmanager.Department_Id && d.Doctor_Id != Deptmanager.Doctor_Id && d.Active).ToListAsync();
             if (doctors == null) return Ok("this deprtment is empty !!");
             ViewBag.DeptMgrId = id;
@@ -111,7 +111,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         { // تفاصيل عامة ===> ساعات الدوام 
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id =EmpId });
             var departments = await _context.Departments.Where(d => d.Ho_Id == id).ToListAsync();
             var doctors =  (from d in _context.Doctors.ToList()
                            join dept in departments
@@ -138,7 +138,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Employee",new {id =EmpId });
             var dept = await _context.Departments.Where(d => d.Dept_Manager != null && d.Ho_Id == id).ToListAsync();
             var deptmanagers = (from doc in _context.Doctors.ToList()
                                 join d in dept
@@ -171,12 +171,11 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id = EmpId});
             var department = await _context.Departments.FindAsync(id);
             department.Dept_Manager = await _context.Doctors.FindAsync(DoctorId);
             var Doctors = await _context.Doctors.Where(d => d.Department_Id == id
-             && d.Doctor_Id != department.Dept_Manager.Doctor_Id)
-            .ToListAsync();
+             && d.Doctor_Id != department.Dept_Manager.Doctor_Id).Include(d=>d.Doctor_Phone_Numbers).ToListAsync();
             ViewBag.DeptID = id;
             ViewBag.EmpId = EmpId;
             ViewBag.Ho_Id = department.Ho_Id;
@@ -272,7 +271,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT =await  _context.Employees.FindAsync(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Employee",new {id =EmpId });
             if (ModelState.IsValid)
             {
                 doctor.Doctor_Email = doctor.Doctor_EmailName.Replace(" ", "_");
@@ -305,7 +304,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Deptmanager = _context.Doctors.Find(DeptMgrId);
             var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
             if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id =id });
             if (id == null)
             {
                 return NotFound();
@@ -330,7 +329,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             }
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id=EmpId });
 
             var doctor = await _context.Doctors
                 .FirstOrDefaultAsync(m => m.Doctor_Id == id);
@@ -350,7 +349,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
             var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
             if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=DocId });
             Doctor doctor = new Doctor
             {
                 Doctor_Email = "mmmmmmmmmm",
@@ -372,7 +371,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var Deptmanager = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == DocId);
             var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
             if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return RedirectToAction("LogOut");         
+                return RedirectToAction("LogOut",new { id = DocId});         
             
             if (ModelState.IsValid)
             {
@@ -414,7 +413,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var doctor = await _context.Doctors.Include(d => d.Doctor_Phone_Numbers).FirstOrDefaultAsync(d => d.Doctor_Id == id);
             if (!doctor.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", new {id =id });
             int doctorCityId = (from c in _context.Cities
                                  join a in _context.Areas
                                  on c.City_Id equals a.City_Id
@@ -446,9 +445,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = doctor.Doctor_Id });
             }
-            //ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == doctorCityId ? true : false }).ToListAsync();
-            //ViewBag.Areas = new List<SelectListItem>();
-            //ViewBag.DoctorArea = _context.Areas.Find(doctor.Area_Id).Area_Name;
+            int doctorCityId = (from c in _context.Cities
+                                join a in _context.Areas
+                                on c.City_Id equals a.City_Id
+                                where a.Area_Id == doctor.Area_Id
+                                select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == doctorCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.DoctorArea = _context.Areas.Find(doctor.Area_Id).Area_Name;
             return View();
         }
         [Authorize(Roles = "DeptManager")]
@@ -465,7 +469,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Employee",new { id=id});
             ViewBag.EmpId = id;
             var data = await (from doc in _context.Doctors
                               join dept in _context.Departments
@@ -485,7 +489,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut","Employee",new {id=id});
             ViewBag.EmpId = id;
             var data = await (from doc in _context.Doctors
                               join dept in _context.Departments
@@ -500,7 +504,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id=EmpId });
             var doctor = await _context.Doctors.FindAsync(id);
             doctor.Active = false;
             await _context.SaveChangesAsync();
@@ -512,7 +516,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id=EmpId});
             var doctor = await _context.Doctors.FindAsync(id);
             doctor.Active = true;
             await _context.SaveChangesAsync();

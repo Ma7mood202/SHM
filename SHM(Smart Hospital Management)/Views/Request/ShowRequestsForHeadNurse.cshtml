@@ -44,23 +44,60 @@
                     </td>
 
                     <td>
-                        <a asp-action="AcceptPatientRequest" asp-route-id="@item.Request_Id">Confirm</a> |
+
+                        @{
+                            string confirm1 = "confirm1" + i;
+                            string cancel1 = "cancel1" + i;
+                            string delete1 = "delete1" + i;
+                        }
+                        <a id="@cancel1" class="btn Cancel_btn" onclick="Cancel1(@i)">إلغاء</a>
+                        <a class="btn Confirm_btn" asp-action="AcceptPatientRequest" asp-route-id="@item.Request_Id" id="@confirm1">تأكيد</a>
+                        <a id="@delete1" class="btn delete_btn" onclick="Confirm1(@i)">قبول</a>
                         @{
                             string confirm = "confirm" + i;
                             string cancel = "cancel" + i;
                             string delete = "delete" + i;
                         }
-                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
                         <a id="@cancel" class="btn Cancel_btn" onclick="Cancel(@i)">إلغاء</a>
                         <a class="btn Confirm_btn" asp-action="DenyPatientRequest" asp-route-id="@item.Request_Id" id="@confirm">تأكيد</a>
-                        @{i++;}
+                        <a id="@delete" class="btn delete_btn" onclick="Confirm(@i)">حذف</a>
+
                     </td>
                 </tr>
+                i++;
             }
         </tbody>
     </table>
 </div>
-    @section Scripts{
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-        <script src="~/ConfirmDelete.js"></script>
-    }
+<a asp-controller="Employee" asp-action="Master" asp-route-id="@ViewBag.EmpId" style=" position: relative; left: 46%;">رجوع للخلف</a>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+
+        function Confirm1(i) {
+            console.log(i);
+            var confirm = document.getElementById('confirm1' + i);
+            var cancel = document.getElementById('cancel1' + i);
+            var btn = document.getElementById('delete1' + i);
+            console.log(confirm);
+            console.log(cancel);
+            console.log(btn);
+            btn.style.display = "none";
+            confirm.style.display = "block";
+            cancel.style.display = "block";
+
+        }
+        function Cancel1(i) {
+            console.log(i);
+            var confirm = document.getElementById('confirm1' + i);
+            var cancel = document.getElementById('cancel1' + i);
+            var btn = document.getElementById('delete1' + i);
+
+            btn.style.display = "block";
+            confirm.style.display = "none";
+            cancel.style.display = "none";
+
+        }
+    </script>
+    <script src="~/ConfirmDelete.js"></script>
+}

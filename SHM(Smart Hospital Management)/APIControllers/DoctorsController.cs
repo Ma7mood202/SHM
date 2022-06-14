@@ -169,6 +169,28 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             });
 
         }
+
+        [Route("[action]")]
+        public async Task<IActionResult> DeletePatient([FromQuery] int id,[FromQuery] int DocId)
+        {
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(m => m.Doctor_Id == DocId);
+            if (!doctor.Active)
+            {
+                return Ok(new { status = false, Active = false, Message = "لم يعد لديك حساب في هذه المشفى" });
+            }
+
+            var previews = await _context.Previews.Where(p => p.Doctor_Id == DocId && p.Patient_Id == id).ToListAsync();
+
+            foreach (var item in previews)
+            {
+                item.Caring = false;
+                _context.Update(item);
+            }
+            await _context.SaveChangesAsync();
+
+            return Ok(new { status = true, Message = "تم حذف المريض بنجاح" });
+        }
+
         // (العمليات)
         #region Doctors
         [Route("[action]")]
@@ -350,7 +372,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             await _context.SaveChangesAsync();
 
             #region send notification
-            //==============================================================================================
             var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == surgery.Doctor_Id);
             var message = new MulticastMessage()
             {
@@ -362,7 +383,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
                 }
             };
             await FCMService.SendNotificationToUserAsync((int)surgery.Patient_Id, UserType.pat, message);
-            //=========================================================================================
             #endregion
 
             return Ok(new
@@ -569,23 +589,22 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             };
             var surgery = JsonConvert.SerializeObject(sr);
             var dept = await _context.Departments.Include(d => d.Dept_Manager).FirstOrDefaultAsync(d => d.Department_Id == doctor.Department_Id);
-            var ho = await _context.Hospitals.FirstOrDefaultAsync(h => h.Ho_Id == dept.Ho_Id);
-            var Mgr = ho.Ho_Mgr_Id;
+            var ho = await _context.Hospitals.Include(m=> m.Manager).FirstOrDefaultAsync(h => h.Ho_Id == dept.Ho_Id);
+            var Mgr = ho.Manager.Employee_Id;
             Request request = new Request
             {
                 Accept = false,
-                Patient_Id = sr.Patient_Id,
-                Employee_Id = null,
+                Patient_Id = null,
+                Employee_Id = Mgr,
                 Request_Date = DateTime.Now,
                 Request_Type = "Add Surgery",
                 Request_Description = $"د. {doctor.Doctor_Full_Name} يريد عمل عملية في {DateTime.Now.ToString("g")} في الغرفة \" {_context.Surgery_Rooms.Find(sr.Surgery_Room_Id).Su_Room_Number}  ",
-                Doctor_Id = Mgr,
+                Doctor_Id = int.Parse(fc["id"]),
                 Request_Data = surgery,
             };
             _context.Add(request);
             await _context.SaveChangesAsync();
             #region send notification
-            //==============================================================================================
             var message = new MulticastMessage()
             {
                 Data = new Dictionary<string, string>()
@@ -595,7 +614,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
                         }
             };
             await FCMService.SendNotificationToUserAsync((int)Mgr, UserType.emp, message);
-            //=========================================================================================
             #endregion
 
             return Ok(new
@@ -633,7 +651,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             await _context.SaveChangesAsync();
 
             #region send notification
-            //==============================================================================================
             var doc = await _context.Doctors.FirstOrDefaultAsync(d => d.Doctor_Id == preview.Doctor_Id);
             var message = new MulticastMessage()
             {
@@ -646,7 +663,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
 
             };
             await FCMService.SendNotificationToUserAsync((int)preview.Patient_Id, UserType.pat, message);
-            //=========================================================================================
             #endregion
 
             return Ok(new
@@ -790,7 +806,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             _context.Add(p);
             await _context.SaveChangesAsync();
             #region send notification
-            //==============================================================================================
             var message = new MulticastMessage()
             {
                 Data = new Dictionary<string, string>()
@@ -800,8 +815,7 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
                             { "body","لديك موعد جديد عند الطبيب " + doctor.Doctor_Full_Name },
                         }
             };
-            await FCMService.SendNotificationToUserAsync((int)p.Patient_Id, UserType.pat, message);
-            //=========================================================================================
+            await FCMService.SendNotificationToUserAsync(int.Parse(fc["PatId"]), UserType.pat, message);
             #endregion
 
             return Ok(new
@@ -836,7 +850,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
 
         [Route("[action]")]
         // (عرض التفاصيل الطبية)
-
         public async Task<IActionResult> GetMedicalDetails([FromQuery] int id, [FromQuery] int PaId)//docId
         {
             var doctor = _context.Doctors.Find(id);
@@ -1009,7 +1022,7 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
                               where mt.Medical_Detail_Id == medicalId
                               select new
                               {
-                                  testId = t.Test_Id,
+                                  testId = mt.Test_Id,
                                   testDate = mt.Test_Date.ToString("dd-MM-yyyy"),
                                   testResult = mt.Test_Result,
                                   testName = t.Test_Name
@@ -1078,7 +1091,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             await _context.SaveChangesAsync();
 
             #region send notification
-            //==============================================================================================
             var pat = await _context.Medical_Details.Include(p => p.Patient).FirstOrDefaultAsync(p => p.Medical_Details_Id == medicalId);
             var message = new MulticastMessage()
             {
@@ -1090,7 +1102,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
                     }
             };
             await FCMService.SendNotificationToUserAsync(pat.Patient.Patient_Id, UserType.pat, message);
-            //=========================================================================================
             #endregion
 
             return Ok(new
@@ -1482,43 +1493,6 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             #endregion
 
             return Ok(new { status = true, message = "تم تعديل الملف الطبي بنجاح" });
-
-        }
-        [Route("[action]")]
-        public async Task<IActionResult> ShowRequestsForDeptManager([FromQuery] int id)
-        {
-            var Deptmanager = _context.Doctors.Find(id);
-            var dept = _context.Departments.Where(d => d.Department_Id == Deptmanager.Department_Id).Include(d => d.Dept_Manager).ToArray()[0];
-            if (!Deptmanager.Active && Deptmanager.Doctor_Id == dept.Dept_Manager.Doctor_Id)
-                return Ok(new { status = false, Active = false, Message = "لم يعد لديك حساب في هذه المشفى" });
-
-
-            var requests = await _context.Requests.Where(r => r.Doctor_Id == id && r.Accept == false)
-                    .Select(r => new
-                    {
-                        description = r.Request_Description,
-                        date = r.Request_Date.ToString("dd-MM-yyyy"),
-                        type = r.Request_Type,
-                        id = r.Request_Id
-                    }).ToListAsync();
-            if (requests.Count == 0)
-            {
-                return Ok(
-                new
-                {
-                    status = false,
-                    Active = true,
-                    Message = "لا يوجد لديك طلبات",
-                });
-            }
-
-            return Ok(
-                new
-                {
-                    status = true,
-                    Active = true,
-                    data = requests
-                });
 
         }
 

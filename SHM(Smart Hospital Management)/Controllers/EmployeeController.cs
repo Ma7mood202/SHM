@@ -10,6 +10,7 @@ using SHM_Smart_Hospital_Management_.Models;
 using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.PasswordHash;
 using SHM_Smart_Hospital_Management_.PhoneNumbers;
+using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             if (IT == null) return NotFound();
             return View(IT);
         }
@@ -59,7 +60,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = await _context.Employees.FindAsync(id);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             if (Resception == null) return NotFound();
             ViewBag.HospitalName = _context.Hospitals.Find(Resception.Ho_Id).Ho_Name;
             return View(Resception);
@@ -70,12 +71,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var HeadNurse = await _context.Employees.FindAsync(id);
             if (!HeadNurse.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             var XYsPlusNames = await _context.Employees.Where(e => e.Employee_Job == "Nurse" && e.Ho_Id == HeadNurse.Ho_Id && e.Active).Select(s => s.Employee_X_Y + "," + s.Employee_Full_Name).ToListAsync();
             ViewBag.NursesXYs = XYsPlusNames;
             var patientRequests = _context.Requests.Where(r => r.Employee_Id == id && r.Accept == false).Select(s => s.Request_Data);
             ViewBag.PatientRequests = await patientRequests.ToListAsync();
-            ViewBag.Rooms = await _context.Rooms.Where(r => r.Ho_Id == HeadNurse.Ho_Id).ToListAsync();
+            ViewBag.Rooms = await _context.Rooms.Where(r => r.Ho_Id == HeadNurse.Ho_Id && r.Active).ToListAsync();
             if (HeadNurse == null) return NotFound();
             return View(HeadNurse);
         }
@@ -84,7 +85,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var HeadNurse = await _context.Employees.FindAsync(id);
             if (!HeadNurse.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             ViewBag.HoId = HoId;
             ViewBag.EmpId = id;
             var employees = await _context.Employees.Where(e => e.Ho_Id == HoId && e.Employee_Job == "Nurse" && e.Active).ToListAsync();
@@ -149,9 +150,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Nurse = await _context.Employees.FindAsync(id);
             if (!Nurse.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             if (Nurse == null) return NotFound();
-            ViewBag.Rooms = await _context.Rooms.Where(r => r.Ho_Id == Nurse.Ho_Id).ToListAsync();
+            ViewBag.Rooms = await _context.Rooms.Where(r => r.Ho_Id == Nurse.Ho_Id && r.Active).ToListAsync();
             return View(Nurse);
         }
         [Authorize(Roles = "Manager")]
@@ -192,13 +193,13 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                          on dept.Department_Id equals sd.Doctor.Department_Id
                          where dept.Ho_Id == manager.Ho_Id
                          group dept by dept into GroupedDepts
-                         select new
+                         select new Report
                          {
                              DepartmentName = _context.Specializations.Find(GroupedDepts.Key.Department_Name).Specialization_Name,
                              Count = surgeriesAndDoctors.Count(sd => sd.Doctor.Department_Id == GroupedDepts.Key.Department_Id)
                          }).ToList();
             var totalSurgeries = depts.Sum(d => d.Count);
-            ViewBag.TotalSurgeries = totalSurgeries;
+
 
 
             var previewsAndDoctors = await (from pre in _context.Previews
@@ -211,15 +212,23 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                           on dept.Department_Id equals pd.Doctor.Department_Id
                           where dept.Ho_Id == manager.Ho_Id
                           group dept by dept into GroupedDepts
-                          select new
+                          select new Report
                           {
                               DepartmentName = _context.Specializations.Find(GroupedDepts.Key.Department_Name).Specialization_Name,
                               Count = previewsAndDoctors.Count(pd => pd.Doctor.Department_Id == GroupedDepts.Key.Department_Id)
                           }).ToList();
-
             var totalPreviews = depts1.Sum(d => d.Count);
-            ViewBag.TotalPreviews = totalPreviews;
-            return View();
+
+
+            var model = new ShowReports
+            {
+                Surgeries = depts,
+                TotalSurgeries = totalSurgeries,
+                Previews = depts1,
+                TotalPreviews = totalPreviews
+            };
+            ViewBag.EmpId = id;
+            return View(model);
         }
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> HoEmployees(int id, string search = "")
@@ -227,7 +236,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var manager =await _context.Employees.FindAsync(id);
             if (!manager.Active)
             {
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             }
             var hospital =await _context.Hospitals.FirstOrDefaultAsync(h => h.Manager.Employee_Id == id && h.Active);
             var Employees = await _context.Employees.Where(e => e.Ho_Id == hospital.Ho_Id && (e.Employee_Job == "Resception" || e.Employee_Job == "IT" || e.Employee_Job == "HeadNurse") && e.Active).ToListAsync();
@@ -295,25 +304,96 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var hospitals = await _context.Hospitals.ToListAsync();
             return View(hospitals);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogInIT(IFormCollection fc, string ReturnUrl)
+        {
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString() && d.Employee_Job == "IT" && d.Active).ToList();
+            if (employees.Count == 0)
+            {
+                TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة ";
+                return RedirectToAction("LogInIT");
+            }
+
+            var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
+            if (employee is not null)
+            {
+                //************* cookie Auth
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Email , employee.Employee_Email),
+                    new Claim(ClaimTypes.Name,employee.Employee_Password),
+                    new Claim(ClaimTypes.Role,"IT"),
+
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, "LogIn");
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                if (ReturnUrl == null)
+                {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
+                    return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id });
+                }
+                return RedirectToAction(ReturnUrl);
+            }
+            //*************
+            return NotFound();
+        }
         public async Task<IActionResult> LogInResception()
         {
             var hospitals = await _context.Hospitals.ToListAsync();
             return View(hospitals);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogInResception(IFormCollection fc, string ReturnUrl)
+        {
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString() && d.Employee_Job == "Resception" && d.Active).ToList();
+            if (employees.Count == 0)
+            {
+                TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة ";
+                return RedirectToAction("LogInResception");
+            }
+
+            var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
+            if (employee is not null)
+            {
+                //************* cookie Auth
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Email , employee.Employee_Email),
+                    new Claim(ClaimTypes.Name,employee.Employee_Password),
+                    new Claim(ClaimTypes.Role,"Resception"),
+
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, "LogIn");
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                if (ReturnUrl == null)
+                {
+                    FCMService.UpdateToken(fc["fcmToken"].ToString(), employee.Employee_Id, UserType.emp, Platform.Web);
+                    return RedirectToAction("Master", "Employee", new { id = employee.Employee_Id });
+                }
+                return RedirectToAction(ReturnUrl);
+            }
+            //*************
+            return NotFound();
+        }
+
         public async Task<IActionResult> LogInNurse()
         {
             var hospitals = await _context.Hospitals.ToListAsync();
             return View(hospitals);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn(IFormCollection fc, string ReturnUrl ,string baseURL)
+        public async Task<IActionResult> LogInNurse(IFormCollection fc, string ReturnUrl)
         {
-            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString()).ToList();
+            var employees = _context.Employees.Where(d => d.Employee_Email == fc["email"].ToString() && d.Employee_Password == fc["password"].ToString() && (d.Employee_Job == "Nurse" || d.Employee_Job == "HeadNurse") && d.Active).ToList();
             if (employees.Count == 0)
             {
                 TempData["LogInFailed"] = "البيانات المدخلة غير صحيحة ";
-                return RedirectToAction(baseURL);
+                return RedirectToAction("LogInNurse");
             }
 
             var employee = employees.FirstOrDefault(e => e.Ho_Id == int.Parse(fc["hospital"]));
@@ -339,7 +419,6 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             //*************
             return NotFound();
         }
-
         public async Task<IActionResult> LogInHoMgr()
         {
             var hospitals =await _context.Hospitals.ToListAsync();
@@ -393,7 +472,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var manager =await _context.Employees.FindAsync(MgrId);
             if (!manager.Active)
             {
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=MgrId});
             }
             Employee e = new Employee
             {
@@ -416,7 +495,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             var manager = _context.Employees.Find(MgrId);
             if (!manager.Active)
             {
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=MgrId });
             }
             if (ModelState.IsValid)
             {
@@ -462,13 +541,12 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             FCMService.RemoveToken(employee.Employee_Id, UserType.emp);
             return RedirectToAction("DisplayNurses", new { id = HeadNurseId, HoId = employee.Ho_Id });
         }
-
         [Authorize(Roles = "HeadNurse,IT,Nurse,Resception")]
         public async Task<IActionResult> EditPersonalDetails(int id) // EMployee (id)
         {
             var employee = await _context.Employees.Include(e => e.Employee_Phone_Numbers).FirstOrDefaultAsync(e => e.Employee_Id == id);
             if (!employee.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             int employeeCityId = (from c in _context.Cities
                                  join a in _context.Areas
                                  on c.City_Id equals a.City_Id
@@ -477,6 +555,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.EmployeeArea = _context.Areas.Find(employee.Area_Id).Area_Name;
+            employee.Employee_EmailName = "mmmmmmmmmmm";
             return View(employee);
         }
         [HttpPost]
@@ -500,6 +579,14 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Master", new { id = employee.Employee_Id });
             }
+            int employeeCityId = (from c in _context.Cities
+                                  join a in _context.Areas
+                                  on c.City_Id equals a.City_Id
+                                  where a.Area_Id == employee.Area_Id
+                                  select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.EmployeeArea = _context.Areas.Find(employee.Area_Id).Area_Name;
             return View(employee);
         }
         [Authorize(Roles = "Manager")]
@@ -507,7 +594,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Mgr = await _context.Employees.Include(e => e.Employee_Phone_Numbers).FirstOrDefaultAsync(e => e.Employee_Id == id);
             if (!Mgr.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=id });
             int employeeCityId = (from c in _context.Cities
                                   join a in _context.Areas
                                   on c.City_Id equals a.City_Id
@@ -516,6 +603,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
             ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
             ViewBag.Areas = new List<SelectListItem>();
             ViewBag.EmployeeArea = _context.Areas.Find(Mgr.Area_Id).Area_Name;
+            Mgr.Employee_EmailName = "mmmmmmmmmm";
             return View(Mgr);
         }
         [HttpPost]
@@ -537,8 +625,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 _context.AddRange(pns.Distinct());
                 _context.Update(Mgr);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Master", new { id = Mgr.Employee_Id });
+                return RedirectToAction("MasterHoMgr", new { id = Mgr.Employee_Id });
             }
+            int employeeCityId = (from c in _context.Cities
+                                  join a in _context.Areas
+                                  on c.City_Id equals a.City_Id
+                                  where a.Area_Id == Mgr.Area_Id
+                                  select c.City_Id).ToArray()[0];
+            ViewBag.Cities = await _context.Cities.Select(c => new SelectListItem { Value = c.City_Id.ToString(), Text = c.City_Name, Selected = c.City_Id == employeeCityId ? true : false }).ToListAsync();
+            ViewBag.Areas = new List<SelectListItem>();
+            ViewBag.EmployeeArea = _context.Areas.Find(Mgr.Area_Id).Area_Name;
             return View();
         }
         [Authorize(Roles = "IT")]
@@ -546,7 +642,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut",new {id=id});
             ViewBag.EmpId = id;
             var Nurses = await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active && e.Employee_Job == "Nurse").ToListAsync();
             if (string.IsNullOrEmpty(search))
@@ -562,7 +658,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new{id=id});
             ViewBag.EmpId = id;
             return View(await _context.Employees.Where(e => e.Ho_Id == IT.Ho_Id && e.Active == false && e.Employee_Job == "Nurse").ToListAsync());
         }
@@ -571,7 +667,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=EmpId });
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = false;
             await _context.SaveChangesAsync();
@@ -583,7 +679,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = _context.Employees.Find(EmpId);
             if (!IT.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut",new {id=EmpId});
             var employee = await _context.Employees.FindAsync(id);
             employee.Active = true;
             await _context.SaveChangesAsync();

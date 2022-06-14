@@ -19,7 +19,7 @@
             </div>
             <div class="All_div col-12">
                 <label asp-for="Su_Room_Floor"></label>
-                <input asp-for="Su_Room_Floor" /><br />
+                <input asp-for="Su_Room_Floor" min="0" max="10" /><br />
                 <span asp-validation-for="Su_Room_Floor" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Surgery_Room_Ready" />

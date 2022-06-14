@@ -553,3 +553,4 @@ C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SHM(Smart Hospital Management).pdb
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SHM(Smart Hospital Management).genruntimeconfig.cache
 C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\SHM(Smart Hospital Management).csproj.AssemblyReference.cache
+C:\Users\Lenovo\Desktop\SHM\SHM\SHM(Smart Hospital Management)\obj\Debug\net5.0\Razor\Views\Employee\ShowReports.cshtml.g.cs

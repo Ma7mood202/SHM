@@ -565,7 +565,7 @@ namespace SHM_Smart_Hospital_Management_.APIControllers
             List<string> data = new List<string>();
             string fileName = string.Empty;
 
-            string test = Path.Combine(_hosting.WebRootPath, "External_Records_Details");
+            string test = Path.Combine(_hosting.WebRootPath, "External_Records");
 
             foreach (var file in files)
             {

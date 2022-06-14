@@ -10,6 +10,7 @@ using SHM_Smart_Hospital_Management_.Models;
 using SHM_Smart_Hospital_Management_.Notifications;
 using SHM_Smart_Hospital_Management_.PasswordHash;
 using SHM_Smart_Hospital_Management_.PhoneNumbers;
+using SHM_Smart_Hospital_Management_.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Master(int id)
         { 
-            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Patient_Id == id);
+            var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut" , new { id});
             var surgeries =await  _context.Surgeries.Where(s => s.Patient_Id == id && s.Surgery_Date.Date >= DateTime.Now.Date).ToListAsync();
             ViewBag.Surgeries = surgeries;
             var medical = await _context.Medical_Details.Include(m => m.Patient).FirstOrDefaultAsync(m => m.Patient.Patient_Id == id);
@@ -45,9 +46,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> DoctorIndex(int id, int HoId) // Doctor (id)
         {
-            var doctor =await _context.Doctors.FindAsync(id);
+            var doctor = await _context.Doctors.FindAsync(id);
             if (!doctor.Active)
-                return RedirectToAction("LogOut", "Doctor");
+                return RedirectToAction("LogOut", "Doctor", new { id  });
             var patients = await (from p in _context.Patients
                             join pre in _context.Previews
                             on p.Patient_Id equals pre.Patient_Id
@@ -62,7 +63,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
             var patients =await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
             ViewBag.HospitalId = id;
             ViewBag.EmpId = EmpId;
@@ -79,7 +80,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
-                return RedirectToAction("LogOut", "Doctor");
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             var data = await(from pat in _context.Patients
                         join pre in _context.Previews
                         on pat.Patient_Id equals pre.Patient_Id
@@ -98,9 +99,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Resception")]
         public async Task<IActionResult> HoPatientsForReservation(int id, int EmpId, string search = "")// Hospital (id)
         {
-            var Resception =await _context.Employees.FindAsync(EmpId);
+            var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
             var patients = await _context.Patients.Include(p => p.Patient_Phone_Numbers).Where(p => p.Ho_Id == id).ToListAsync();
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
@@ -115,9 +116,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Resception")]
         public async Task<IActionResult> HoPatientsForResception(int id, int EmpId, string search = "")// Hospital (id)
         {
-            var Resception =await _context.Employees.FindAsync(EmpId);
+            var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
             var patients = await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
             ViewBag.HoId = id;
             ViewBag.EmpId = EmpId;
@@ -132,32 +133,59 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Nurse,HeadNurse")]
         public async Task<IActionResult> DisplayPatientsByName(int id, int EmpId, string patientName = "") // Hospital (id)
         {
-            var Nurse = await  _context.Employees.FindAsync(EmpId);
+            var Nurse = await _context.Employees.FindAsync(EmpId);
             if (!Nurse.Active)
-                return RedirectToAction("LogOut");
-            var patients = await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
+            var data = (from p in _context.Patients
+                        join md in _context.Medical_Details.Include(p => p.Patient)
+                        on p.Patient_Id equals md.Patient.Patient_Id
+                        where p.Ho_Id == id && p.Active
+                        select new ShowPatientForNurse
+                        {
+                            PatinntName = p.Patient_Full_Name,
+                            Age = (int)p.Patient_Age,
+                            Plans = md.MD_Patient_Treatment_Plans_And_Daily_Supplements,
+                            BloodType = md.MD_Patient_Blood_Type,
+                            SpecialNeeds = md.MD_Patient_Special_Needs
+                        }).ToList();
             ViewBag.EmpId = EmpId;
             if (string.IsNullOrEmpty(patientName))
-                return View(patients);
-            return View(patients.Where(p => p.Patient_Full_Name.Contains(patientName)).ToList());
+                return View(data);
+            return View(data.Where(p => p.PatinntName.Contains(patientName)).ToList());
         }
+    
         [Authorize(Roles = "Nurse,HeadNurse")]
         public async Task<IActionResult> DisplayPatientsByRoomNumber(int id, int EmpId, int roomNumber) // Hospital (id)
         {
             var Nurse = await _context.Employees.FindAsync(EmpId);
             if (!Nurse.Active)
-                return RedirectToAction("LogOut");
-            var pats =await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
+            var pats = await _context.Patients.Where(p => p.Ho_Id == id && p.Active).ToListAsync();
             var patients = (from p in pats
                             join res in _context.Reservations.ToList()
                             on p.Patient_Id equals res.Patient_Id
+                            where res.End_Date == default
+                            && res.Room_Id == roomNumber
                             select new { p, res }).ToList();
 
-            var data = (from p in patients
-                        join r in _context.Rooms.ToList()
-                        on p.res.Room_Id equals r.Room_Id
-                        where r.Room_Id == roomNumber
-                        select p.p).Distinct().ToList();
+            var patis = (from p in patients
+                         join r in _context.Rooms.ToList()
+                         on p.res.Room_Id equals r.Room_Id
+                         where r.Room_Id == roomNumber
+                         select p.p).Distinct().ToList();
+
+            var data = (from p in patis
+                        join md in _context.Medical_Details.Include(p => p.Patient).ToList()
+                        on p.Patient_Id equals md.Patient.Patient_Id
+                        where p.Ho_Id == id && p.Active
+                        select new ShowPatientForNurse
+                        {
+                            PatinntName = p.Patient_Full_Name,
+                            Age = (int)p.Patient_Age,
+                            Plans = md.MD_Patient_Treatment_Plans_And_Daily_Supplements,
+                            BloodType = md.MD_Patient_Blood_Type,
+                            SpecialNeeds = md.MD_Patient_Special_Needs
+                        }).ToList();
             ViewBag.EmpId = EmpId;
             return View(data);
         }
@@ -166,7 +194,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
             var patient = await _context.Patients
                 .FirstOrDefaultAsync(m => m.Patient_Id == id);
             if (patient == null)
@@ -183,7 +211,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
             if (!doctor.Active)
-                return RedirectToAction("LogOut", "Doctor");
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             var patient = await _context.Patients.FindAsync(id);                    
             ViewBag.HoId = HoId;
             ViewBag.DocId = DocId;
@@ -194,9 +222,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> EditPersonalDetails(int id) // Patient (id)
         {
-            var patient = await _context.Patients.Include(p=>p.Patient_Phone_Numbers).FirstOrDefaultAsync(p=>p.Patient_Id == id);
+            var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", new { id });
             int patientCityId = (from c in _context.Cities
                                  join a in _context.Areas
                                  on c.City_Id equals a.City_Id
@@ -284,7 +312,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = await _context.Employees.FindAsync(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut");
+                return RedirectToAction("LogOut", "Employee", new { id = EmpId });
             Patient p = new Patient
             {
                 Ho_Id = id,
@@ -334,7 +362,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee" , new { id});
             ViewBag.EmpId = id;
             if (string.IsNullOrEmpty(search))
                 return View(await _context.Patients.Where(p => p.Ho_Id == IT.Ho_Id && p.Active).ToListAsync());
@@ -345,9 +373,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> ShowUnActivePatientsForIT(int id) //IT (id)
         {
-            var IT = _context.Employees.Find(id);
+            var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee", new { id });
             ViewBag.EmpId = id;
             var patients = await _context.Patients.Where(p => p.Ho_Id == IT.Ho_Id && p.Active == false).Except(_context.Death_Cases.Include(p => p.Dead_Patient).Select(s => s.Dead_Patient)).ToListAsync();
             return View(patients);
@@ -355,9 +383,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "IT")]
         public async Task<IActionResult> DeActivate(int? id, int EmpId) //IT (id)
         {
-            var IT = _context.Employees.Find(EmpId);
+            var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee", new { id });
             var patient = await _context.Patients.FindAsync(id);
             patient.Active = false;
             await _context.SaveChangesAsync();
@@ -368,15 +396,16 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         
         public async Task<IActionResult> Activate(int? id, int EmpId) //IT (id)
         {
-            var IT = _context.Employees.Find(EmpId);
+            var IT = await _context.Employees.FindAsync(id);
             if (!IT.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee", new { id });
             var patient = await _context.Patients.FindAsync(id);
             patient.Active = true;
             await _context.SaveChangesAsync();
             FCMService.AddToken(patient.Patient_Id, UserType.pat);
             return RedirectToAction("ShowUnActivePatientsForIT", new { id = EmpId });
         }
+        [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> SetAllCaringsFalse(int id , int DocId , int HoId)
         {
             var doctor = await _context.Doctors.FindAsync(DocId);

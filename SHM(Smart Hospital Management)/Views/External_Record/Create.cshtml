@@ -21,7 +21,7 @@
                                 <span id="DatesSpan0" style="color:red"></span>
                             </div>
                             <span class="span" id="0"></span>
-                            <button type="button" onclick="AddRay(this,0)" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px;"> إضافة اشعة</button>
+                            <button type="button" onclick="AddRay(this,0)" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px;"> إضافة ملف خارجي</button>
                         </div>
 
                         <input type="hidden" name="medicalDetailId" value="@Model.Medical_Detail_Id" />
@@ -83,7 +83,7 @@
                     '<span id="DatesSpan' + (i + 1) + '"  style="color:red"></span>' +
                         '</div>' +
                         '<span class="span" id="'+(i+1)+'"></span>' +
-                    '<button type="button" onclick="AddRay(this,' + (i + 1) + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة اشعة </button>' +
+                    '<button type="button" onclick="AddRay(this,' + (i + 1) + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة ملف خارجي  </button>' +
                     '<button type="button" onclick="DeleteRay(' + (i + 1) + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> حذف </button>' +
                         '</div>';
                 }
@@ -113,10 +113,10 @@
             var spans = document.getElementsByClassName('span');
             if (RaysCount == 1) {
                 var span = document.getElementById('0');
-                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,0)" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة اشعة </button>');
+                span.insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,0)" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة ملف خارجي  </button>');
             }
             else {
-                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,' + spans[spans.length - 1].id + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة اشعة </button>');
+                spans[spans.length - 1].insertAdjacentHTML('afterend', '<button type="button" onclick="AddRay(this,' + spans[spans.length - 1].id + ')" style=" background-color: gainsboro; font-size: 15px; border-radius: 15px; margin: 5px;"> إضافة ملف خارجي  </button>');
             }
 
 

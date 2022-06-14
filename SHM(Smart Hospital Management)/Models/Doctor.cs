@@ -78,6 +78,7 @@ namespace SHM_Smart_Hospital_Management_.Models
         public int? Department_Id { get; set; } // Foreign Key // set null 
 
         [ForeignKey("Doctor_Id")]
+        [Display(Name = "أرقام الهواتف")]
         public virtual ICollection<Doctor_Phone_Numbers> Doctor_Phone_Numbers { get; set; }
         [ForeignKey("Doctor_Id")]
         public virtual ICollection<Preview> Doctor_Previews { get; set; }

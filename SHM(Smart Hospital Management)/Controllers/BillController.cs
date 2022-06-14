@@ -29,10 +29,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
                 return NotFound();
             }
             var patient = await _context.Patients.FindAsync(id);
-            if (patient == null)
-            {
-                return NotFound();
-            }
+            if (!patient.Active)
+                return RedirectToAction("LogOut", "Patient", new { id = id });
             var bills = await _context.Bills.Where(b => b.Patient_Id == patient.Patient_Id).Select(s => new ShowBills
             {
                 Bill = s,
@@ -47,7 +45,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = _context.Employees.Find(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee" ,new {id =EmpId });
             var patient = await _context.Patients.FindAsync(id);
             if (patient is null)
                 return NotFound();
@@ -68,7 +66,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = _context.Employees.Find(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id = EmpId });
             var bill = _context.Bills.Find(id);
             bill.Paid = true;
             _context.Update(bill);
@@ -96,7 +94,7 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         {
             var Resception = _context.Employees.Find(EmpId);
             if (!Resception.Active)
-                return RedirectToAction("LogOut", "Employee");
+                return RedirectToAction("LogOut", "Employee",new {id =EmpId });
             var patient = _context.Patients.FirstOrDefault(m => m.Patient_Id == id);
             Bill b = new Bill()
             {

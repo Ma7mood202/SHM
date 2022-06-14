@@ -25,9 +25,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Patient")]
         public async Task<IActionResult> ShowMedicalDetailsForPatient(int id) //Patient (id)
         {
-            var patient = _context.Patients.Find(id);
+            var patient = await _context.Patients.FindAsync(id);
             if (!patient.Active)
-                return RedirectToAction("LogOut", "Patient");
+                return RedirectToAction("LogOut", "Patient", new { id });
             var details = await _context.Medical_Details.Include(m => m.Patient).FirstOrDefaultAsync(d => d.Patient.Patient_Id == id);
 
             var allergies = await (from a in _context.Allergies
@@ -68,9 +68,10 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles ="Doctor,DeptManager")]
         public async Task<IActionResult> ShowMedicalDetailsForDoctor(int id, int DocId, int HoId) //Patient (id)
         {
-
-            // (Active / DeptManagger)
-            var details = await _context.Medical_Details.Include(m => m.Patient).FirstOrDefaultAsync(d => d.Patient.Patient_Id == id);
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
+            var details = await _context.Medical_Details.Include(m => m.Patient).FirstOrDefaultAsync(d => d.Patient.Patient_Id == id );
             if (details == null)
             {
                 return RedirectToAction("Create", new { id = id, DocId = DocId, HoId = HoId });
@@ -115,9 +116,9 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         [Authorize(Roles = "Doctor,DeptManager")]
         public async Task<IActionResult> Create(int? id, int DocId, int HoId)
         {
-            var patient = _context.Patients.Find(id);
-            if (!patient.Active)
-                return RedirectToAction("LogOut", "Patient");
+            var doctor = await _context.Doctors.FindAsync(DocId);
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             Medical_Detail d = new Medical_Detail()
             {
                 Pa_Id = (int)id
@@ -193,8 +194,8 @@ namespace SHM_Smart_Hospital_Management_.Controllers
         public async Task<IActionResult> Edit(int id, int DocId, int HoId)
         {
             var doctor = await _context.Doctors.FindAsync(DocId);
-            if(!doctor.Active)
-                return RedirectToAction("LogOut" , "Doctor");
+            if (!doctor.Active)
+                return RedirectToAction("LogOut", "Doctor", new { id = DocId });
             var medical = await _context.Medical_Details.Include(md=>md.Patient).FirstOrDefaultAsync(m => m.Medical_Details_Id == id);
 
             var allergies = await (from a in _context.Medical_Allergies
